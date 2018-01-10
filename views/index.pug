@@ -3,8 +3,9 @@ extends layout
 block content
   div.container.center-align
       each user in users
-          a.waves-effect.waves-light.btn-large.blue.lighten-2(href='/doc/?user=' + user._id)= user.name
-              i.material-icons.large.left account_circle
-          br
-          br
-      a.waves-effect.waves-light.btn-large.blue(href='/doc/?user=.*') Alle Dokumente
+          div.row
+            a.waves-effect.waves-light.btn-large.blue.col.s2.offset-s5(href='/doc/?user=' + user._id)= user.name
+                i.material-icons.large.left account_circle
+      div.row
+          a.waves-effect.waves-light.btn-large.blue.col.s2.offset-s5(href='/doc/?user=.*') Alle Dokumente
+              i.material-icons.left view_list

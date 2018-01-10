@@ -1,13 +1,12 @@
 extends layout
 
 block content
-    h1= docdata._id
     div.row
-        div.column
+        div.col.s8
             -var n = 0
             while n++ < docdata.previews
                 img.preview(src='/doc/' + docdata._id + '/preview/' + n)
-        div.column
+        div.col.s4
             div= 'Betreff: '
                 =docdata.subject
             div= 'Datum: '
@@ -20,5 +19,3 @@ block content
             a(href='/doc/' + docdata._id + '/update/') Aktualisieren
             br
             a(href='/doc/') Zurück
-            br
-            textarea()= docdata.plaintext

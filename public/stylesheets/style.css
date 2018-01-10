@@ -1,32 +1,24 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
-a {
-  color: #00B7FF;
+main {
+    flex: 1 0 auto;
 }
 
-.column {
-  float: left;
-  width: 50%;
-}
-
-.column30 {
-  float: left;
-  width: 30%;
-}
-
-.column10 {
-  float: left;
-  width: 10%;
-}
-
-/* Clear floats after the columns */
-.row1:after {
-  content: "";
-  display: table;
-  clear: both;
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    padding-right: 10px !important;
 }
 
 img.preview {
@@ -38,8 +30,13 @@ img.preview {
   border: 2px dotted;
 }
 
-input.red {
-  color: #ff0000;
+textarea.doctext {
+    height: 20rem;
+}
+
+div.customcontainer {
+    width: 95%;
+    max-width: initial;
 }
 
 .ppgrid {

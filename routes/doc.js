@@ -27,7 +27,7 @@ router.get('/:docid/:func?/:genid?', function(req, res, next) {
             update(req, res, next);
             break;
         default:
-            view(req, res, next);
+            update(req, res, next);
             break;
     }
 });
@@ -57,6 +57,7 @@ function thumb(req, res, next) {
     res.end(img, 'binary');
 }
 
+/*
 function view(req, res, next) {
 
     req.app.locals.db.collection(conf.db.c_doc).findOne( {_id: req.params.docid}, function(err, result) {
@@ -64,10 +65,11 @@ function view(req, res, next) {
             console.log(err);
             render.rendercallback(err, req, res, 'error', result, conf);
         } else {
-            render.rendercallback(err, req, res, 'doc', result, conf);
+            render.rendercallback(err, req, res, 'doc', result, conf, result.subject ? result.subject : result._id);
         }
     });
 }
+*/
 
 function update(req, res, next) {
     if(req.params.genid === "true") {  //execute update
@@ -75,7 +77,8 @@ function update(req, res, next) {
             $set: {
                 subject: req.body.subject,
                 users: req.body.users,
-                docdate: req.body.docdate
+                docdate: req.body.docdate,
+                partner: req.body.partner
             }
         };
 
@@ -83,7 +86,7 @@ function update(req, res, next) {
             if (err) throw err;
 
             res.writeHead(302, {
-                'Location': '/doc/' + req.params.docid + '/'
+                'Location': '/doc/' + req.params.docid + '/update/'
             });
             res.end();
         });
@@ -114,13 +117,16 @@ function update(req, res, next) {
                         month = months.indexOf(month) + 1;
                     }
                     console.log(result.plaintext.toString());
-                    //2012-04-23T18:25:43.511Z
                     result.docdate = padStart(year, 4, '20') + '-' + padStart(month, 2, '0') + '-' + padStart(day, 2, '0');
                     result.founddate = true;
                     console.log(result.docdate);
                 }
             }
-            render.rendercallback(err, req, res, 'doc_form', result, conf)
+            req.app.locals.db.collection(conf.db.c_partner).find({}).toArray(function(err, partnerlist) {
+                result.partnerlist = partnerlist;
+                render.rendercallback(err, req, res, 'doc_form', result, conf, result.subject ? result.subject : result._id)
+
+            });
         });
     }
 }

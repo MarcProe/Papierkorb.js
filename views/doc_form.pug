@@ -1,13 +1,12 @@
 extends layout
 
 block content
-    h1= 'update ' + docdata._id
     div.row
-        div.column
+        div.col.s8
             -var n = 0
             while n++ < docdata.previews
                 img.preview(src='/doc/' + docdata._id + '/preview/' + n)
-        div.column
+        div.col.s4
             form(method='POST' action='/doc/' + docdata._id + '/update/true')
                 div.form-group
                     label(for='subject') Betreff:
@@ -15,24 +14,12 @@ block content
                 div.form-group
                     label(for='docdate') Datum:
                     if(docdata.founddate)
-                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                        input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
                     else
                         input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
                 div.form-group
-                    //div.input-field
-                        //select(multiple name='users')
-                            //option(disabled, selected) User auswählen
-                            -var hasuser = false;
-                            each user in users
-                                if(docdata.users.indexOf(user.name) > -1)
-                                    option(value=user.name, selected)= user.name
-                                    -hasuser = true
-                                else
-                                    option(value=user.name)= user.name
-                            if(!hasuser)
-                                option(disabled, selected) User auswählen
-
-                        //label= 'User'
+                    label(for='users') Besitzer:
+                    br
                     each user in users
                         if(docdata.users.indexOf(user.name) > -1)
                             input(type='checkbox' id='user_' + user.name name='users' value=user.name checked='checked')
@@ -40,14 +27,22 @@ block content
                             input(type='checkbox' id='user_' + user.name name='users' value=user.name)
                         label(for='user_' + user.name)= user.name
                         br
+                        br
+                div.form-group
+                    -var partnerval = '';
+                    if(docdata.partner)
+                        -partnerval = docdata.partner
+                    label(for='partner') Partner:
+                    input#partner.autocomplete(name='partner' value=partnerval)
+
                 div.row &nbsp;
                 div.row
                     div.col.s6
-                        button.btn(type='submit') Aktualisieren
+                        button.btn.blue(type='submit') Aktualisieren
                     div.col.s6
-                        a(href='/doc/' + docid)
-                            button.btn(type='button') Zurück
-            textarea(rows=20 cols=60)= docdata.plaintext
+                        a(href='/doc/')
+                            button.btn.blue(type='button') Zurück
+            textarea.doctext= docdata.plaintext
 
 
     script.
@@ -78,4 +73,27 @@ block content
         //Initialize Select
         $(document).ready(function () {
             $('select').material_select();
+        });
+        //Initialize Partner Autocomplete
+        $(document).ready(function () {
+
+            var docdata = !{JSON.stringify(docdata).replace(/<\//g, '<\\/')}
+            var partnerlist = {};
+            for (index = 0; index < docdata.partnerlist.length; ++index) {
+                partnerlist[docdata.partnerlist[index].name] = docdata.partnerlist[index].logo;
+            }
+            console.log(partnerlist);
+
+            $('#partner').autocomplete({
+                data: partnerlist,
+                limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+                onAutocomplete: function (val) {
+                    // Callback function when value is autcompleted.
+                },
+                minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+            });
+
+            $("#partner").on('click', function () {
+                    $(this).val('')
+            });
         });

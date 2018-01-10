@@ -1,18 +1,16 @@
 extends layout
 
 block content
-    h1 Neue Dokumente
-    div.container
-        if(docdata)
-            table.striped.blue.lighten-5
-                tbody
-                each file in docdata
-                    tr
-                        td
-                            a(class='overview' href="/new/" + file.file + "/create/")= file.file
-                        td
-                            =' ' + file.size + ' KB '
-                        td
-                            =moment(file.mtime).format('DD.MM.YYYY HH:mm')
-        else
-            span Keine neuen Dateien
+    if(docdata)
+        table.striped.blue.lighten-5
+            tbody
+            each file in docdata
+                tr
+                    td
+                        a(class='overview' href="/new/" + file.file + "/create/")= file.file
+                    td
+                        =' ' + file.size + ' KB '
+                    td
+                        =moment(file.mtime).format('DD.MM.YYYY HH:mm')
+    else
+        span Keine neuen Dateien

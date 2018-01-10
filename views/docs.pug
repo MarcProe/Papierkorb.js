@@ -1,33 +1,31 @@
 extends layout
 
 block content
-    h1 Dokumentenübersicht
-    div.container
-        a(href='/new/') Neue Dokumente
-        hr
-        p Filter:
-            =docdata.query
-        table.striped
-            tbody
-                each item in docdata
-                    tr
-                        td.ppgrid
-                            if(item.subject)
-                                a.overview(href="/doc/" + item._id)= item.subject
+    p Filter:
+        =docdata.query
+    table.striped
+        tbody
+            each item in docdata
+                tr
+                    td.ppgrid
+                        -var linktitle = '';
+                        if(item.subject)
+                            -linktitle = item.subject;
+                        else
+                            -linktitle = item._id;
+                        a.overview(href="/doc/" + item._id + '/update/')= linktitle
+                    td.ppgrid
+                        if(item.docdate)
+                            span= moment(item.docdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
+                        else
+                            ='-'
+                    td.ppgrid
+                        if(item.users)
+                            if(typeof item.users !== 'string')
+                                each user in item.users
+                                    span= user
+                                    =' '
                             else
-                                a.overview(href="/doc/" + item._id)= item._id
-                        td.ppgrid
-                            if(item.docdate)
-                                span= moment(item.docdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
-                            else
-                                ='-'
-                        td.ppgrid
-                            if(item.users)
-                                if(typeof item.users !== 'string')
-                                    each user in item.users
-                                        span= user
-                                        =' '
-                                else
-                                        span= item.users
-                            else
-                                ='-'
+                                    span= item.users
+                        else
+                            ='-'

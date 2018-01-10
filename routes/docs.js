@@ -18,14 +18,12 @@ router.get('/', function(req, res, next) {
         query.users = new RegExp(req.session.user);
     }
 
-
     req.app.locals.db.collection(conf.db.c_doc).find(query).sort( { docdate: -1 } ).toArray(function(err, result) {
         console.log(query);
         console.log(result);
         let docdata = result;
         docdata.query = query;
-
-        render.rendercallback(err, req, res, 'docs', docdata, conf);
+        render.rendercallback(err, req, res, 'docs', docdata, conf, 'Dokumentenübersicht');
     });
 
 
