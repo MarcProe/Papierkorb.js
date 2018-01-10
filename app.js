@@ -7,7 +7,6 @@ let bodyParser = require('body-parser');
 let session = require('express-session');
 
 let index = require('./routes/index');
-let user = require('./routes/user');
 let docs = require('./routes/docs');
 let doc = require('./routes/doc');
 let newdoc = require('./routes/newdoc');
@@ -54,7 +53,6 @@ app.use(session({
 }));
 
 app.use('/', index);
-app.use('/user', user);
 app.use('/doc/', docs);
 app.use('/doc', doc);
 app.use('/new', newdoc);

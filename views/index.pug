@@ -1,7 +1,6 @@
 extends layout
 
 block content
-  h1 Willkommen im Papierkorb
   div.container.center-align
       each user in users
           a.waves-effect.waves-light.btn-large.blue.lighten-2(href='/doc/?user=' + user._id)= user.name

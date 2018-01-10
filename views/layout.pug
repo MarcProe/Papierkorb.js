@@ -1,11 +1,15 @@
 doctype html
 html
     head
-        title= title
+        title= 'Papierkorb :: ' + title
         link(rel='stylesheet', href='/stylesheets/style.css')
         link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
         link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
         link(rel='stylesheet', type='text/css', href='/materialize/css/materialize.css')
+        script(src='/javascripts/jquery-3.2.1.min.js')
+        script(src='/javascripts/moment.min.js')
+        script(src='/materialize/js/materialize.min.js')
+        script(src='/javascripts/init.js')
     body
         ul#dropdownuser.dropdown-content
             each user in users
@@ -13,7 +17,11 @@ html
                     a(href='/doc/?user=' + user._id)= user.name
         nav.blue
             div.nav-wrapper
-                a.brand-logo(href='/') Papierkorb
+                a.brand-logo(href='/')
+                    div.valign-wrapper &nbsp;
+                        img(src='/images/icon-inv-48x48.png')
+                        span &nbsp;
+                            = docdata.title
                 ul.right.hide-on-med-and-down
                     //<li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
                     li(class=active_user)
@@ -28,10 +36,6 @@ html
                         a(href='/new/') Neu
                     li(class=active_orphan)
                         a(href='/doc/orphan/') Waisen
-        script(src='/javascripts/jquery-3.2.1.min.js')
-        script(src='/javascripts/moment.min.js')
-        script(src='/materialize/js/materialize.min.js')
-        script(src='/javascripts/init.js')
-
+        br
         block content
 
