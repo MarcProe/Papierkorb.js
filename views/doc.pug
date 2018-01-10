@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1= docdata._id
+    div.row
+        div.column
+            -var n = 0
+            while n++ < docdata.previews
+                img.preview(src='/doc/' + docdata._id + '/preview/' + n)
+        div.column
+            div= 'Betreff: '
+                =docdata.subject
+            div= 'Datum: '
+                if(docdata.docdate)
+                    =moment(docdata.docdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
+
+            div
+                div= 'Benutzer: '
+                    =docdata.users
+            a(href='/doc/' + docdata._id + '/update/') Aktualisieren
+            br
+            a(href='/doc/') Zurück
+            br
+            textarea()= docdata.plaintext

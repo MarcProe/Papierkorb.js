@@ -1,0 +1,24 @@
+{
+  "conf": {
+    "net": {
+      "port": "3000"
+    },
+    "doc": {
+      "basepath": "c:/temp/test/",
+      "imagepath": "c:/temp/test/images/",
+      "newpath": "c:/temp/test/new/"
+    },
+    "store": {
+      "user": "c:/temp/test/storage/user/",
+      "doc": "c:/temp/test/storage/doc/"
+    },
+    "db": {
+      "constring": "mongodb://papierkorb:27017/",
+      "db": "papierkorb-test",
+      "c_user": "user",
+      "c_doc": "doc",
+      "c_tag": "tag",
+      "c_partner": "partner"
+    }
+  }
+}

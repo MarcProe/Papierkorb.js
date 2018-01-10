@@ -1,0 +1,37 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+        link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
+        link(rel='stylesheet', type='text/css', href='/materialize/css/materialize.css')
+    body
+        ul#dropdownuser.dropdown-content
+            each user in users
+                li
+                    a(href='/doc/?user=' + user._id)= user.name
+        nav.blue
+            div.nav-wrapper
+                a.brand-logo(href='/') Papierkorb
+                ul.right.hide-on-med-and-down
+                    //<li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                    li(class=active_user)
+                        a.dropdown-button(href='#!' data-activates="dropdownuser")
+                            ='Benutzer'
+                            i.material-icons.right arrow_drop_down
+                    li(class=active_search)
+                        a(href='/doc/') Suche
+                    li(class=active_docs)
+                        a(href='/doc/') Alle
+                    li(class=active_new)
+                        a(href='/new/') Neu
+                    li(class=active_orphan)
+                        a(href='/doc/orphan/') Waisen
+        script(src='/javascripts/jquery-3.2.1.min.js')
+        script(src='/javascripts/moment.min.js')
+        script(src='/materialize/js/materialize.min.js')
+        script(src='/javascripts/init.js')
+
+        block content
+

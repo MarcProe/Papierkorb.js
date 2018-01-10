@@ -1,0 +1,81 @@
+extends layout
+
+block content
+    h1= 'update ' + docdata._id
+    div.row
+        div.column
+            -var n = 0
+            while n++ < docdata.previews
+                img.preview(src='/doc/' + docdata._id + '/preview/' + n)
+        div.column
+            form(method='POST' action='/doc/' + docdata._id + '/update/true')
+                div.form-group
+                    label(for='subject') Betreff:
+                    input#subject.form-control(type='text', placeholder='Betreff' name='subject' value=docdata.subject)
+                div.form-group
+                    label(for='docdate') Datum:
+                    if(docdata.founddate)
+                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                    else
+                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                div.form-group
+                    //div.input-field
+                        //select(multiple name='users')
+                            //option(disabled, selected) User auswählen
+                            -var hasuser = false;
+                            each user in users
+                                if(docdata.users.indexOf(user.name) > -1)
+                                    option(value=user.name, selected)= user.name
+                                    -hasuser = true
+                                else
+                                    option(value=user.name)= user.name
+                            if(!hasuser)
+                                option(disabled, selected) User auswählen
+
+                        //label= 'User'
+                    each user in users
+                        if(docdata.users.indexOf(user.name) > -1)
+                            input(type='checkbox' id='user_' + user.name name='users' value=user.name checked='checked')
+                        else
+                            input(type='checkbox' id='user_' + user.name name='users' value=user.name)
+                        label(for='user_' + user.name)= user.name
+                        br
+                div.row &nbsp;
+                div.row
+                    div.col.s6
+                        button.btn(type='submit') Aktualisieren
+                    div.col.s6
+                        a(href='/doc/' + docid)
+                            button.btn(type='button') Zurück
+            textarea(rows=20 cols=60)= docdata.plaintext
+
+
+    script.
+        //Initialize Datepicker
+        $(document).ready(function () {
+            $('.datepicker').pickadate({
+                onStart: function() {
+                    year = moment($('#docdate').val(), 'DD.MM.YYYY').format("YYYY");
+                    month = moment($('#docdate').val(), 'DD.MM.YYYY').format("MM");
+                    day = moment($('#docdate').val(), 'DD.MM.YYYY').format("DD");
+                    this.set(year, month, day);
+                },
+                format: 'dd.mm.yyyy',
+                selectMonths: true, // Creates a dropdown to control month
+                selectYears: 15, // Creates a dropdown of 15 years to control year,
+                today: 'Heute',
+                clear: 'L&ouml;schen',
+                close: 'Ok',
+                closeOnSelect: false, // Close upon selecting a date,
+                monthsFull: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                monthsShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+                weekdaysShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+                firstDay: 1,
+                min: false,
+                max: 365
+            });
+        });
+        //Initialize Select
+        $(document).ready(function () {
+            $('select').material_select();
+        });

@@ -1,0 +1,57 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.column30 {
+  float: left;
+  width: 30%;
+}
+
+.column10 {
+  float: left;
+  width: 10%;
+}
+
+/* Clear floats after the columns */
+.row1:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+img.preview {
+  max-width: 90%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3px;
+  border: 2px dotted;
+}
+
+input.red {
+  color: #ff0000;
+}
+
+.ppgrid {
+    font-size: 18px;
+}
+
+[type="date"] {
+  background:#fff url(/images/date16px.png)  97% 50% no-repeat ;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}

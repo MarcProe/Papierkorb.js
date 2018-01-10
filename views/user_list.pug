@@ -1,0 +1,6 @@
+extends layout
+
+block content
+    each item in users
+        li
+            a(href="/user/" + item.name)= item.name
