@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/MarcProe/papierkorb/master/papierkorb-logo.png" height="200" align="right">
+<img src="https://github.com/MarcProe/Papierkorb.js/blob/master/public/images/papierkorb-logo.png?raw=true" height="200" align="right">
 
 # Papierkorb
 
