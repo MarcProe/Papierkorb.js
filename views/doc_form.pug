@@ -7,7 +7,7 @@ block content
             while n++ < docdata.previews
                 img.preview(src='/doc/' + docdata._id + '/preview/' + n)
         div.col.s4
-            form(method='POST' action='/doc/' + docdata._id + '/update/true')
+            form(method='POST' action='/doc/' + docdata._id + '/update/true' autocomplete="off")
                 div.form-group
                     label(for='subject') Betreff:
                     input#subject.form-control(type='text', placeholder='Betreff' name='subject' value=docdata.subject)
@@ -33,16 +33,45 @@ block content
                     if(docdata.partner)
                         -partnerval = docdata.partner
                     label(for='partner') Partner:
-                    input#partner.autocomplete(name='partner' value=partnerval)
+                    if(docdata.foundpartner)
+                        input#partner.autocomplete.red-text(name='partner' value=partnerval)
+                    else
+                        input#partner.autocomplete(name='partner' value=partnerval)
 
                 div.row &nbsp;
                 div.row
-                    div.col.s6
-                        button.btn.blue(type='submit') Aktualisieren
-                    div.col.s6
-                        a(href='/doc/')
-                            button.btn.blue(type='button') Zurück
+                    div.col.s12.xl6
+                        button.btn.blue.z-depth-5(type='submit') Aktualisieren
+                    div.col.s12.xl3
+                        a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/') Zurück
+                    div.col.s12.xl2
+                        a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href="#modaldelete") Löschen
             textarea.doctext= docdata.plaintext
+    div#modaldelete.modal
+        div.modal-content
+            div.row
+                div.col.s6.center
+                    p.flow-text.blue.white-text Zurücksetzen
+                div.col.s6.center
+                    p.red.flow-text.white-text Löschen
+            div.row
+                div.col.s6.center
+                    p.flow-text= 'Die Metadaten (Betreff, Partner, etc) werden unwiderruflich gelöscht und das PDF-Dokument in den "Neu" Ordner verschoben'
+                div.col.s6.center
+                    p.flow-text= 'Die Metadaten (Betreff, Partner, etc) und '
+                        span.red-text= 'das Dokument'
+                        =' werden unwiderruflich gelöscht.'
+            div.row
+                div.col.s12.center.red
+                    p.flow-text Keine weitere Sicherheitsabfrage!
+            div.row
+                div.col.s6.center
+                    a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/remove/' + docdata._id + '/soft/') Zurücksetzen
+                div.col.s6.center
+                    a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href='/remove/' + docdata._id + '/hard/') Löschen
+            div.row
+                div.col.s12.center
+                    a#canceldelete.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='#') Abbrechen
 
 
     script.
@@ -54,6 +83,9 @@ block content
                     month = moment($('#docdate').val(), 'DD.MM.YYYY').format("MM");
                     day = moment($('#docdate').val(), 'DD.MM.YYYY').format("DD");
                     this.set(year, month, day);
+                },
+                onOpen: function() {
+                    $('#docdate').removeClass('red-text')
                 },
                 format: 'dd.mm.yyyy',
                 selectMonths: true, // Creates a dropdown to control month
@@ -93,7 +125,21 @@ block content
                 minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
             });
 
-            $("#partner").on('click', function () {
-                    $(this).val('')
+            $('#partner').on('click', function () {
+                $(this).val('')
+                $(this).removeClass('red-text');
             });
+
         });
+
+        //Initialize Modal delete Dialogue
+        $(document).ready(function () {
+            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+            $('#modaldelete').modal();
+            $('#canceldelete').on('click', function () {
+                $('#modaldelete').modal('close');
+            });
+
+        });
+
+

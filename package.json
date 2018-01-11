@@ -23,6 +23,7 @@
     "jade-bootstrap": "~1.0.14",
     "pug": "~2.0.0-rc.4",
     "glob": "~7.1.2",
-    "express-session": "~1.15.6"
+    "express-session": "~1.15.6",
+    "sanitize-filename": "~1.6.1"
   }
 }

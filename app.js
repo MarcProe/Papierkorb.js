@@ -10,6 +10,7 @@ let index = require('./routes/index');
 let docs = require('./routes/docs');
 let doc = require('./routes/doc');
 let newdoc = require('./routes/newdoc');
+let remove = require('./routes/remove');
 
 let mongo = require('mongodb').MongoClient;
 let config = require('config');
@@ -56,6 +57,7 @@ app.use('/', index);
 app.use('/doc/', docs);
 app.use('/doc', doc);
 app.use('/new', newdoc);
+app.use('/remove', remove);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

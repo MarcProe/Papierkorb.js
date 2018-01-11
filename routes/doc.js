@@ -117,18 +117,52 @@ function update(req, res, next) {
                         month = months.indexOf(month) + 1;
                     }
                     console.log(result.plaintext.toString());
-                    result.docdate = padStart(year, 4, '20') + '-' + padStart(month, 2, '0') + '-' + padStart(day, 2, '0');
+                    result.docdate = padStart(day, 2, '0') + '-' + padStart(month, 2, '0') + '-' + padStart(year, 4, '20')  ;
                     result.founddate = true;
                     console.log(result.docdate);
                 }
             }
-            req.app.locals.db.collection(conf.db.c_partner).find({}).toArray(function(err, partnerlist) {
-                result.partnerlist = partnerlist;
-                render.rendercallback(err, req, res, 'doc_form', result, conf, result.subject ? result.subject : result._id)
 
-            });
+            let bestpartner = {"name": "", "score": "0"};
+
+            if(!result.partner && result.plaintext) {
+                req.app.locals.db.collection(conf.db.c_partner).find({}).toArray(function(err, partners) {
+                    let score = 0;
+                    partners.forEach(function(partner) {
+                        if(partner.search) {
+                            partner.search.forEach(function(search) {
+                                let partnerfind = result.plaintext[0].match(new RegExp(search));
+                                console.log(partner.name + ' - ' + search + ' - ' + partnerfind);
+                                if(partnerfind) {
+                                    score++;
+                                }
+                            });
+                            if(score > bestpartner.score) {
+                                bestpartner.name = partner.name;
+                                bestpartner.score = score;
+                                console.log('New best Partner: ' + partner.name);
+                            }
+                        }
+                    });
+                    console.log(bestpartner);
+                    result.partner = bestpartner.name;
+                    result.foundpartner = true;
+                    preparerender(req, res, next, result)
+
+                });
+            } else {
+                preparerender(req, res, next, result)
+            }
         });
     }
+}
+
+function preparerender(req, res, next, result) {
+    req.app.locals.db.collection(conf.db.c_partner).find({}).toArray(function(err, partnerlist) {
+        result.partnerlist = partnerlist;
+        render.rendercallback(err, req, res, 'doc_form', result, conf, result.subject ? result.subject : result._id)
+
+    });
 }
 
 module.exports = router;
