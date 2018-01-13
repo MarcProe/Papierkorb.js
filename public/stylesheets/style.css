@@ -8,6 +8,8 @@ main {
     flex: 1 0 auto;
 }
 
+.anchor:target {padding-top: 80px;}
+
 .footer {
     position: fixed;
     left: 0;

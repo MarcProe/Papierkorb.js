@@ -5,7 +5,32 @@ block content
         div.col.s8
             -var n = 0
             while n++ < docdata.previews
-                img.preview(src='/doc/' + docdata._id + '/preview/' + n)
+                div.row
+                    div.col.s6.blue.white-text
+                        h5
+                            a.white-text.anchor(name='page' + n)= 'Seite ' + n
+                    div.col.s6
+                        a(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=-90&#page' + n)
+                            i.material-icons.medium rotate_left
+                        a(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=180&#page' + n)
+                            i.material-icons.medium refresh
+                        a(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=90&#page' + n)
+                            i.material-icons.medium rotate_right
+                        if( n === 1)
+                            i.grey-text.material-icons.medium arrow_upward
+                        else
+                            a(href='/doc/' + docdata._id + '/move/up/?page=' + n + '#page' + n)
+                                i.material-icons.medium arrow_upward
+                        if(n < docdata.previews)
+                            a(href='/doc/' + docdata._id + '/move/down/?page=' + n + '#page' + n)
+                                i.material-icons.medium arrow_downward
+                        else
+                            i.grey-text.material-icons.medium arrow_downward
+
+
+                div.row
+                    div.col.s12
+                        img.preview(src='/doc/' + docdata._id + '/preview/' + n)
         div.col.s4
             form(method='POST' action='/doc/' + docdata._id + '/update/true' autocomplete="off")
                 div.form-group
@@ -16,7 +41,7 @@ block content
                     if(docdata.founddate)
                         input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
                     else
-                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value='')
                 div.form-group
                     label(for='users') Besitzer:
                     br
@@ -132,7 +157,7 @@ block content
 
         });
 
-        //Initialize Modal delete Dialogue
+        //Initialize modal delete dialogue
         $(document).ready(function () {
             // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
             $('#modaldelete').modal();

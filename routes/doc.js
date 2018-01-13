@@ -6,13 +6,14 @@ let fs = require('fs');
 let padStart = require('pad-start');
 
 let render = require('../modules/render.js');
+let editpre = require('../modules/editpreview.js');
 
 let config = require('config');
 let conf = config.get('conf');
 
 const months = ['Januar','Februar','März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
-router.get('/:docid/:func?/:genid?', function(req, res, next) {
+router.get('/:docid/:func?/:genid?/', function(req, res, next) {
     console.log(req.params.docid);
     console.log(req.params);
 
@@ -25,6 +26,13 @@ router.get('/:docid/:func?/:genid?', function(req, res, next) {
             break;
         case 'update':
             update(req, res, next);
+            break;
+        case 'edit':
+            editpre.edit(res, req.params.genid, req.params.docid, req.query.preview, req.query.degrees);
+            break;
+        case 'move':
+            console.log('Starting MP')
+            movepage(res, req.params.docid, req.params.genid, req.query.page);
             break;
         default:
             update(req, res, next);
@@ -42,6 +50,34 @@ router.post('/:docid/:func?/:genid?', function(req, res, next) {
             break;
     }
 });
+
+function movepage(res, docid, direction, page) {
+    console.log('Starting 1')
+    let filetemp = conf.doc.imagepath + docid + '.temp.png';
+    let file1 = conf.doc.imagepath + docid + '.' + page + '.png';
+    let file2 = '';
+
+    console.log(filetemp);
+    console.log(file1);
+    console.log(direction);
+
+    if(direction === 'up') {
+        file2 = conf.doc.imagepath + docid + '.' + (parseInt(page) - 1) + '.png';
+    } else {
+        file2 = conf.doc.imagepath + docid + '.' + (parseInt(page) + 1) + '.png';
+    }
+
+    console.log(file2);
+
+    fs.renameSync(file2, filetemp);
+    fs.renameSync(file1, file2);
+    fs.renameSync(filetemp, file1);
+
+    res.writeHead(302, {
+        'Location': '/doc/' +docid + '/update/'
+    });
+    res.end();
+}
 
 function preview(req, res, next) {
     let id = req.params.genid ? req.params.genid : 1;
@@ -103,6 +139,7 @@ function update(req, res, next) {
                 result.users = [];
             }
 
+
             if(!result.docdate && result.plaintext) {
                 //versuche das Datum zu finden
                 let regex = /([\d]{1,2})\.\s?([\d]{1,2}|[\w]{3,9})\.?\s?(\d{4}|\d{2})/;
@@ -119,7 +156,10 @@ function update(req, res, next) {
                     console.log(result.plaintext.toString());
                     result.docdate = padStart(day, 2, '0') + '-' + padStart(month, 2, '0') + '-' + padStart(year, 4, '20')  ;
                     result.founddate = true;
+
                     console.log(result.docdate);
+                } else {
+                    result.founddate = false;
                 }
             }
 

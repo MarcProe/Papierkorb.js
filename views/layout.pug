@@ -47,9 +47,15 @@ html
         main
             div.container.customcontainer
                 block content
+                br
+                br
         footer.footer.page-footer.blue
             div.valign-wrapper.right
                 if(docdata._id)
+                    -var n = 0
+                    while n++ < docdata.previews
+                        a.white-text(href='#page' + n style='font-size: 24px')= n
+                        span &nbsp;
                     a(href='/doc/')
                         i.material-icons.right.white-text arrow_back
                 a#button(href='#')
