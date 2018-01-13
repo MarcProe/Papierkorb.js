@@ -6,28 +6,48 @@ block content
             -var n = 0
             while n++ < docdata.previews
                 div.row
-                    div.col.s6.blue.white-text
+                    div#pageheadercol.col.s11.blue.white-text.valign-wrapper
                         h5
                             a.white-text.anchor(name='page' + n)= 'Seite ' + n
-                    div.col.s6
-                        a(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=-90&#page' + n)
-                            i.material-icons.medium rotate_left
-                        a(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=180&#page' + n)
-                            i.material-icons.medium refresh
-                        a(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=90&#page' + n)
-                            i.material-icons.medium rotate_right
-                        if( n === 1)
-                            i.grey-text.material-icons.medium arrow_upward
-                        else
-                            a(href='/doc/' + docdata._id + '/move/up/?page=' + n + '#page' + n)
-                                i.material-icons.medium arrow_upward
-                        if(n < docdata.previews)
-                            a(href='/doc/' + docdata._id + '/move/down/?page=' + n + '#page' + n)
-                                i.material-icons.medium arrow_downward
-                        else
-                            i.grey-text.material-icons.medium arrow_downward
-
-
+                    div#editcol.col.s1
+                        div.valign-wrapper(style='height:100%')
+                            -var offset = '3'
+                            if(n > 1)
+                                -offset = '-9'
+                            else
+                            div.right-align(style='position: relative; height: 75px;')
+                                div.fixed-action-btn.horizontal(style='position: absolute; display: inline-block; right: 24px; top:' + offset + 'px; z-index: -0')
+                                    a.btn-floating.btn-large.blue.waves-effect.waves-light.lighten-1
+                                        i.material-icons.medium edit
+                                    ul
+                                        li
+                                            a.deletepreview.btn-floating.tooltipped(id='delpage_' + n, data-position='bottom' data-delay='50' data-tooltip='Diese Seite löschen. Das ursprüngliche PDF bleibt unverändert, es wird nur das Vorschaubild gelöscht.')
+                                                i.material-icons.medium.red.white-text delete_forever
+                                        li.divider
+                                        li
+                                            a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=-90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach links drehen')
+                                                i.material-icons.medium.white.blue-text rotate_left
+                                        li
+                                            a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=180&#page' + n, data-position='bottom' data-delay='50' data-tooltip='180° drehen')
+                                                i.material-icons.medium.white.blue-text refresh
+                                        li
+                                            a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach rechts drehen')
+                                                i.material-icons.medium.white.blue-text rotate_right
+                                        li.divider
+                                        li
+                                            if( n === 1)
+                                                a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben(diese Seite ist die erste Seite)', style='cursor: default;')
+                                                    i.grey-text.material-icons.white.medium arrow_upward
+                                            else
+                                                a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/move/up/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben')
+                                                    i.material-icons.medium.white.blue-text arrow_upward
+                                        li
+                                            if(n < docdata.previews)
+                                                a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/move/down/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben')
+                                                    i.material-icons.medium.white.blue-text arrow_downward
+                                            else
+                                                a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben (diese Seite ist die letzte Seite)', style='cursor: default;')
+                                                    i.grey-text.material-icons.medium.white.blue-text arrow_downward
                 div.row
                     div.col.s12
                         img.preview(src='/doc/' + docdata._id + '/preview/' + n)
@@ -166,5 +186,21 @@ block content
             });
 
         });
+        //Fix page header column height
+        $(document).ready(function () {
+            $('#editcol').css({
+                height: +$('#pageheadercol').height()
+            })
+        });
 
+        $(document).ready(function() {
+            var docdata = !{JSON.stringify(docdata).replace(/<\//g, '<\\/')}
 
+            $('.deletepreview').on('click', function() {
+                var page = this.id.split("_").pop();
+                Materialize.Toast.removeAll();
+                var $toastContent = $('<i class="material-icons medium white-text">delete_forever</i>')
+                    .add($('<a href="/doc/' + docdata._id + '/delete/' + page + '?previews=' + docdata.previews + '" class="btn-flat toast-action">Sicher?</button>'));
+                Materialize.toast($toastContent, 10000, 'rounded');
+            });
+        });

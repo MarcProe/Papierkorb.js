@@ -20,6 +20,11 @@ block content
                         else
                             ='-'
                     td.ppgrid
+                        if(item.partner)
+                            span= item.partner
+                        else
+                            ='-'
+                    td.ppgrid
                         if(item.users)
                             if(typeof item.users !== 'string')
                                 each user in item.users
@@ -29,3 +34,25 @@ block content
                                     span= item.users
                         else
                             ='-'
+                    td.ppgrid
+                        a.hoverover(id=item._id, style='cursor: zoom-in;')
+                            i.material-icons.small attach_file
+
+        div#hoverimage.popup(style='display:none;')= ' '
+        script.
+            $(document).ready(function(){
+                $('.hoverover').on('mouseenter', function(evt){
+                    let src = this;
+                    let left = $(window).width() / 3.;
+                    console.log(left);
+                    console.log($(window).width());
+
+                    $('#hoverimage')
+                        .html('<img height="' + ($(window).height() * 0.85) + '" src="/doc/' + src.id + '/preview/" />')
+                        .css({left: left, top: 100})
+                        .show();
+                        $(this).on('mouseleave', function(){
+                            $('#hoverimage').hide();
+                    });
+                });
+            });

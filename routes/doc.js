@@ -31,8 +31,11 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
             editpre.edit(res, req.params.genid, req.params.docid, req.query.preview, req.query.degrees);
             break;
         case 'move':
-            console.log('Starting MP')
             movepage(res, req.params.docid, req.params.genid, req.query.page);
+            break;
+        case 'delete':
+            console.log(req.params.genid);
+            deletepage(req, res, req.params.docid, req.params.genid, req.query.previews);
             break;
         default:
             update(req, res, next);
@@ -79,6 +82,37 @@ function movepage(res, docid, direction, page) {
     res.end();
 }
 
+function deletepage(req, res, docid, page, maxpages ) {
+    //delete page
+    fs.unlinkSync(conf.doc.imagepath + docid + '.' + page + '.png');
+
+    //move all lower pages
+    for(let i = parseInt(page); i < maxpages; i++) {
+        let filenew = conf.doc.imagepath + docid + '.' + i + '.png';
+        let fileold = conf.doc.imagepath + docid + '.' + (i + 1) + '.png';
+        console.log('I would move page '+fileold+' to page '+filenew);
+        fs.renameSync(fileold, filenew);
+    }
+
+    //update database preview field
+    let previews = parseInt(maxpages) - 1;
+    let docdata = {
+        $set: {
+            previews: previews
+        }
+    };
+    req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: docid}, docdata, { upsert : true },  function(err, result) {
+        if (err) throw err;
+
+        res.writeHead(302, {
+            'Location': '/doc/' +docid + '/update/'
+        });
+        res.end();
+    });
+
+
+}
+
 function preview(req, res, next) {
     let id = req.params.genid ? req.params.genid : 1;
     let img = fs.readFileSync(conf.doc.imagepath + req.params.docid + '.' + id + '.png');
@@ -92,20 +126,6 @@ function thumb(req, res, next) {
     res.writeHead(200, {'Content-Type': 'image/png' });
     res.end(img, 'binary');
 }
-
-/*
-function view(req, res, next) {
-
-    req.app.locals.db.collection(conf.db.c_doc).findOne( {_id: req.params.docid}, function(err, result) {
-        if (err || !result || !result._id) {
-            console.log(err);
-            render.rendercallback(err, req, res, 'error', result, conf);
-        } else {
-            render.rendercallback(err, req, res, 'doc', result, conf, result.subject ? result.subject : result._id);
-        }
-    });
-}
-*/
 
 function update(req, res, next) {
     if(req.params.genid === "true") {  //execute update
