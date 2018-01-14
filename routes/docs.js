@@ -11,11 +11,15 @@ let conf = config.get('conf');
 router.get('/', function(req, res, next) {
     let query = {};
 
-    if (req.query.user) {
-        query.users = new RegExp(req.query.user);
-        req.session.user = req.query.user;
-    } else if (req.session.user) {
-        query.users = new RegExp(req.session.user);
+    if (req.query.orphan) {
+        query = {$or: [ {users: {$exists: false} }, { users: null } ] };
+    } else {
+        if (req.query.user) {
+            query.users = new RegExp(req.query.user);
+            req.session.user = req.query.user;
+        } else if (req.session.user) {
+            query.users = new RegExp(req.session.user);
+        }
     }
 
     req.app.locals.db.collection(conf.db.c_doc).find(query).sort( { docdate: -1 } ).toArray(function(err, result) {
