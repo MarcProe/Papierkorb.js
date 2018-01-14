@@ -5,6 +5,12 @@ block content
         =docdata.query
     table.striped
         tbody
+            th Dokument
+            th Seiten
+            th Datum
+            th Partner
+            th Besitzer
+            th Vorschau
             each item in docdata
                 tr
                     td.ppgrid
@@ -14,6 +20,7 @@ block content
                         else
                             -linktitle = item._id;
                         a.overview(href="/doc/" + item._id + '/update/')= linktitle
+                    td.ppgrind= item.previews
                     td.ppgrid
                         if(item.docdate)
                             span= moment(item.docdate, 'DD.MM.YYYY').format('DD.MM.YYYY')

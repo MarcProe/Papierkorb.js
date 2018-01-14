@@ -128,13 +128,38 @@ function thumb(req, res, next) {
 }
 
 function update(req, res, next) {
+
     if(req.params.genid === "true") {  //execute update
+
+        let tags = [];
+        let dbtags = [];
+
+        (JSON.parse(req.body.tags)).forEach(function(tag) {
+            tags.push(tag.tag);
+            let dbtag = {};
+            dbtag._id = tag.tag;
+            dbtags.push(dbtag);
+        });
+
+        //save the tags. this may fire async, we don't care
+        //ordered: false will also ignore any duplicate errors
+        req.app.locals.db.collection(conf.db.c_tag).insertMany(dbtags, {ordered: false}, function(err, res) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log(res);
+            }
+        });
+
+        console.log(dbtags);
+
         let docdata = {
             $set: {
                 subject: req.body.subject,
                 users: req.body.users,
                 docdate: req.body.docdate,
-                partner: req.body.partner
+                partner: req.body.partner,
+                tags: tags
             }
         };
 
@@ -220,8 +245,10 @@ function update(req, res, next) {
 function preparerender(req, res, next, result) {
     req.app.locals.db.collection(conf.db.c_partner).find({}).toArray(function(err, partnerlist) {
         result.partnerlist = partnerlist;
-        render.rendercallback(err, req, res, 'doc_form', result, conf, result.subject ? result.subject : result._id)
-
+        req.app.locals.db.collection(conf.db.c_tag).find({}).toArray(function(err, taglist) {
+            result.taglist = taglist;
+            render.rendercallback(err, req, res, 'doc_form', result, conf, result.subject ? result.subject : result._id)
+        });
     });
 }
 

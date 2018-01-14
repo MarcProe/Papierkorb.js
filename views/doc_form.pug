@@ -53,6 +53,7 @@ block content
                         img.preview(src='/doc/' + docdata._id + '/preview/' + n)
         div.col.s4
             form(method='POST' action='/doc/' + docdata._id + '/update/true' autocomplete="off")
+                input#hidden_tags(type='hidden' name='tags')
                 div.form-group
                     label(for='subject') Betreff:
                     input#subject.form-control(type='text', placeholder='Betreff' name='subject' value=docdata.subject)
@@ -84,6 +85,11 @@ block content
                         input#partner.autocomplete(name='partner' value=partnerval)
 
                 div.row &nbsp;
+                div.row
+                    div.col.s11
+                        div#taginputparent.chips.chips-autocomplete
+                    div.right-align.col.s1
+                            i#tagstooltip.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
                 div.row
                     div.col.s12.xl6
                         button.btn.blue.z-depth-5(type='submit') Aktualisieren
@@ -159,7 +165,6 @@ block content
             for (index = 0; index < docdata.partnerlist.length; ++index) {
                 partnerlist[docdata.partnerlist[index].name] = docdata.partnerlist[index].logo;
             }
-            console.log(partnerlist);
 
             $('#partner').autocomplete({
                 data: partnerlist,
@@ -193,6 +198,7 @@ block content
             })
         });
 
+        //delete preview "are you sure"
         $(document).ready(function() {
             var docdata = !{JSON.stringify(docdata).replace(/<\//g, '<\\/')}
 
@@ -203,4 +209,58 @@ block content
                     .add($('<a href="/doc/' + docdata._id + '/delete/' + page + '?previews=' + docdata.previews + '" class="btn-flat toast-action">Sicher?</button>'));
                 Materialize.toast($toastContent, 10000, 'rounded');
             });
+        });
+
+        //tag chips
+        $(document).ready(function() {
+
+            let docdata = !{JSON.stringify(docdata).replace(/<\//g, '<\\/')}
+            docdata.taglist = docdata.taglist.sort(function (a, b) {
+                return a._id > b._id ? 1 : b._id > a._id ? -1 : 0
+            });
+
+            let seltags = [];
+            if(docdata.tags) {
+                docdata.tags.forEach(function(tag) {
+                    seltags.push({tag: tag});
+                })
+            }
+            let tags = {};
+            let tagtooltip = "";
+            if(docdata.taglist) {
+                docdata.taglist.forEach(function(tag) {
+                    tags[tag._id] = null;
+                    tagtooltip += tag._id + ', ';
+                })
+            }
+
+            $('#tagstooltip').attr('data-tooltip','<div class="flow-text">' + tagtooltip + '</div>');
+
+            console.log(seltags);
+            $('#hidden_tags').val(JSON.stringify(seltags)); //store array
+
+            console.log($('#hidden_tags').val());
+
+            $('.chips').material_chip();
+            $('.chips-autocomplete').material_chip({
+                placeholder: 'Tags eingeben',
+                secondaryPlaceholder: 'Mehr Tags',
+                autocompleteOptions: {
+                    data: tags,
+                    limit: Infinity,
+                    minLength: 1
+                },
+                data: seltags
+            });
+
+            $('.chips').on('chip.add', function (e, chip) {
+                $('#hidden_tags').val(JSON.stringify($('.chips-autocomplete').material_chip('data')));
+            });
+
+            $('.chips').on('chip.delete', function (e, chip) {
+                $('#hidden_tags').val(JSON.stringify($('.chips-autocomplete').material_chip('data')));
+            });
+        });
+        $(document).ready(function () {
+            $('#tagstooltip').tooltip({delay: 50});
         });
