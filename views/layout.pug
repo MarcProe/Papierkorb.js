@@ -11,11 +11,15 @@ html
         script(src='/materialize/js/materialize.min.js')
         script(src='/javascripts/init.js')
     body
+        -if(!users) users=[]
+        -if(!docdata) docdata={}
+        -if(!docdata.query) docdata.query={}
+        -if(!docdata.plainsearch) docdata.plainsearch={}
         header
             ul#dropdownuser.dropdown-content
                 each user in users
                     li
-                        a(href='/doc/?user=' + user._id)= user.name
+                        a.blue-text(href='/doc/?users=' + user._id)= user.name
             div#navbar.navbar-fixed
                 nav.blue
                     div.nav-wrapper
@@ -25,17 +29,19 @@ html
                                 span &nbsp;
                                     = title
                         ul.right.hide-on-med-and-down
-                            //<li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                            li
+                                form#navform(method='POST' action='/doc/')
+                                    input#navsearch(name='navsearch', style='margin-left:200px;width:100px')
+                            li
+                                a#navbutton(href='#')
+                                    i.material-icons(style='cursor:pointer;') search
                             li(class=active_user)
-                                a.dropdown-button(href='#!' data-activates="dropdownuser")
+                                a.dropdown-button(href='#!' data-activates="dropdownuser" data-beloworigin="true")
                                     ='Benutzer'
                                     i.material-icons.right arrow_drop_down
                                     i.material-icons.left account_circle
-                            li(class=active_search)
-                                a(href='/doc/') Suche
-                                    i.material-icons.left search
-                            li(class=active_docs)
-                                a(href='/doc/') Alle
+                            li(class=active_alldocs)
+                                a(href='/doc/?users=.*&partner=.*&tags=.*') Alle
                                     i.material-icons.left view_list
                             li(class=active_new)
                                 a(href='/new/') Neu
@@ -49,6 +55,17 @@ html
                 block content
                 br
                 br
+            div#modalsearch.modal
+                div.modal-content
+                    h4 Suche
+                    form(autocomplete="off")
+                        label(for='partner') Partner:
+                        input#partnersearchinput.autocomplete(name='partner')
+                        label(for='tags') Tags:
+                        input#tagsearchinput.autocomplete(name='tags')
+                div.modal-footer
+                    a#modalsearchbutton.modal-action.modal-close.waves-effect.btn.blue(href='#')
+                        i.material-icons.large search
         footer.footer.page-footer.blue
             div.valign-wrapper.right
                 if(docdata._id)
@@ -62,8 +79,60 @@ html
                     i.material-icons.right.white-text arrow_upward
 
         script.
+            $(document).ready(function () {
+                $('#modalsearch').modal();
+            });
             $("#button").click(function () {
                 $('html, body').animate({
                     scrollTop: $("#navbar").offset().top
                 }, 600);
+            });
+            $('#navsearch').click(function () {
+                console.log('wah!');
+                $('#navsearch').css({width:400});
+            });
+            $('#navbutton').click(function() {
+                if($('#navsearch').val().length === 0) {
+                    $('#modalsearch').modal('open');
+                } else {
+                    $('#navform').submit();
+                }
+            });
+
+            //Initialize Partner Autocomplete
+            $(document).ready(function () {
+
+                var partnerlist = !{JSON.stringify(partnerlist).replace(/<\//g, '<\\/')}
+                for (index = 0; index < partnerlist.length; ++index) {
+                    partnerlist[partnerlist[index].name] = partnerlist[index].logo;
+                }
+
+                $('#partnersearchinput').autocomplete({
+                    data: partnerlist,
+                    limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+                    onAutocomplete: function (val) {
+                        // Callback function when value is autocompleted.
+                    },
+                    minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+                });
+            });
+
+            $(document).ready(function () {
+
+                var taglist = !{JSON.stringify(taglist).replace(/<\//g, '<\\/')}
+
+                console.log(taglist);
+
+                for (index = 0; index < taglist.length; ++index) {
+                    taglist[taglist[index]._id] = null;
+                }
+
+                $('#tagsearchinput').autocomplete({
+                    data: taglist,
+                    limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+                    onAutocomplete: function (val) {
+                        // Callback function when value is autocompleted.
+                    },
+                    minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+                });
             });

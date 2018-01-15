@@ -61,6 +61,8 @@ block content
                     label(for='docdate') Datum:
                     if(docdata.founddate)
                         input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                    else if (docdata.docdate)
+                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
                     else
                         input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value='')
                 div.form-group
@@ -239,8 +241,6 @@ block content
             console.log(seltags);
             $('#hidden_tags').val(JSON.stringify(seltags)); //store array
 
-            console.log($('#hidden_tags').val());
-
             $('.chips').material_chip();
             $('.chips-autocomplete').material_chip({
                 placeholder: 'Tags eingeben',
@@ -261,6 +261,7 @@ block content
                 $('#hidden_tags').val(JSON.stringify($('.chips-autocomplete').material_chip('data')));
             });
         });
+
         $(document).ready(function () {
             $('#tagstooltip').tooltip({delay: 50});
         });

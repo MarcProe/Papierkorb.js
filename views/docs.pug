@@ -1,16 +1,22 @@
 extends layout
 
 block content
-    p Filter:
-        =docdata.query
     table.striped
         tbody
-            th Dokument
-            th Seiten
-            th Datum
-            th Partner
-            th Besitzer
-            th Vorschau
+            th(width='25%') Dokument
+            th(width='7%') Seiten
+            th(width='12%') Datum
+            th(width='16%') Partner
+            th(width='10%') Besitzer
+                -var showfilter = false
+                if(docdata.plainsearch.users)
+                    -showfilter = true
+                if(docdata.plainsearch.users === '.*')
+                    -showfilter = false
+                if(showfilter)
+                    i.material-icons.tiny(alt=docdata.plainsearch.users) filter_list
+            th(width='25%') Tags
+            th(width='5%') Vorschau
             each item in docdata
                 tr
                     td.ppgrid
@@ -28,17 +34,27 @@ block content
                             ='-'
                     td.ppgrid
                         if(item.partner)
-                            span= item.partner
+                            a(href='/doc/?partner=' + item.partner)= item.partner
                         else
                             ='-'
                     td.ppgrid
                         if(item.users)
                             if(typeof item.users !== 'string')
-                                each user in item.users
-                                    span= user
+                                each user in item.users.sort()
+                                    a(href='/doc/?users=' + user)= user
                                     =' '
                             else
-                                    span= item.users
+                                a(href='/doc/?users=' + item.users)= item.users
+                        else
+                            ='-'
+                    td.ppgrid
+                        if(item.tags)
+                            if(typeof item.tags !== 'string')
+                                each tag in item.tags.sort()
+                                    a(href='/doc/?tags=' + tag)= tag
+                                    =' '
+                            else
+                                a(href='/doc/?tag=' + item.tags)= item.tags
                         else
                             ='-'
                     td.ppgrid

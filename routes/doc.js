@@ -134,7 +134,7 @@ function update(req, res, next) {
         let tags = [];
         let dbtags = [];
 
-        (JSON.parse(req.body.tags)).forEach(function(tag) {
+        (JSON.parse(req.body.tags)).forEach(function (tag) {
             tags.push(tag.tag);
             let dbtag = {};
             dbtag._id = tag.tag;
@@ -143,14 +143,26 @@ function update(req, res, next) {
 
         //save the tags. this may fire async, we don't care
         //ordered: false will also ignore any duplicate errors
-        req.app.locals.db.collection(conf.db.c_tag).insertMany(dbtags, {ordered: false}, function(err, res) {
-            if(err) {
-                console.log(err);
-            } else {
-                console.log(res);
-            }
-        });
+        if(req.body.tags) {
+            req.app.locals.db.collection(conf.db.c_tag).insertMany(dbtags, {ordered: false}, function (err, res) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(res);
+                }
+            });
+        }
 
+        if (req.body.partner) {
+            //same for partner (but there's only one)
+            req.app.locals.db.collection(conf.db.c_partner).insertOne({_id: req.body.partner, name: req.body.partner}, function (err, res) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(res);
+                }
+            });
+        }
         console.log(dbtags);
 
         let docdata = {
