@@ -1,6 +1,6 @@
 <img src="https://github.com/MarcProe/Papierkorb.js/blob/master/public/images/papierkorb-logo.png?raw=true" height="200" align="right">
 
-# Papierkorb
+# Papierkorb.js
 
 [![Coverage Status](https://david-dm.org/marcproe/papierkorb.js.svg)](https://david-dm.org/marcproe/papierkorb.js)
 
