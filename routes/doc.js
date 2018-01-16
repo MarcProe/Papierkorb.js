@@ -254,14 +254,8 @@ function update(req, res, next) {
     }
 }
 
-function preparerender(req, res, next, result) {
-    req.app.locals.db.collection(conf.db.c_partner).find({}).toArray(function(err, partnerlist) {
-        result.partnerlist = partnerlist;
-        req.app.locals.db.collection(conf.db.c_tag).find({}).toArray(function(err, taglist) {
-            result.taglist = taglist;
-            render.rendercallback(err, req, res, 'doc_form', result, conf, result.subject ? result.subject : result._id)
-        });
-    });
+function preparerender(req, res, next, data) {
+    render.rendercallback(null, req, res, 'doc_form', data, conf, data.subject ? data.subject : data._id)
 }
 
 module.exports = router;

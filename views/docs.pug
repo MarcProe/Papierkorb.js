@@ -9,16 +9,16 @@ block content
             th(width='16%') Partner
             th(width='10%') Besitzer
                 -var showfilter = false
-                if(docdata.plainsearch.users)
+                if(session.plainsearch.users)
                     -showfilter = true
-                if(docdata.plainsearch.users === '.*')
+                if(session.plainsearch.users === '.*')
                     -showfilter = false
                 if(showfilter)
                     i.material-icons.tiny(alt=docdata.plainsearch.users) filter_list
             th(width='25%') Tags
             th(width='5%') Vorschau
-            if(docdata)
-                each item in docdata
+            if(data)
+                each item in data
                     tr
                         td.ppgrid
                             -var linktitle = '';

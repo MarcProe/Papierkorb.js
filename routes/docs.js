@@ -18,18 +18,8 @@ router.post('/', function(req, res, next) {
 
 function handle(req, res, next) {
 
-    //initialize filter
-    //if(!req.session.users) req.session.users = new RegExp('.*');
-    //if(!req.session.partner) req.session.partner = /.*/;
-    //if(!req.session.tags) req.session.tags = /.*/;
-    //if(!req.session.docdate) req.session.docdate = /.*/;
-    //if(!req.session.fulltext) req.session.fulltext = /.*/;
-
     let query = {};
     let plainsearch = {};
-    //query.users = {};
-    //query.tags = {};
-    //query.partner = {};
 
     if(req.body.navsearch) {
         console.log(req.body.navsearch);
@@ -52,20 +42,6 @@ function handle(req, res, next) {
             query.users = new RegExp(req.session.users);
             plainsearch.users = req.session.users;
         }
-
-        /*if(req.query.partner) {
-            query.partner = new RegExp(req.query.partner);
-            req.session.partner = new RegExp(req.query.partner);
-        } else if (req.session.partner) {
-            query.partner = req.session.partner;
-        }
-
-        if(req.query.tags) {
-            query.tags = new RegExp(req.query.tags);
-            req.session.tags = new RegExp(req.query.tags);
-        } else if (req.session.tags) {
-            query.tags = req.session.tags;
-        }*/
     }
 
     console.log(query);
@@ -74,8 +50,8 @@ function handle(req, res, next) {
         console.log(query);
         console.log(result);
         let docdata = result;
-        docdata.plainsearch = plainsearch;
-        docdata.query = query;
+        req.session.plainsearch = plainsearch;
+        req.session.query = query;
         render.rendercallback(err, req, res, 'docs', docdata, conf, 'Dokumentenübersicht');
     });
 

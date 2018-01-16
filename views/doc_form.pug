@@ -4,7 +4,7 @@ block content
     div.row
         div.col.s8
             -var n = 0
-            while n++ < docdata.previews
+            while n++ < data.previews
                 div.row
                     div#pageheadercol.col.s11.blue.white-text.valign-wrapper
                         h5
@@ -25,13 +25,13 @@ block content
                                                 i.material-icons.medium.red.white-text delete_forever
                                         li.divider
                                         li
-                                            a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=-90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach links drehen')
+                                            a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=-90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach links drehen')
                                                 i.material-icons.medium.white.blue-text rotate_left
                                         li
-                                            a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=180&#page' + n, data-position='bottom' data-delay='50' data-tooltip='180° drehen')
+                                            a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=180&#page' + n, data-position='bottom' data-delay='50' data-tooltip='180° drehen')
                                                 i.material-icons.medium.white.blue-text refresh
                                         li
-                                            a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/edit/rotate/?preview=' + n + '&degrees=90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach rechts drehen')
+                                            a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach rechts drehen')
                                                 i.material-icons.medium.white.blue-text rotate_right
                                         li.divider
                                         li
@@ -39,37 +39,37 @@ block content
                                                 a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben(diese Seite ist die erste Seite)', style='cursor: default;')
                                                     i.grey-text.material-icons.white.medium arrow_upward
                                             else
-                                                a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/move/up/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben')
+                                                a.btn-floating.tooltipped(href='/doc/' + data._id + '/move/up/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben')
                                                     i.material-icons.medium.white.blue-text arrow_upward
                                         li
-                                            if(n < docdata.previews)
-                                                a.btn-floating.tooltipped(href='/doc/' + docdata._id + '/move/down/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben')
+                                            if(n < data.previews)
+                                                a.btn-floating.tooltipped(href='/doc/' + data._id + '/move/down/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben')
                                                     i.material-icons.medium.white.blue-text arrow_downward
                                             else
                                                 a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben (diese Seite ist die letzte Seite)', style='cursor: default;')
                                                     i.grey-text.material-icons.medium.white.blue-text arrow_downward
                 div.row
                     div.col.s12
-                        img.preview(src='/doc/' + docdata._id + '/preview/' + n)
+                        img.preview(src='/doc/' + data._id + '/preview/' + n)
         div.col.s4
-            form(method='POST' action='/doc/' + docdata._id + '/update/true' autocomplete="off")
+            form(method='POST' action='/doc/' + data._id + '/update/true' autocomplete="off")
                 input#hidden_tags(type='hidden' name='tags')
                 div.form-group
                     label(for='subject') Betreff:
-                    input#subject.form-control(type='text', placeholder='Betreff' name='subject' value=docdata.subject)
+                    input#subject.form-control(type='text', placeholder='Betreff' name='subject' value=data.subject)
                 div.form-group
                     label(for='docdate') Datum:
-                    if(docdata.founddate)
-                        input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
-                    else if (docdata.docdate)
-                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(docdata.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                    if(data.founddate)
+                        input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment(data.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                    else if (data.docdate)
+                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(data.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
                     else
                         input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value='')
                 div.form-group
                     label(for='users') Besitzer:
                     br
                     each user in users
-                        if(docdata.users.indexOf(user.name) > -1)
+                        if(data.users.indexOf(user.name) > -1)
                             input(type='checkbox' id='user_' + user.name name='users' value=user.name checked='checked')
                         else
                             input(type='checkbox' id='user_' + user.name name='users' value=user.name)
@@ -78,10 +78,10 @@ block content
                         br
                 div.form-group
                     -var partnerval = '';
-                    if(docdata.partner)
-                        -partnerval = docdata.partner
+                    if(data.partner)
+                        -partnerval = data.partner
                     label(for='partner') Partner:
-                    if(docdata.foundpartner)
+                    if(data.foundpartner)
                         input#partner.autocomplete.red-text(name='partner' value=partnerval)
                     else
                         input#partner.autocomplete(name='partner' value=partnerval)
@@ -99,7 +99,7 @@ block content
                         a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/') Zurück
                     div.col.s12.xl2
                         a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href="#modaldelete") Löschen
-            textarea.doctext= docdata.plaintext
+            textarea.doctext= data.plaintext
     div#modaldelete.modal
         div.modal-content
             div.row
@@ -119,9 +119,9 @@ block content
                     p.flow-text Keine weitere Sicherheitsabfrage!
             div.row
                 div.col.s6.center
-                    a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/remove/' + docdata._id + '/soft/') Zurücksetzen
+                    a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/remove/' + data._id + '/soft/') Zurücksetzen
                 div.col.s6.center
-                    a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href='/remove/' + docdata._id + '/hard/') Löschen
+                    a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href='/remove/' + data._id + '/hard/') Löschen
             div.row
                 div.col.s12.center
                     a#canceldelete.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='#') Abbrechen
@@ -162,14 +162,14 @@ block content
         //Initialize Partner Autocomplete
         $(document).ready(function () {
 
-            var docdata = !{JSON.stringify(docdata).replace(/<\//g, '<\\/')}
-            var partnerlist = {};
-            for (index = 0; index < docdata.partnerlist.length; ++index) {
-                partnerlist[docdata.partnerlist[index].name] = docdata.partnerlist[index].logo;
+            var partnerlist = !{JSON.stringify(partnerlist).replace(/<\//g, '<\\/')}
+            var plist = {};
+            for (index = 0; index < partnerlist.length; ++index) {
+                plist[partnerlist[index].name] = partnerlist[index].logo;
             }
 
             $('#partner').autocomplete({
-                data: partnerlist,
+                data: plist,
                 limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
                 onAutocomplete: function (val) {
                     // Callback function when value is autcompleted.
@@ -202,7 +202,7 @@ block content
 
         //delete preview "are you sure"
         $(document).ready(function() {
-            var docdata = !{JSON.stringify(docdata).replace(/<\//g, '<\\/')}
+            var docdata = !{JSON.stringify(data).replace(/<\//g, '<\\/')}
 
             $('.deletepreview').on('click', function() {
                 var page = this.id.split("_").pop();
@@ -216,8 +216,10 @@ block content
         //tag chips
         $(document).ready(function() {
 
-            let docdata = !{JSON.stringify(docdata).replace(/<\//g, '<\\/')}
-            docdata.taglist = docdata.taglist.sort(function (a, b) {
+            let docdata = !{JSON.stringify(data).replace(/<\//g, '<\\/')}
+            let taglist = !{JSON.stringify(taglist).replace(/<\//g, '<\\/')}
+
+            taglist = taglist.sort(function (a, b) {
                 return a._id > b._id ? 1 : b._id > a._id ? -1 : 0
             });
 
@@ -229,8 +231,8 @@ block content
             }
             let tags = {};
             let tagtooltip = "";
-            if(docdata.taglist) {
-                docdata.taglist.forEach(function(tag) {
+            if(taglist) {
+                taglist.forEach(function(tag) {
                     tags[tag._id] = null;
                     tagtooltip += tag._id + ', ';
                 })
