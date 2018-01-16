@@ -17,49 +17,50 @@ block content
                     i.material-icons.tiny(alt=docdata.plainsearch.users) filter_list
             th(width='25%') Tags
             th(width='5%') Vorschau
-            each item in docdata
-                tr
-                    td.ppgrid
-                        -var linktitle = '';
-                        if(item.subject)
-                            -linktitle = item.subject;
-                        else
-                            -linktitle = item._id;
-                        a.overview(href="/doc/" + item._id + '/update/')= linktitle
-                    td.ppgrind= item.previews
-                    td.ppgrid
-                        if(item.docdate)
-                            span= moment(item.docdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
-                        else
-                            ='-'
-                    td.ppgrid
-                        if(item.partner)
-                            a(href='/doc/?partner=' + item.partner)= item.partner
-                        else
-                            ='-'
-                    td.ppgrid
-                        if(item.users)
-                            if(typeof item.users !== 'string')
-                                each user in item.users.sort()
-                                    a(href='/doc/?users=' + user)= user
-                                    =' '
+            if(docdata)
+                each item in docdata
+                    tr
+                        td.ppgrid
+                            -var linktitle = '';
+                            if(item.subject)
+                                -linktitle = item.subject;
                             else
-                                a(href='/doc/?users=' + item.users)= item.users
-                        else
-                            ='-'
-                    td.ppgrid
-                        if(item.tags)
-                            if(typeof item.tags !== 'string')
-                                each tag in item.tags.sort()
-                                    a(href='/doc/?tags=' + tag)= tag
-                                    =' '
+                                -linktitle = item._id;
+                            a.overview(href="/doc/" + item._id + '/update/')= linktitle
+                        td.ppgrind= item.previews
+                        td.ppgrid
+                            if(item.docdate)
+                                span= moment(item.docdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
                             else
-                                a(href='/doc/?tag=' + item.tags)= item.tags
-                        else
-                            ='-'
-                    td.ppgrid
-                        a.hoverover(id=item._id, style='cursor: zoom-in;')
-                            i.material-icons.small attach_file
+                                ='-'
+                        td.ppgrid
+                            if(item.partner)
+                                a(href='/doc/?partner=' + item.partner)= item.partner
+                            else
+                                ='-'
+                        td.ppgrid
+                            if(item.users)
+                                if(typeof item.users !== 'string')
+                                    each user in item.users.sort()
+                                        a(href='/doc/?users=' + user)= user
+                                        =' '
+                                else
+                                    a(href='/doc/?users=' + item.users)= item.users
+                            else
+                                ='-'
+                        td.ppgrid
+                            if(item.tags)
+                                if(typeof item.tags !== 'string')
+                                    each tag in item.tags.sort()
+                                        a(href='/doc/?tags=' + tag)= tag
+                                        =' '
+                                else
+                                    a(href='/doc/?tag=' + item.tags)= item.tags
+                            else
+                                ='-'
+                        td.ppgrid
+                            a.hoverover(id=item._id, style='cursor: zoom-in;')
+                                i.material-icons.small attach_file
 
         div#hoverimage.popup(style='display:none;')= ' '
         script.
