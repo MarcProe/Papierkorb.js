@@ -101,7 +101,11 @@ html
 
             //Initialize Partner Autocomplete
             $(document).ready(function () {
-
+                console.log('---');
+                console.log(users);
+                console.log(partnerlist);
+                console.log(taglist);
+                console.log('---');
                 var partnerlist = !{JSON.stringify(partnerlist).replace(/<\//g, '<\\/')}
                 for (index = 0; index < partnerlist.length; ++index) {
                     partnerlist[partnerlist[index].name] = partnerlist[index].logo;
