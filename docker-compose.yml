@@ -8,9 +8,11 @@ services:
       - "3000:3000"
     links:
       - mongo
+    environment:
+      - NODE_ENV=docker
   mongo:
     container_name: mongo
-    image: mongo
+    image: sumglobal/rpi-mongodb
     #volumes:
     #  - ./data:/data/db
     ports:

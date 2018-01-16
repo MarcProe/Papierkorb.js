@@ -13,8 +13,8 @@
       "doc": "c:/temp/test/storage/doc/"
     },
     "db": {
-      "constring": "mongodb://mongo:27017/",
-      "db": "mptest",
+      "constring": "mongodb://papierkorb:27017/",
+      "db": "papierkorb-test",
       "c_user": "user",
       "c_doc": "doc",
       "c_tag": "tag",

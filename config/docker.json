@@ -14,7 +14,7 @@
     },
     "db": {
       "constring": "mongodb://papierkorb:27017/",
-      "db": "papierkorb",
+      "db": "papierkorb-docker",
       "c_user": "user",
       "c_doc": "doc",
       "c_tag": "tag",
