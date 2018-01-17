@@ -5,7 +5,7 @@
     },
     "doc": {
       "basepath": "/opt/papierkorb/docs/",
-      "imagepath": "/opt/paperkorb/images/",
+      "imagepath": "/opt/papierkorb/images/",
       "newpath": "/opt/papierkorb/docs/new/"
     },
     "store": {

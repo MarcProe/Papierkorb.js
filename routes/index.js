@@ -8,8 +8,8 @@ let conf = config.get('conf');
 
 router.get('/', function(req, res, next) {
     let docdata = {}
-    docdata.title = 'Willkommen im Papierkorb';
-    render.rendercallback(null, req, res, 'index', docdata, conf);
+    let title = 'Willkommen im Papierkorb';
+    render.rendercallback(null, req, res, 'index', docdata, conf, title);
 });
 
 module.exports = router;
