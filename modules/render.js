@@ -45,7 +45,7 @@ let render = {
                     if (err) {
                         reject(err);
                     } else {
-                        console.log('tag: session');
+                        console.log('tag: db');
                         req.session.taglist = taglistres;
                         resolve();
                     }
@@ -53,8 +53,6 @@ let render = {
             }
         });
 
-
-        console.log('before then');
         promiseLoadUsers.then(function() {
 
             return promiseLoadPartnerlist;
@@ -62,10 +60,6 @@ let render = {
         }).then(function() {
 
             return promiseLoadTaglist;
-
-        }).then(function() {
-
-            return;
 
         }).then(function() {
 
@@ -79,12 +73,8 @@ let render = {
 
         }).catch(function(err) {
             console.log(err);
-        }).then(function() {
-            console.log("All done!");
+            res.render('error', { error: err } );
         });
-
-        console.log('after all');
-
     }
 };
 

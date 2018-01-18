@@ -14,9 +14,6 @@ let conf = config.get('conf');
 const months = ['Januar','Februar','März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
 router.get('/:docid/:func?/:genid?/', function(req, res, next) {
-    console.log(req.params.docid);
-    console.log(req.params);
-
     switch (req.params.func) {
         case 'preview':
             preview(req, res, next);
@@ -34,7 +31,6 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
             movepage(res, req.params.docid, req.params.genid, req.query.page);
             break;
         case 'delete':
-            console.log(req.params.genid);
             deletepage(req, res, req.params.docid, req.params.genid, req.query.previews);
             break;
         default:
@@ -55,22 +51,16 @@ router.post('/:docid/:func?/:genid?', function(req, res, next) {
 });
 
 function movepage(res, docid, direction, page) {
-    console.log('Starting 1')
     let filetemp = conf.doc.imagepath + docid + '.temp.png';
     let file1 = conf.doc.imagepath + docid + '.' + page + '.png';
     let file2 = '';
 
-    console.log(filetemp);
-    console.log(file1);
-    console.log(direction);
 
     if(direction === 'up') {
         file2 = conf.doc.imagepath + docid + '.' + (parseInt(page) - 1) + '.png';
     } else {
         file2 = conf.doc.imagepath + docid + '.' + (parseInt(page) + 1) + '.png';
     }
-
-    console.log(file2);
 
     fs.renameSync(file2, filetemp);
     fs.renameSync(file1, file2);
@@ -90,7 +80,6 @@ function deletepage(req, res, docid, page, maxpages ) {
     for(let i = parseInt(page); i < maxpages; i++) {
         let filenew = conf.doc.imagepath + docid + '.' + i + '.png';
         let fileold = conf.doc.imagepath + docid + '.' + (i + 1) + '.png';
-        console.log('I would move page '+fileold+' to page '+filenew);
         fs.renameSync(fileold, filenew);
     }
 
@@ -132,38 +121,47 @@ function update(req, res, next) {
     if(req.params.genid === "true") {  //execute update
 
         let tags = [];
-        let dbtags = [];
-
         (JSON.parse(req.body.tags)).forEach(function (tag) {
+
             tags.push(tag.tag);
+
             let dbtag = {};
             dbtag._id = tag.tag;
-            dbtags.push(dbtag);
+
+            let foundtag = req.session.taglist.some(function (el) {
+                return el._id === dbtag._id;
+            });
+
+            if(!foundtag) req.session.taglist.push(dbtag);
         });
 
         //save the tags. this may fire async, we don't care
         //ordered: false will also ignore any duplicate errors
         if(req.body.tags) {
-            req.app.locals.db.collection(conf.db.c_tag).insertMany(dbtags, {ordered: false}, function (err, res) {
+            req.app.locals.db.collection(conf.db.c_tag).insertMany(req.session.taglist, {ordered: false}, function (err, res) {
                 if (err) {
                     console.log(err);
-                } else {
-                    console.log(res);
                 }
             });
         }
 
         if (req.body.partner) {
+
+            let foundpartner = req.session.partnerlist.some(function (element) {
+                return element._id === req.body.partner;
+            });
+
+            if(!foundpartner) {
+                req.session.partnerlist.push({_id: req.body.partner, name: req.body.partner});
+            }
+
             //same for partner (but there's only one)
             req.app.locals.db.collection(conf.db.c_partner).insertOne({_id: req.body.partner, name: req.body.partner}, function (err, res) {
                 if (err) {
                     console.log(err);
-                } else {
-                    console.log(res);
                 }
             });
         }
-        console.log(dbtags);
 
         let docdata = {
             $set: {
@@ -210,11 +208,10 @@ function update(req, res, next) {
                     if (isNaN(month)) {
                         month = months.indexOf(month) + 1;
                     }
-                    console.log(result.plaintext.toString());
+
                     result.docdate = padStart(day, 2, '0') + '-' + padStart(month, 2, '0') + '-' + padStart(year, 4, '20')  ;
                     result.founddate = true;
 
-                    console.log(result.docdate);
                 } else {
                     result.founddate = false;
                 }
@@ -229,7 +226,7 @@ function update(req, res, next) {
                         if(partner.search) {
                             partner.search.forEach(function(search) {
                                 let partnerfind = result.plaintext[0].match(new RegExp(search));
-                                console.log(partner.name + ' - ' + search + ' - ' + partnerfind);
+
                                 if(partnerfind) {
                                     score++;
                                 }
@@ -237,11 +234,10 @@ function update(req, res, next) {
                             if(score > bestpartner.score) {
                                 bestpartner.name = partner.name;
                                 bestpartner.score = score;
-                                console.log('New best Partner: ' + partner.name);
                             }
                         }
                     });
-                    console.log(bestpartner);
+
                     result.partner = bestpartner.name;
                     result.foundpartner = true;
                     preparerender(req, res, next, result)

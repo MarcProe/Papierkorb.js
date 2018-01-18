@@ -56,10 +56,24 @@ html
                 div.modal-content
                     h4 Suche
                     form(autocomplete="off")
-                        label(for='partner') Partner:
-                        input#partnersearchinput.autocomplete(name='partner')
-                        label(for='tags') Tags:
-                        input#tagsearchinput.autocomplete(name='tags')
+                        div.row
+                            div.col.s10
+                                label(for='partner') Partner:
+                            div.col.s2
+                                div.right-align
+                                    i#pstt.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
+                        div.row
+                            div.col.s12
+                                input#partnersearchinput.autocomplete(name='partner')
+                        div.row
+                            div.col.s10
+                                label(for='tags') Tags:
+                            div.col.s2
+                                div.right-align
+                                    i#tstt.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
+                        div.row
+                            div.col.s12
+                                input#tagsearchinput.autocomplete(name='tags')
                 div.modal-footer
                     a#modalsearchbutton.modal-action.modal-close.waves-effect.btn.blue(href='#')
                         i.material-icons.large search
@@ -98,38 +112,49 @@ html
 
             //Initialize Partner Autocomplete
             $(document).ready(function () {
-                var lpartnerlist = !{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
-                var plist = [];
+                let lpartnerlist = !{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
+                let plist = [];
+                let tooltippartnerlist = "";
+
                 for (index = 0; index < lpartnerlist.length; ++index) {
                     plist[lpartnerlist[index].name] = lpartnerlist[index].logo;
+                    tooltippartnerlist += lpartnerlist[index].name + ", ";
                 }
+
+                $('#pstt').attr('data-tooltip','<div class="flow-text">' + tooltippartnerlist + '</div>');
 
                 $('#partnersearchinput').autocomplete({
                     data: plist,
-                    limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
-                    onAutocomplete: function (val) {
-                        // Callback function when value is autocompleted.
-                    },
-                    minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+                    limit: 20,
+                    minLength: 1
                 });
             });
 
             $(document).ready(function () {
 
-                var taglist = !{JSON.stringify(session.taglist).replace(/<\//g, '<\\/')}
+                let taglist = !{JSON.stringify(session.taglist).replace(/<\//g, '<\\/')}
 
                 console.log(taglist);
 
+                let tooltiptaglist = "";
                 for (index = 0; index < taglist.length; ++index) {
                     taglist[taglist[index]._id] = null;
+                    tooltiptaglist += taglist[index]._id + ", ";
                 }
+
+                $('#tstt').attr('data-tooltip','<div class="flow-text">' + tooltiptaglist + '</div>');
 
                 $('#tagsearchinput').autocomplete({
                     data: taglist,
-                    limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
-                    onAutocomplete: function (val) {
-                        // Callback function when value is autocompleted.
-                    },
-                    minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+                    limit: 20,
+                    minLength: 1
                 });
+            });
+
+            $(document).ready(function () {
+                $('#tstt').tooltip({delay: 50});
+            });
+
+            $(document).ready(function () {
+                $('#pstt').tooltip({delay: 50});
             });

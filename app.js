@@ -27,6 +27,7 @@ console.log('Storage config:');
 console.log(conf.doc);
 
 mongo.connect(url, function(err, db) {
+
     if (err) throw err;
 
     console.log('Database connected. (' + conf.db.constring + ')');
