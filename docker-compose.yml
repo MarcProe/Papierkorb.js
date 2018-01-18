@@ -10,10 +10,13 @@ services:
       - mongo
     environment:
       - NODE_ENV=docker
+    volumes:
+     - ./mnt/papierkorb.js:/opt/papierkorb
   mongo:
     container_name: mongo
     image: sumglobal/rpi-mongodb
-    #volumes:
-    #  - ./data:/data/db
+    volumes:
+      - ./data:/data/db
     ports:
       - "27017:27017"
+    restart: always

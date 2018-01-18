@@ -6,11 +6,7 @@
     "doc": {
       "basepath": "/opt/papierkorb/docs/",
       "imagepath": "/opt/papierkorb/images/",
-      "newpath": "/opt/papierkorb/docs/new/"
-    },
-    "store": {
-      "user": "/opt/papierkorb/storage/user/",
-      "doc": "/opt/papierkorb/storage/doc/"
+      "newpath": "/opt/papierkorb/new/"
     },
     "db": {
       "constring": "mongodb://papierkorb:27017/",

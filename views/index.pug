@@ -2,7 +2,7 @@ extends layout
 
 block content
   div.container.center-align
-      each user in users
+      each user in session.userlist
           div.row
             a.waves-effect.waves-light.btn-large.blue.col.s2.offset-s5(href='/doc/?users=' + user._id)= user.name
                 i.material-icons.large.left account_circle

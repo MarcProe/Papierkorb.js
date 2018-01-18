@@ -255,7 +255,7 @@ function update(req, res, next) {
 }
 
 function preparerender(req, res, next, data) {
-    render.rendercallback(null, req, res, 'doc_form', data, conf, data.subject ? data.subject : data._id)
+    render.rendercallback(null, req, res, 'doc', data, conf, data.subject ? data.subject : data._id)
 }
 
 module.exports = router;

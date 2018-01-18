@@ -16,9 +16,7 @@ COPY . .
 #patch pdf-extract
 RUN cp share/ocr.js node_modules/pdf-extract/lib/
 
-#add testdata
-RUN mkdir -p /opt/papierkorb/docs/new/
-RUN cp share/Test.pdf /opt/papierkorb/docs/new/
+VOLUME ["/opt/papierkorb"]
 
 EXPOSE 3000
 

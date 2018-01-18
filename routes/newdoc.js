@@ -117,24 +117,20 @@ function extractok(data, req, res, targetfile) {
             let docdata = { $set: { previews: numpreviews } };
 
             //save numpreviews to database
-            req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: targetfile}, docdata, { upsert : true },  function updatepreviewsdb(err, result) {
-                if (err) throw err;
-
-
-                let thumbcmd = 'gs -dBATCH -dNOPAUSE -sDEVICE=pngalpha -sOutputFile=' + imagepath + '.%d.thumb.png -r33 ' + docpath;
-                let thumbchild = exec(thumbcmd, procoptions, function createthumbnails(err, stdout, stderr) {
-
-                    res.writeHead(302, {
-                        'Location': '/doc/' +targetfile + '/update/'
-                    });
-                    res.end();
-                });
-
-            });
+            req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: targetfile}, docdata, { upsert : true },  redirect(err, res, targetfile));
 
         });
 
     });
+}
+
+function redirect(err, res, targetfile) {
+    if (err) throw err;
+
+        res.writeHead(302, {
+            'Location': '/doc/' +targetfile + '/update/'
+        });
+        res.end();
 }
 
 function extracterr(err, res) {

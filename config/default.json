@@ -8,10 +8,6 @@
       "imagepath": "c:/temp/test/images/",
       "newpath": "c:/temp/test/new/"
     },
-    "store": {
-      "user": "c:/temp/test/storage/user/",
-      "doc": "c:/temp/test/storage/doc/"
-    },
     "db": {
       "constring": "mongodb://papierkorb:27017/",
       "db": "papierkorb-test",

@@ -23,6 +23,9 @@ app.locals.moment = require('moment');
 
 let url = conf.db.constring + conf.db.db;
 
+console.log('Storage config:');
+console.log(conf.doc);
+
 mongo.connect(url, function(err, db) {
     if (err) throw err;
 
@@ -35,6 +38,7 @@ mongo.connect(url, function(err, db) {
     createcol(dbase, conf.db.c_doc);
     createcol(dbase, conf.db.c_tag);
     createcol(dbase, conf.db.c_partner);
+
 });
 
 // view engine setup

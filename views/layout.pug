@@ -14,7 +14,7 @@ html
         -console.log(data);
         header
             ul#dropdownuser.dropdown-content
-                each user in users
+                each user in session.userlist
                     li
                         a.blue-text(href='/doc/?users=' + user._id)= user.name
             div#navbar.navbar-fixed
@@ -98,7 +98,7 @@ html
 
             //Initialize Partner Autocomplete
             $(document).ready(function () {
-                var lpartnerlist = !{JSON.stringify(partnerlist).replace(/<\//g, '<\\/')}
+                var lpartnerlist = !{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
                 var plist = [];
                 for (index = 0; index < lpartnerlist.length; ++index) {
                     plist[lpartnerlist[index].name] = lpartnerlist[index].logo;
@@ -116,7 +116,7 @@ html
 
             $(document).ready(function () {
 
-                var taglist = !{JSON.stringify(taglist).replace(/<\//g, '<\\/')}
+                var taglist = !{JSON.stringify(session.taglist).replace(/<\//g, '<\\/')}
 
                 console.log(taglist);
 
