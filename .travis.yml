@@ -1,11 +1,19 @@
 language: node_js
-sudo: required
 
 services:
-  - docker
+  - mongodb
   
 before_script:
-  - sudo docker-compose up -d --build
+  - sudo apt-get install -qq ghostscript
+  - sudo apt-get install -qq pdftk
+  - sudo apt-get install -qq tesseract-ocr
+  - sudo apt-get install -qq poppler-utils
+  - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
+  - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/deu.traineddata
+  - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
+  - sleep 15
+  - npm start
+  - sleep 15
   
 script:
   - npm test
