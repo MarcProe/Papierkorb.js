@@ -9,6 +9,10 @@ before_script:
   - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
   - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/deu.traineddata
   - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
+  - npm start
+  
+script:
+  - npm test
   
 node_js:
   - "lts/*"
