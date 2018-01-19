@@ -4,11 +4,11 @@ block content
     div.row
         div.col.s8
             -var n = 0
-            while n++ < data.previews
+            while n < data.previews
                 div.row
                     div#pageheadercol.col.s11.blue.white-text.valign-wrapper
                         h5
-                            a.white-text.anchor(name='page' + n)= 'Seite ' + n
+                            a.white-text.anchor(name='page' + (n + 1) )= 'Seite ' + (n + 1)
                     div#editcol.col.s1
                         div.valign-wrapper(style='height:100%')
                             -var offset = '3'
@@ -52,6 +52,7 @@ block content
                     div.col.s12
                         div.previewcontainer(style='min-height: 600px;')
                             img.preview(src='/images/loading.gif', data-src='/doc/' + data._id + '/preview/' + n)
+                -n++
         div.col.s4
             form(method='POST' action='/doc/' + data._id + '/update/true' autocomplete="off")
                 input#hidden_tags(type='hidden' name='tags')
@@ -274,4 +275,11 @@ block content
             setTimeout(function(){
                 $('.previewcontainer').css('min-height', '0px');
             }, 600);
+        });
+
+        //load a placeholder if preview image is not (yet) created
+        $(document).ready(function () {
+            $("img").on('error', function () {
+                $(this).unbind("error").attr("src", "/images/papierkorb-logo.png");
+            });
         });

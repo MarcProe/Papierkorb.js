@@ -8,15 +8,14 @@ let config = require('config');
 let conf = config.get('conf');
 
 let render = require('../modules/render.js');
+let pdfextractwrapper = require('../modules/pdfextractwrapper.js');
+let ghwrapper = require('../modules/ghwrapper.js');
 
 let fs = require('fs');
+const fse = require('fs-extra');
 
 let inspect = require('eyes').inspector({maxLength:20000});
-let pdf_extract = require('pdf-extract');
 
-let exec = require('child_process').exec;
-
-/* GET home page. */
 router.get('/:filename?/:func?', function(req, res, next) {
     switch(req.params.func) {
         case "create":
@@ -50,92 +49,51 @@ function create(req, res, next) {
     let targetfile = moment().toISOString().replace(/:/g,'-') + '.pdf';
     let src = conf.doc.newpath + req.params.filename;
     let target = conf.doc.basepath + targetfile;
+    let imagepath = conf.doc.imagepath + targetfile;
+
+    let numpages = 0;
     console.log(src + ' -> ' + target);
-    fs.rename(src, target, function movepdf(err) {
-        if(err) {
-            res.send(err);
-            res.end();
+
+    //execute promises
+    fse.rename(src, target).then(function() {                                           //move file from new to docs
+
+        return pdfextractwrapper.go(targetfile, 'deu+nld+eng', req.app.locals.db, conf);
+
+    }).then(function(data) {                                                            //extract the first pdf file
+        inspect(data, 'tesseract promise was resolved and returned');
+
+        numpages = data.num_pages;
+
+        return req.app.locals.db.collection(conf.db.c_doc)
+            .updateOne({_id: targetfile}, {$set: {previews: data.num_pages}}, {upsert: true});
+
+    }).then(function(err, result) {                                                     //write numpages to db
+        inspect(result, 'updated numprevs');
+
+        return ghwrapper.create(targetfile, imagepath, true, conf);
+
+    }).then(function() {                                                                //create 1st preview
+
+        redirect(res, targetfile);                                                      //redirect to the doc
+
+        if (numpages > 1) {                                                             //only create more previews if
+            return ghwrapper.create(targetfile, imagepath, false, conf);                //there is more than 1 page
         } else {
-            let options = {
-                type: 'ocr', // perform ocr to get the text within the scanned image
-                ocr_flags: [
-                    '-l deu+nld+eng',       // use a custom language file
-                ]
-            };
-
-            let processor = pdf_extract(target, options, function(err) {
-                extracttext(err, res);
-            });
-            processor.on('complete', function(data) {
-                extractok(data, req, res, targetfile)
-            });
-            processor.on('error', function(err) {
-                extracterr(err, res);
-            });
+            return null;
         }
+
+    }).then(function() {                                                                //other previews where
+        console.log('Other Previews done!');                                            //created if more than 1 page
+    }).catch(function(err) {
+        console.log(err);
     });
 }
 
-function extracttext(err, res) {
-    if (err) {
-        res.send(err);
-        res.end();
-    }
-}
+function redirect(res, targetfile) {
 
-function extractok(data, req, res, targetfile) {
-    inspect(data.text_pages, 'extracted text pages');
-
-    console.log(data.text_pages);
-
-    let docdata = {
-        $set: {
-            plaintext: data.text_pages
-        }
-    };
-
-    req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: targetfile}, docdata, { upsert : true },  function updatedatabase(err, result) {
-        if (err) throw err;
-        console.log("document updated");
-
-        let imagepath = conf.doc.imagepath + targetfile;
-        let docpath = conf.doc.basepath + targetfile;
-        let cmd = 'gs -dBATCH -dNOPAUSE -sDEVICE=pngalpha -sOutputFile=' + imagepath + '.%d.png -r300 ' + docpath;
-
-        console.log(cmd);
-
-        let procoptions = { maxBuffer: 4096 * 4096 };
-        let child = exec(cmd, procoptions, function createpreview(err, stdout, stderr) {
-
-            if (err) {
-                res.send(err);
-                res.end();
-            }
-
-            let numpreviews = stdout.match(/Processing pages 1 through (\d)\./)[1];
-
-            let docdata = { $set: { previews: numpreviews } };
-
-            //save numpreviews to database
-            req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: targetfile}, docdata, { upsert : true },  redirect(err, res, targetfile));
-
-        });
-
+    res.writeHead(302, {
+        'Location': '/doc/' +targetfile + '/update/'
     });
-}
-
-function redirect(err, res, targetfile) {
-    if (err) throw err;
-
-        res.writeHead(302, {
-            'Location': '/doc/' +targetfile + '/update/'
-        });
-        res.end();
-}
-
-function extracterr(err, res) {
-    inspect(err, 'error while extracting pages');
-    res.send(err);
     res.end();
 }
 
