@@ -17,6 +17,9 @@ before_script:
   
 script:
   - npm test
-
+  
+node_js:
+  - "lts/*"
+  
 notifications:
   email: false
