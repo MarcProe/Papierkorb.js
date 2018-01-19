@@ -1,8 +1,9 @@
 <img src="https://github.com/MarcProe/Papierkorb.js/blob/master/public/images/papierkorb-logo.png?raw=true" height="200" align="right">
 
 # Papierkorb.js
-
-[![Coverage Status](https://david-dm.org/marcproe/papierkorb.js.svg)](https://david-dm.org/marcproe/papierkorb.js)
+[![Build Status](https://travis-ci.org/MarcProe/Papierkorb.js.svg?branch=master)](https://travis-ci.org/MarcProe/Papierkorb.js)
+[![Dependencies Staus](https://david-dm.org/marcproe/papierkorb.js.svg)](https://david-dm.org/marcproe/papierkorb.js)
+[![devDependencies Status](https://david-dm.org/marcproe/papierkorb.js/dev-status.svg)](https://david-dm.org/marcproe/papierkorb.js?type=dev)
 
 This is a personal development repository.
 
