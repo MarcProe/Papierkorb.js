@@ -35,14 +35,14 @@ block content
                                                 i.material-icons.medium.white.blue-text rotate_right
                                         li.divider
                                         li
-                                            if( n === 1)
+                                            if(n === 0)
                                                 a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben(diese Seite ist die erste Seite)', style='cursor: default;')
                                                     i.grey-text.material-icons.white.medium arrow_upward
                                             else
                                                 a.btn-floating.tooltipped(href='/doc/' + data._id + '/move/up/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben')
                                                     i.material-icons.medium.white.blue-text arrow_upward
                                         li
-                                            if(n < data.previews)
+                                            if(n < data.previews - 1)
                                                 a.btn-floating.tooltipped(href='/doc/' + data._id + '/move/down/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben')
                                                     i.material-icons.medium.white.blue-text arrow_downward
                                             else
