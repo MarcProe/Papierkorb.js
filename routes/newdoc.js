@@ -52,7 +52,6 @@ function create(req, res, next) {
     let imagepath = conf.doc.imagepath + targetfile;
 
     let numpages = 0;
-    console.log(src + ' -> ' + target);
 
     //execute promises
     fse.rename(src, target).then(function() {                                           //move file from new to docs
@@ -85,7 +84,7 @@ function create(req, res, next) {
     }).then(function() {                                                                //other previews where
         console.log('Other Previews done!');                                            //created if more than 1 page
     }).catch(function(err) {
-        console.log(err);
+        console.error(err);
     });
 }
 

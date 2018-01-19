@@ -6,6 +6,8 @@ let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let session = require('express-session');
 
+let inspect = require('eyes').inspector({maxLength: 20000, hideFunctions: true,});
+
 let index = require('./routes/index');
 let docs = require('./routes/docs');
 let doc = require('./routes/doc');
@@ -23,8 +25,7 @@ app.locals.moment = require('moment');
 
 let url = conf.db.constring + conf.db.db;
 
-console.log('Storage config:');
-console.log(conf.doc);
+inspect(conf.doc, 'Storage config');
 
 mongo.connect(url, function(err, db) {
 

@@ -131,7 +131,7 @@ function update(req, res, next) {
         if(req.body.tags) {
             req.app.locals.db.collection(conf.db.c_tag).insertMany(req.session.taglist, {ordered: false}, function (err, res) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                 }
             });
         }
@@ -149,7 +149,7 @@ function update(req, res, next) {
             //same for partner (but there's only one)
             req.app.locals.db.collection(conf.db.c_partner).insertOne({_id: req.body.partner, name: req.body.partner}, function (err, res) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                 }
             });
         }
