@@ -42,9 +42,9 @@ Add line `deb https://download.docker.com/linux/debian stretch stable`
 
 `sudo service docker start`
 
-### Build docker images
+### Build docker images and start
 
-`docker-compose build && docker-compose up`
+`docker-compose up -d --build`
 
 ### Access the app
 
