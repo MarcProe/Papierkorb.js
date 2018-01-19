@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "postversion": "git push"
+    "postversion": "git push",
+    "test": "node_modules/.bin/mocha --reporter spec"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -26,5 +27,9 @@
     "glob": "~7.1.2",
     "express-session": "~1.15.6",
     "sanitize-filename": "~1.6.1"
+  },
+  "devDependencies": {
+    "mocha": "~5.0.0",
+    "should": "~13.2.1"
   }
 }
