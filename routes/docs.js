@@ -22,16 +22,14 @@ function handle(req, res, next) {
     let plainsearch = {};
 
     if(req.body.navsearch) {
-        console.log(req.body.navsearch);
         query.plaintext = new RegExp(req.body.navsearch.trim(), 'i');
         plainsearch.plaintext = req.body.navsearch.trim();
     }
 
-
     //orphan filter has top-prio
     if (req.query.orphan) {
         query = {$or: [ {users: {$exists: false} }, { users: null } ] };
-    //if w don't look for orphans, lets see what we are looking for
+    //if we don't look for orphans, lets see what we are looking for
     } else {
 
         if (req.query.users) {
@@ -44,11 +42,7 @@ function handle(req, res, next) {
         }
     }
 
-    console.log(query);
-
     req.app.locals.db.collection(conf.db.c_doc).find(query).sort( { docdate: -1 } ).toArray(function(err, result) {
-        console.log(query);
-        console.log(result);
         let docdata = result;
         req.session.plainsearch = plainsearch;
         req.session.query = query;

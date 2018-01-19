@@ -98,20 +98,11 @@ function deletepage(req, res, docid, page, maxpages ) {
         });
         res.end();
     });
-
-
 }
 
 function preview(req, res, next) {
     let id = req.params.genid ? req.params.genid : 1;
     let img = fs.readFileSync(conf.doc.imagepath + req.params.docid + '.' + id + '.png');
-    res.writeHead(200, {'Content-Type': 'image/png' });
-    res.end(img, 'binary');
-}
-
-function thumb(req, res, next) {
-    let id = req.params.genid ? req.params.genid : 1;
-    let img = fs.readFileSync(conf.doc.imagepath + req.params.docid + '.' + id + '.thumb.png');
     res.writeHead(200, {'Content-Type': 'image/png' });
     res.end(img, 'binary');
 }
@@ -183,7 +174,6 @@ function update(req, res, next) {
         });
 
     } else { //show update form
-        console.log('show update');
 
         req.app.locals.db.collection(conf.db.c_doc).findOne( {_id: req.params.docid}, function(err, result) {
 
@@ -193,7 +183,6 @@ function update(req, res, next) {
             if(!result.users) {
                 result.users = [];
             }
-
 
             if(!result.docdate && result.plaintext) {
                 //versuche das Datum zu finden

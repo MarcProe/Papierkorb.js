@@ -1,7 +1,6 @@
 let render = {
     rendercallback: function(err, req, res, template, data, conf, title) {
 
-
         let promiseLoadUsers = new Promise(function(resolve, reject) {
             if(req.session.userlist) { //get users from session
                 console.log('user: session');

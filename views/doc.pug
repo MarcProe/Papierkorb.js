@@ -50,7 +50,8 @@ block content
                                                     i.grey-text.material-icons.medium.white.blue-text arrow_downward
                 div.row
                     div.col.s12
-                        img.preview(src='/doc/' + data._id + '/preview/' + n)
+                        div.previewcontainer(style='min-height: 600px;')
+                            img.preview(src='/images/loading.gif', data-src='/doc/' + data._id + '/preview/' + n)
         div.col.s4
             form(method='POST' action='/doc/' + data._id + '/update/true' autocomplete="off")
                 input#hidden_tags(type='hidden' name='tags')
@@ -126,7 +127,7 @@ block content
                 div.col.s12.center
                     a#canceldelete.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='#') Abbrechen
 
-
+    script(src='/javascripts/unveil.js')
     script.
         //Initialize Datepicker
         $(document).ready(function () {
@@ -266,4 +267,11 @@ block content
 
         $(document).ready(function () {
             $('#tagstooltip').tooltip({delay: 50});
+        });
+
+        $(document).ready(function () {
+            $('img').unveil();
+            setTimeout(function(){
+                $('.previewcontainer').css('min-height', '0px');
+            }, 600);
         });

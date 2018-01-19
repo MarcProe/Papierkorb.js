@@ -12,9 +12,6 @@ let config = require('config');
 let conf = config.get('conf');
 
 router.get('/:docid/:func?/:genid?', function(req, res, next) {
-    console.log(req.params.docid);
-    console.log(req.params);
-
     switch (req.params.func) {
         case 'hard':
             hard(req, res, next);
@@ -30,12 +27,9 @@ router.get('/:docid/:func?/:genid?', function(req, res, next) {
 
 function noop(req, res, next, err){
     throw err;
-    //render.rendercallback(err, req, res, 'error', null, conf, 'Löschen fehlgeschlagen')
-
 }
 
 function hard(req, res, next) {
-    //lösche pdf
     fs.unlink(conf.doc.basepath + req.params.docid, function(err) {
         if(err) {
             noop(req, res, next, err);
@@ -46,7 +40,6 @@ function hard(req, res, next) {
 }
 
 function soft(req, res, next) {
-    //hole subject aus datenbank
     req.app.locals.db.collection(conf.db.c_doc).findOne( {_id: req.params.docid}, function(err, result) {
         if(err) {
             noop(req, res, next, err);
@@ -92,7 +85,8 @@ function cleanuppreview(req, res, next) {
 
 function cleanupdb(req, res, next) {
     req.app.locals.db.collection(conf.db.c_doc).removeOne({_id: req.params.docid}, function(err, obj) {
-        console.log(obj);
+        if(err)
+            throw err;
     });
 }
 
