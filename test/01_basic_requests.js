@@ -34,5 +34,17 @@ describe("Papierkorb.js WebApp", function() {
                 done();
             });
         });
-    });
+    }),
+        describe("request /images/papierkorb-logo.png", function () {
+
+            let url = "http://localhost:3000//images/papierkorb-logo.png";
+
+            it("should return status 200", function (done) {
+                request(url, function (error, response, body) {
+                    expect(response.statusCode).to.equal(200);
+                    expect(response.headers['content-type']).to.equal('image/png');
+                    done();
+                });
+            });
+        });
 });
