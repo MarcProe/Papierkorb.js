@@ -54,7 +54,7 @@ html
             div#modalsearch.modal
                 div.modal-content
                     h4 Suche
-                    form(autocomplete="off")
+                    form#modalsearchform(autocomplete="off" method='POST' action='/doc/')
                         div.row
                             div.col.s10
                                 label(for='partnersearchinput') Partner:
@@ -98,7 +98,6 @@ html
                 }, 600);
             });
             $('#navsearch').click(function () {
-                console.log('wah!');
                 $('#navsearch').css({width:400});
             });
             $('#navbutton').click(function() {
@@ -156,4 +155,10 @@ html
 
             $(document).ready(function () {
                 $('#pstt').tooltip({delay: 50});
+            });
+
+            $(document).ready(function () {
+                $('#modalsearchbutton').on('click', function () {
+                    $('#modalsearchform').submit();
+                });
             });

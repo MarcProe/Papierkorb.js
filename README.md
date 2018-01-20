@@ -49,4 +49,4 @@ Add line `deb https://download.docker.com/linux/debian stretch stable`
 
 ### Access the app
 
-<raspberry>:3000
+http://raspberry:3000

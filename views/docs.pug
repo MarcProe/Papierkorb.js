@@ -9,9 +9,9 @@ block content
             th(width='16%') Partner
             th(width='10%') Besitzer
                 -var showfilter = false
-                if(session.plainsearch.users)
+                if(session.query.users)
                     -showfilter = true
-                if(session.plainsearch.users === '.*')
+                if(session.query.users === '.*')
                     -showfilter = false
                 if(showfilter)
                     i.material-icons.tiny filter_list
