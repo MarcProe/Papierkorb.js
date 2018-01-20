@@ -5,6 +5,7 @@ services:
 
 env:
   - NODE_ENV=travis
+  - TESSDATA_PREFIX=/usr/local/share/tesseract-ocr/tessdata/
 
 before_script:
   - sudo apt-get install -qq ghostscript pdftk poppler-utils autoconf-archive automake g++ libtool libleptonica-dev pkg-config
@@ -16,9 +17,9 @@ before_script:
 
   - tesseract -v
 
-  - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
-  - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/deu.traineddata
-  - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
+  - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
+  - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/deu.traineddata
+  - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
   - ls -alh
   - sleep 3
   - npm start &
