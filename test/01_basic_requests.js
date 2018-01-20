@@ -42,6 +42,12 @@ describe("Papierkorb.js WebApp", function() {
             it("should return status 200", function (done) {
                 request(url, function (error, response, body) {
                     expect(response.statusCode).to.equal(200);
+                    done();
+                });
+            });
+
+            it("should return content-type image/png", function (done) {
+                request(url, function (error, response, body) {
                     expect(response.headers['content-type']).to.equal('image/png');
                     done();
                 });
