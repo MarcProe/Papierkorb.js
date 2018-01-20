@@ -48,10 +48,14 @@ block content
                                             else
                                                 a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben (diese Seite ist die letzte Seite)', style='cursor: default;')
                                                     i.grey-text.material-icons.medium.white.blue-text arrow_downward
+                                        li.divider
+                                        li
+                                            a.reloadpreview.btn-floating.tooltipped(id='reloadpage_' + n, data-id='image_' + n, data-position='bottom' data-delay='50' data-tooltip='Diese Vorschau erneut laden.')
+                                                i.material-icons.medium.white.blue-text sync_problem
                 div.row
                     div.col.s12
                         div.previewcontainer(style='min-height: 600px;')
-                            img.preview(src='/images/loading.gif', data-src='/doc/' + data._id + '/preview/' + n)
+                            img.preview(id='image_' + n, src='/images/loading.gif', data-src='/doc/' + data._id + '/preview/' + n)
                 -n++
         div.col.s4
             form(method='POST' action='/doc/' + data._id + '/update/true' autocomplete="off")
@@ -95,12 +99,19 @@ block content
                     div.right-align.col.s1
                             i#tagstooltip.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
                 div.row
-                    div.col.s12.xl6
-                        button.btn.blue.z-depth-5(type='submit') Aktualisieren
-                    div.col.s12.xl3
+                    div.col.s12.xl6.center
+                        button.btn.blue.z-depth-5(type='submit') Speichern
+                            i.material-icons.left save
+                    div.col.s12.xl6.center
+                        a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/' + data._id + '/download/') Download
+                            i.material-icons.left file_download
+                div.row
+                    div.col.s12.xl6.center
                         a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/') Zurück
-                    div.col.s12.xl2
+                            i.material-icons.left arrow_back
+                    div.col.s12.xl6.center
                         a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href="#modaldelete") Löschen
+                            i.material-icons.left delete_forever
             textarea.doctext= data.plaintext
     div#modaldelete.modal
         div.modal-content
@@ -280,6 +291,14 @@ block content
         //load a placeholder if preview image is not (yet) created
         $(document).ready(function () {
             $("img").on('error', function () {
-                $(this).unbind("error").attr("src", "/images/papierkorb-logo.png");
+                $(this).unbind("error");
+                $(this).attr("src", "/images/papierkorb-logo.png");
             });
+        });
+        $(document).ready(function () {
+            $('.reloadpreview').on('click', function () {
+                let image = $(this).attr('data-id');
+                let src = $('#' + image).attr("data-src");
+                $('#' + image).attr("src", src + '?timestamp=' + new Date().getTime());
+            })
         });

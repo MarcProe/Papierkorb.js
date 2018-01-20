@@ -33,6 +33,8 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
         case 'delete':
             deletepage(req, res, req.params.docid, req.params.genid, req.query.previews);
             break;
+        case 'download':
+            download(req, res, req.params.docid);
         default:
             update(req, res, next);
             break;
@@ -77,6 +79,7 @@ function deletepage(req, res, docid, page, maxpages ) {
     fs.unlinkSync(conf.doc.imagepath + docid + '.' + page + '.png');
 
     //move all lower pages
+    //#todo pages start at 0
     for(let i = parseInt(page); i < maxpages; i++) {
         let filenew = conf.doc.imagepath + docid + '.' + i + '.png';
         let fileold = conf.doc.imagepath + docid + '.' + (i + 1) + '.png';
@@ -98,6 +101,12 @@ function deletepage(req, res, docid, page, maxpages ) {
         });
         res.end();
     });
+}
+
+function download(req, res, docid) {
+    let file = fs.readFileSync(conf.doc.basepath + req.params.docid);
+    res.writeHead(200, {'Content-Type': 'application/pdf'});
+    res.end(file, 'binary');
 }
 
 function preview(req, res, next) {

@@ -52,23 +52,29 @@ function create(req, res, next) {
     let imagepath = conf.doc.imagepath + targetfile;
 
     let numpages = 0;
+    let firstPageExtract = '';
 
     //execute promises
     fse.rename(src, target).then(function() {                                           //move file from new to docs
 
-        return pdfextractwrapper.go(targetfile, 'deu+nld+eng', req.app.locals.db, conf);
+        return pdfextractwrapper.go(targetfile, conf.ocr.lang, req.app.locals.db, conf);
 
     }).then(function(data) {                                                            //extract the first pdf file
         inspect(data, 'tesseract promise was resolved and returned');
 
         numpages = data.num_pages;
+        firstPageExtract = [data.text];
+
+        inspect(firstPageExtract);
 
         return req.app.locals.db.collection(conf.db.c_doc)
             .updateOne({_id: targetfile}, {$set: {previews: data.num_pages}}, {upsert: true});
+    }).then(function (result) {                                                    //write numpages to db
 
-    }).then(function(err, result) {                                                     //write numpages to db
-        inspect(result, 'updated numprevs');
+        return req.app.locals.db.collection(conf.db.c_doc)
+            .updateOne({_id: targetfile}, {$set: {plaintext: firstPageExtract}}, {upsert: true});
 
+    }).then(function (result) {                                                     //write first page extract to db
         return ghwrapper.create(targetfile, imagepath, true, conf);
 
     }).then(function() {                                                                //create 1st preview

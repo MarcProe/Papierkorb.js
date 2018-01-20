@@ -12,7 +12,6 @@ let editpreview = {
     },
     rotate: function(res, docid, page, degrees) {
         let filename = conf.doc.imagepath + docid + '.' + page + '.png';
-        console.log(filename);
         Jimp.read(filename, function (err, pic) {
             if (err) throw err;
             pic.rotate(parseInt(degrees))

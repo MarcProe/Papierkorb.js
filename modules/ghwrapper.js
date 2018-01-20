@@ -6,16 +6,19 @@ let ghwrapper = {
 
         let count;
         let firstpage;
+        let lastpage;
         if (onlyfirst) {
             count = '0';
             firstpage = 1;
+            lastpage = 1;
         } else {
             count = '%d';
             firstpage = 2;
+            lastpage = 999;
         }
         let pdffilepath = conf.doc.basepath + pdffile;
         let cmd = 'gs -dBATCH -dNOPAUSE -sDEVICE=pngalpha -dFirstPage=' + firstpage +
-            ' -sOutputFile=' + targetpath + '.' + count + '.png -r300 ' + pdffilepath;
+            ' -dLastPage=' + lastpage + ' -sOutputFile=' + targetpath + '.' + count + '.png -r300 ' + pdffilepath;
 
         let procoptions = {maxBuffer: 4096 * 4096};
 
@@ -28,8 +31,13 @@ let ghwrapper = {
                 }
 
                 inspect(stdout, 'gh output');
-
-                let numpreviews = stdout.match(/Processing pages (\d+) through (\d+)\./)[2];
+                let regexresult = stdout.match(/Processing pages (\d+) through (\d+)\./);
+                let numpreviews;
+                if (regexresult) {
+                    numpreviews = regexresult[2];
+                } else {
+                    numpreviews = 0;
+                }
 
                 resolve(numpreviews)
 
