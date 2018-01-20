@@ -4,8 +4,7 @@ services:
   - mongodb
 
 env:
-  - NODE_ENV=travis
-  - TESSDATA_PREFIX=/usr/local/share/tesseract-ocr/tessdata/
+  - NODE_ENV=travis TESSDATA_PREFIX=/usr/local/share/tesseract-ocr/tessdata/
 
 before_script:
   - sudo apt-get install -qq ghostscript pdftk poppler-utils autoconf-archive automake g++ libtool libleptonica-dev pkg-config
