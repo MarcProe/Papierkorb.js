@@ -14,7 +14,7 @@ before_script:
   - git clone https://github.com/tesseract-ocr/tesseract.git ~/tesseract-ocr
   - cd ~/tesseract-ocr && ./autogen.sh && ./configure && make && sudo make install && sudo ldconfig
 
-  -cd ~
+  - cd ~
   - tesseract -v
 
   - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
