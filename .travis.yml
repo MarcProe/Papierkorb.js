@@ -9,8 +9,15 @@ env:
 before_script:
   - sudo apt-get install -qq ghostscript
   - sudo apt-get install -qq pdftk
-  - sudo apt-get install -qq tesseract-ocr
   - sudo apt-get install -qq poppler-utils
+
+  - git clone https://github.com/DanBloomberg/leptonica.git leptonica
+  - cd leptonica && ./autobuild && ./configure && make && sudo make install && sudo ldconfig
+  - git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
+  - cd tesseract-ocr && ./autogen.sh && ./configure && make && sudo make install && sudo ldconfig
+
+  - tesseract -v
+
   - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
   - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/deu.traineddata
   - sudo wget -P /usr/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
