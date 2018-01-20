@@ -21,7 +21,7 @@ before_script:
   - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
   - ls -alh
   - sleep 3
-  - npm start &
+  - npm start
   - sleep 15
   
 script:
