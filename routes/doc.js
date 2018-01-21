@@ -110,7 +110,7 @@ function download(req, res, docid) {
 }
 
 function preview(req, res, next) {
-    let id = req.params.genid ? req.params.genid : 1;
+    let id = req.params.genid ? req.params.genid : 0;
     let img = fs.readFileSync(conf.doc.imagepath + req.params.docid + '.' + id + '.png');
     res.writeHead(200, {'Content-Type': 'image/png' });
     res.end(img, 'binary');
