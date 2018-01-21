@@ -5,17 +5,30 @@ block content
         tbody
             th(width='25%') Dokument
             th(width='7%') Seiten
-            th(width='12%') Datum
-            th(width='16%') Partner
-            th(width='10%') Besitzer
-                -var showfilter = false
-                if(session.query.users)
-                    -showfilter = true
-                if(session.query.users === '.*')
-                    -showfilter = false
-                if(showfilter)
-                    i.material-icons.tiny filter_list
-            th(width='25%') Tags
+            th(width='12%') Datum&nbsp;
+                if(session.plain.docdate)
+                    a(href='/doc/?deldocdate=1')
+                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.docdate, data-html='true') filter_list
+                else if(session.plain.orphan === 'docdate')
+                    i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
+            th(width='16%') Partner&nbsp;
+                if(session.plain.partner)
+                    a(href='/doc/?delpartner=1')
+                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.partner, data-html='true') filter_list
+                else if(session.plain.orphan === 'partner')
+                    i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
+            th(width='10%') Besitzer&nbsp;
+                if(session.plain.users)
+                    a(href='/doc/?delusers=1')
+                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.users, data-html='true') filter_list
+                else if(session.plain.orphan === 'users')
+                    i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
+            th(width='25%') Tags&nbsp;
+                if(session.plain.tags)
+                    a(href='/doc/?deltags=1')
+                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.tags, data-html='true') filter_list
+                else if(session.plain.orphan === 'tags')
+                    i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
             th(width='5%') Vorschau
             if(data)
                 each item in data
@@ -39,22 +52,19 @@ block content
                             else
                                 ='-'
                         td.ppgrid
-                            if(item.users)
-                                if(typeof item.users !== 'string')
-                                    each user in item.users.sort()
-                                        a(href='/doc/?users=' + user)= user
-                                        =' '
-                                else
-                                    a(href='/doc/?users=' + item.users)= item.users
+                            if(item.users[0])
+                                each user in item.users.sort()
+                                    a(href='/doc/?users=' + user)= user
+                                    =' '
                             else
                                 ='-'
                         td.ppgrid
-                            if(item.tags)
-                                if(typeof item.tags !== 'string')
-                                    each tag in item.tags.sort()
-                                        a(href='/doc/?tags=' + tag)= tag
-                                        =' '
-                                else
+                            if(item.tags[0])
+                                //if(typeof item.tags !== 'string')
+                                each tag in item.tags.sort()
+                                    a(href='/doc/?tags=' + tag)= tag
+                                    =' '
+                                //else
                                     a(href='/doc/?tag=' + item.tags)= item.tags
                             else
                                 ='-'

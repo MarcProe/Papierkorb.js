@@ -16,6 +16,19 @@ html
                 each user in session.userlist
                     li
                         a.blue-text(href='/doc/?users=' + user._id)= user.name
+            ul#dropdownorphan.dropdown-content
+                li
+                    a.blue-text(href='/doc/?orphan=docdate') Datum
+                        i.material-icons.left date_range
+                li
+                    a.blue-text(href='/doc/?orphan=partner') Partner
+                        i.material-icons.left store_mall_directory
+                li
+                    a.blue-text(href='/doc/?orphan=users') Besitzer
+                        i.material-icons.left account_circle
+                li
+                    a.blue-text(href='/doc/?orphan=tags') Tags
+                        i.material-icons.left label
             div#navbar.navbar-fixed
                 nav.blue
                     div.nav-wrapper
@@ -37,13 +50,17 @@ html
                                     i.material-icons.right arrow_drop_down
                                     i.material-icons.left account_circle
                             li(class=active_alldocs)
-                                a(href='/doc/?users=.*&partner=.*&tags=.*') Alle
+                                a(href='/doc/?delusers=1&delpartner=1&deltags=1') Alle
                                     i.material-icons.left view_list
                             li(class=active_new)
                                 a(href='/new/') Neu
                                     i.material-icons.left add_circle
                             li(class=active_orphan)
-                                a(href='/doc/?orphan=1/') Waisen
+                                a.dropdown-button(href='#!' data-activates="dropdownorphan" data-beloworigin="true")
+                                    ='Waisen'
+                                    i.material-icons.right arrow_drop_down
+                                    i.material-icons.left warning
+                                //a(href='/doc/?orphan=users') Waisen
                                     i.material-icons.left warning
             br
         main
@@ -56,14 +73,24 @@ html
                     h4 Suche
                     form#modalsearchform(autocomplete="off" method='POST' action='/doc/')
                         div.row
+                            div.col.s6
+                                label(for='docdatesearchinputfrom') Datum von:
+                            div.col.s6
+                                label(for='docdatesearchinputto') Datum bis:
+                        div.row
+                            div.col.s6
+                                input#docdatesearchinputfrom.form-control.datepicker(value=session.plain.docdatefrom, name='docdatefrom')
+                            div.col.s6
+                                input#docdatesearchinputto.form-control.datepicker(value=session.plain.docdateto, name='docdateto')
+                        div.row
                             div.col.s10
                                 label(for='partnersearchinput') Partner:
                             div.col.s2
                                 div.right-align
-                                    i#pstt.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
+                                    i#pstt.tooltipped.material-icons(data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
                         div.row
                             div.col.s12
-                                input#partnersearchinput.autocomplete(name='partner')
+                                input#partnersearchinput.autocomplete(value=session.plain.partner, name='partner')
                         div.row
                             div.col.s10
                                 label(for='tagsearchinput') Tags:
@@ -72,7 +99,7 @@ html
                                     i#tstt.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
                         div.row
                             div.col.s12
-                                input#tagsearchinput.autocomplete(name='tags')
+                                input#tagsearchinput.autocomplete(value=session.plain.tags, name='tags')
                 div.modal-footer
                     a#modalsearchbutton.modal-action.modal-close.waves-effect.btn.blue(href='#')
                         i.material-icons.large search
@@ -160,5 +187,33 @@ html
             $(document).ready(function () {
                 $('#modalsearchbutton').on('click', function () {
                     $('#modalsearchform').submit();
+                });
+            });
+
+            //Initialize Datepicker
+            $(document).ready(function () {
+                $('.datepicker').pickadate({
+                    onStart: function () {
+                        year = moment($('#docdate').val(), 'DD.MM.YYYY').format("YYYY");
+                        month = moment($('#docdate').val(), 'DD.MM.YYYY').format("MM");
+                        day = moment($('#docdate').val(), 'DD.MM.YYYY').format("DD");
+                        this.set(year, month, day);
+                    },
+                    onOpen: function () {
+                        $('#docdate').removeClass('red-text')
+                    },
+                    format: 'dd.mm.yyyy',
+                    selectMonths: true, // Creates a dropdown to control month
+                    selectYears: 15, // Creates a dropdown of 15 years to control year,
+                    today: 'Heute',
+                    clear: 'L&ouml;schen',
+                    close: 'Ok',
+                    closeOnSelect: false, // Close upon selecting a date,
+                    monthsFull: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                    monthsShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+                    weekdaysShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+                    firstDay: 1,
+                    min: false,
+                    max: 365
                 });
             });

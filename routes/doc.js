@@ -8,8 +8,9 @@ let padStart = require('pad-start');
 let render = require('../modules/render.js');
 let editpre = require('../modules/editpreview.js');
 
-let config = require('config');
-let conf = config.get('conf');
+let conf = require('config').get('conf');
+
+let inspect = require('eyes').inspector({maxLength: 20000});
 
 const months = ['Januar','Februar','März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
@@ -137,10 +138,10 @@ function update(req, res, next) {
 
         //save the tags. this may fire async, we don't care
         //ordered: false will also ignore any duplicate errors
-        if(req.body.tags) {
+        if (req.body.tags && req.body.tags[0]) {
             req.app.locals.db.collection(conf.db.c_tag).insertMany(req.session.taglist, {ordered: false}, function (err, res) {
                 if (err) {
-                    console.error(err);
+                    //console.error(err);
                 }
             });
         }
@@ -163,15 +164,24 @@ function update(req, res, next) {
             });
         }
 
+        let users;
+        if (req.body.users && req.body.users.constructor === Array) {      //If only one element is given, the type is string, which is bad
+            users = req.body.users
+        } else {
+            users = [req.body.users];
+        }
+
         let docdata = {
             $set: {
                 subject: req.body.subject,
-                users: req.body.users,
+                users: users,
                 docdate: req.body.docdate,
                 partner: req.body.partner,
                 tags: tags
             }
         };
+
+        inspect(docdata, 'docdata');
 
         req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: req.params.docid}, docdata, { upsert : true },  function(err, result) {
             if (err) throw err;

@@ -1,6 +1,10 @@
 let render = {
     rendercallback: function(err, req, res, template, data, conf, title) {
 
+        if (!req.session.plain) {
+            req.session.plain = {};
+        }
+
         let promiseLoadUsers = new Promise(function(resolve, reject) {
             if (req.session.userlist) {
                 resolve();
