@@ -66,9 +66,9 @@ block content
                 div.form-group
                     label(for='docdate') Datum:
                     if(data.founddate)
-                        input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment(data.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                        input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment.utc(data.docdate).format("DD.MM.YYYY")))
                     else if (data.docdate)
-                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment(data.docdate, 'DD.MM.YYYY').format("DD.MM.YYYY")))
+                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment.utc(data.docdate).format("DD.MM.YYYY")))
                     else
                         input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value='')
                 div.form-group
@@ -145,9 +145,9 @@ block content
         $(document).ready(function () {
             $('.datepicker').pickadate({
                 onStart: function() {
-                    year = moment($('#docdate').val(), 'DD.MM.YYYY').format("YYYY");
-                    month = moment($('#docdate').val(), 'DD.MM.YYYY').format("MM");
-                    day = moment($('#docdate').val(), 'DD.MM.YYYY').format("DD");
+                    year = moment.utc($('#docdate').val(), 'DD.MM.YYYY').format("YYYY");
+                    month = moment.utc($('#docdate').val(), 'DD.MM.YYYY').format("MM");
+                    day = moment.utc($('#docdate').val(), 'DD.MM.YYYY').format("DD");
                     this.set(year, month, day);
                 },
                 onOpen: function() {

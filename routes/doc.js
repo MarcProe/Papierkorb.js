@@ -4,6 +4,7 @@ let router = express.Router();
 
 let fs = require('fs');
 let padStart = require('pad-start');
+let moment = require('moment');
 
 let render = require('../modules/render.js');
 let editpre = require('../modules/editpreview.js');
@@ -171,11 +172,13 @@ function update(req, res, next) {
             users = [req.body.users];
         }
 
+        let isodate = moment.utc(req.body.docdate, 'DD.MM.YYYY').toISOString();
+
         let docdata = {
             $set: {
                 subject: req.body.subject,
                 users: users,
-                docdate: req.body.docdate,
+                docdate: isodate,
                 partner: req.body.partner,
                 tags: tags
             }
@@ -217,7 +220,8 @@ function update(req, res, next) {
                         month = months.indexOf(month) + 1;
                     }
 
-                    result.docdate = padStart(day, 2, '0') + '-' + padStart(month, 2, '0') + '-' + padStart(year, 4, '20')  ;
+                    let tempdate = padStart(day, 2, '0') + '-' + padStart(month, 2, '0') + '-' + padStart(year, 4, '20');
+                    result.docdate = moment.utc(tempdate, 'DD.MM.YYYY').toISOString();
                     result.founddate = true;
 
                 } else {

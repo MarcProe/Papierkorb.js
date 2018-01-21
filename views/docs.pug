@@ -6,9 +6,9 @@ block content
             th(width='25%') Dokument
             th(width='7%') Seiten
             th(width='12%') Datum&nbsp;
-                if(session.plain.docdate)
+                if(session.plain.docdatefrom || session.plain.docdateto)
                     a(href='/doc/?deldocdate=1')
-                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.docdate, data-html='true') filter_list
+                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.docdatefrom + ' - ' + session.plain.docdateto, data-html='true') filter_list
                 else if(session.plain.orphan === 'docdate')
                     i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
             th(width='16%') Partner&nbsp;
@@ -43,7 +43,7 @@ block content
                         td.ppgrind= item.previews
                         td.ppgrid
                             if(item.docdate)
-                                span= moment(item.docdate, 'DD.MM.YYYY').format('DD.MM.YYYY')
+                                span= moment.utc(item.docdate).format('DD.MM.YYYY')
                             else
                                 ='-'
                         td.ppgrid
@@ -60,12 +60,9 @@ block content
                                 ='-'
                         td.ppgrid
                             if(item.tags[0])
-                                //if(typeof item.tags !== 'string')
                                 each tag in item.tags.sort()
                                     a(href='/doc/?tags=' + tag)= tag
                                     =' '
-                                //else
-                                    a(href='/doc/?tag=' + item.tags)= item.tags
                             else
                                 ='-'
                         td.ppgrid
