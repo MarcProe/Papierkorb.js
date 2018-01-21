@@ -55,11 +55,19 @@ function create(req, res, next) {
     let firstPageExtract = '';
 
     //execute promises
-    fse.rename(src, target).then(function() {                                           //move file from new to docs
+    fse.rename(src, target).then(function (data) {                                       //move file from new to work
+
+        redirect(res);                                                                  //redirect to /new/
+
+        return;                                                                         //continue processing in backend
+
+    }).then(function () {                                                               //write first page extract to db
+        return ghwrapper.create(targetfile, imagepath, true, conf);
+
+    }).then(function () {                                                                //extract the first pdf file
 
         return pdfextractwrapper.go(targetfile, conf.ocr.lang, req.app.locals.db, conf);
-
-    }).then(function(data) {                                                            //extract the first pdf file
+    }).then(function (data) {
         inspect(data, 'tesseract promise was resolved and returned');
 
         numpages = data.num_pages;
@@ -69,17 +77,15 @@ function create(req, res, next) {
 
         return req.app.locals.db.collection(conf.db.c_doc)
             .updateOne({_id: targetfile}, {$set: {previews: data.num_pages}}, {upsert: true});
-    }).then(function (result) {                                                    //write numpages to db
+
+    }).then(function () {                                                    //write numpages to db
 
         return req.app.locals.db.collection(conf.db.c_doc)
             .updateOne({_id: targetfile}, {$set: {plaintext: firstPageExtract}}, {upsert: true});
 
-    }).then(function (result) {                                                     //write first page extract to db
-        return ghwrapper.create(targetfile, imagepath, true, conf);
-
     }).then(function() {                                                                //create 1st preview
 
-        redirect(res, targetfile);                                                      //redirect to the doc
+        //redirect(res, targetfile);                                                      //redirect to the doc
 
         if (numpages > 1) {                                                             //only create more previews if
             return ghwrapper.create(targetfile, imagepath, false, conf);                //there is more than 1 page
@@ -94,10 +100,10 @@ function create(req, res, next) {
     });
 }
 
-function redirect(res, targetfile) {
+function redirect(res) {
 
     res.writeHead(302, {
-        'Location': '/doc/' +targetfile + '/update/'
+        'Location': '/new/'
     });
     res.end();
 }

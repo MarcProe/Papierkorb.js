@@ -3,7 +3,8 @@ extends layout
 block content
     table.striped
         tbody
-            th(width='25%') Dokument
+            th(width='20%') Dokument
+            th(width='5%') Ready
             th(width='7%') Seiten
             th(width='12%') Datum&nbsp;
                 if(session.plain.docdatefrom || session.plain.docdateto)
@@ -40,6 +41,11 @@ block content
                             else
                                 -linktitle = item._id;
                             a.overview(href="/doc/" + item._id + '/update/')= linktitle
+                        td.ppgrind
+                            if(item.previews === item.plaintext.length)
+                                i.material-icons check_circle
+                            else
+                                i.material-icons cancel
                         td.ppgrind= item.previews
                         td.ppgrid
                             if(item.docdate)
@@ -52,14 +58,14 @@ block content
                             else
                                 ='-'
                         td.ppgrid
-                            if(item.users[0])
+                            if(item.users && item.users[0])
                                 each user in item.users.sort()
                                     a(href='/doc/?users=' + user)= user
                                     =' '
                             else
                                 ='-'
                         td.ppgrid
-                            if(item.tags[0])
+                            if(item.tags && item.tags[0])
                                 each tag in item.tags.sort()
                                     a(href='/doc/?tags=' + tag)= tag
                                     =' '
