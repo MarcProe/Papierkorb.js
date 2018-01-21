@@ -6,8 +6,7 @@
     "doc": {
       "basepath": "c:/temp/test/",
       "imagepath": "c:/temp/test/images/",
-      "newpath": "c:/temp/test/new/",
-      "workpath": "c:/temp/test/work"
+      "newpath": "c:/temp/test/new/"
     },
     "db": {
       "constring": "mongodb://papierkorb:27017/",
