@@ -1,7 +1,7 @@
 let expect  = require("chai").expect;
 let request = require("request");
 
-describe("Papierkorb.js WebApp", function() {
+describe("Basic Requests", function () {
     describe("request /", function() {
 
         let url = "http://localhost:3000/";
