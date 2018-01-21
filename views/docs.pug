@@ -85,7 +85,7 @@ block content
                     console.log($(window).width());
 
                     $('#hoverimage')
-                        .html('<img height="' + ($(window).height() * 0.85) + '" src="/doc/' + src.id + '/preview/" />')
+                        .html('<img style="position:fixed; top:10" height="' + ($(window).height() * 0.85) + '" src="/doc/' + src.id + '/preview/" />')
                         .css({left: left, top: 100})
                         .show();
                         $(this).on('mouseleave', function(){
