@@ -8,21 +8,13 @@ env:
 
 before_script:
   - sudo apt-get install -qq ghostscript pdftk poppler-utils curl
-  #- git clone https://github.com/DanBloomberg/leptonica.git leptonica
-  #- cd leptonica && ./autobuild && ./configure && make && sudo make install && sudo ldconfig
-  #- cd ..
-  #- git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
-  #- cd tesseract-ocr && ./autogen.sh && ./configure && make && sudo make install && sudo ldconfig
-  #- cd ..
-  #- curl -s https://packagecloud.io/install/repositories/marcproe/tesseract-rpi/script.deb.sh | sudo bash
-  #- sudo apt-get update
-  #- sudo apt-get install leptonica=99-1
-  #- sudo apt-get install tesseract=99-1
-  - wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/leptonica_99-1_amd64.deb/download.deb
-  - wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/tesseract_99-1_amd64.deb/download.deb
-  - sudo dpkg -i *.deb 
-  - ls -alh /usr/local/lib
-
+  - git clone https://github.com/DanBloomberg/leptonica.git leptonica
+  - cd leptonica && ./autobuild && ./configure && make && sudo make install && sudo ldconfig
+  - cd ..
+  - git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
+  - cd tesseract-ocr && ./autogen.sh && ./configure && make && sudo make install && sudo ldconfig
+  - cd ..
+  
   - tesseract -v
 
   - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
