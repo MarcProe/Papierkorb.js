@@ -2,13 +2,15 @@ let expect = require("chai").expect;
 let request = require("request");
 let conf = require('config').get('conf');
 let fs = require('fs');
+let fse = require('fs-extra');
 
 describe("Prepare Tests", function () {
     describe("create new directory", function () {
         let path = conf.doc.newpath;
-        fs.mkdir(path, function (err) {
+        //fs.mkdir(path, function (err) {
             //ignore if it already exists
-        });
+        //});
+        fse.ensureDirSync(path);
         it("should have created the new folder", function (done) {
             expect(fs.existsSync(path)).to.equal(true);
             done();
