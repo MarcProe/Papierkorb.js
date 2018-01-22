@@ -7,6 +7,7 @@ RUN apt-get update && apt-get -y install ghostscript pdftk poppler-utils && apt-
 
 #build tesseract 4
 #RUN apt-get -y install autoconf-archive automake g++ libtool libleptonica-dev pkg-config
+RUN apt-get -y install automake g++ libtool libleptonica-dev pkg-config autoconf-archive
 
 #RUN git clone https://github.com/DanBloomberg/leptonica.git leptonica
 #RUN cd leptonica && ./autobuild && ./configure && make && make install && ldconfig

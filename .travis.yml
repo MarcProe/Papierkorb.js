@@ -7,7 +7,7 @@ env:
   - NODE_ENV=travis TESSDATA_PREFIX=/usr/local/share/tesseract-ocr/tessdata/
 
 before_script:
-  - sudo apt-get install -qq ghostscript pdftk poppler-utils curl
+  - sudo apt-get install -qq ghostscript pdftk poppler-utils automake g++ libtool libleptonica-dev pkg-config autoconf-archive 
   - git clone https://github.com/DanBloomberg/leptonica.git leptonica
   - cd leptonica && ./autobuild && ./configure && make && sudo make install && sudo ldconfig
   - cd ..
