@@ -21,8 +21,8 @@ before_script:
   - wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/leptonica_99-1_amd64.deb/download.deb
   - wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/tesseract_99-1_amd64.deb/download.deb
   - sudo dpkg -i *.deb 
-  
-  #- sudo ln -s /usr/local/lib/libtesseract.so.4 /usr/local/lib/libtesseract.so.4.0.0
+  - ls -alh /usr/local/lib
+  - sudo ln -s /usr/local/lib/libtesseract.so.4 /usr/local/lib/libtesseract.so.4.0.0
   - ls -alh /usr/local/lib
 
   - tesseract -v
