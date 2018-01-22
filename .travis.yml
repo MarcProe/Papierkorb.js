@@ -7,24 +7,22 @@ env:
   - NODE_ENV=travis TESSDATA_PREFIX=/usr/local/share/tesseract-ocr/tessdata/
 
 before_script:
-  - sudo apt-get install -qq ghostscript pdftk poppler-utils autoconf-archive automake g++ libtool libleptonica-dev pkg-config
-
+  - sudo apt-get install -qq ghostscript pdftk poppler-utils curl
   - git clone https://github.com/DanBloomberg/leptonica.git leptonica
   - cd leptonica && ./autobuild && ./configure && make && sudo make install && sudo ldconfig
   - cd ..
   - git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
   - cd tesseract-ocr && ./autogen.sh && ./configure && make && sudo make install && sudo ldconfig
   - cd ..
-
+  
   - tesseract -v
 
   - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
   - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/deu.traineddata
   - sudo wget -P /usr/local/share/tesseract-ocr/tessdata/ https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
-  - ls -alh
   - sleep 3
   - npm start
-  - sleep 15
+  - sleep 5
   
 script:
   - npm test

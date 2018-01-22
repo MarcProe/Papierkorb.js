@@ -14,7 +14,7 @@ describe("Document Creation", function () {
                 expect(response.statusCode).to.equal(200);
                 done();
             });
-        });
+        }).timeout(20000);
     }),
         describe("wait for 15 seconds", function () {
 
