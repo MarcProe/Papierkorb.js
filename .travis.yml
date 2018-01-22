@@ -7,13 +7,16 @@ env:
   - NODE_ENV=travis TESSDATA_PREFIX=/usr/local/share/tesseract-ocr/tessdata/
 
 before_script:
-  - sudo apt-get install -qq ghostscript pdftk poppler-utils autoconf-archive automake g++ libtool libleptonica-dev pkg-config
-  - git clone https://github.com/DanBloomberg/leptonica.git leptonica
-  - cd leptonica && ./autobuild && ./configure && make && sudo make install && sudo ldconfig
-  - cd ..
-  - git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
-  - cd tesseract-ocr && ./autogen.sh && ./configure && make && sudo make install && sudo ldconfig
-  - cd ..
+  - sudo apt-get install -qq ghostscript pdftk poppler-utils curl
+  #- git clone https://github.com/DanBloomberg/leptonica.git leptonica
+  #- cd leptonica && ./autobuild && ./configure && make && sudo make install && sudo ldconfig
+  #- cd ..
+  #- git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
+  #- cd tesseract-ocr && ./autogen.sh && ./configure && make && sudo make install && sudo ldconfig
+  #- cd ..
+  - curl -s https://packagecloud.io/install/repositories/marcproe/tesseract-rpi/script.deb.sh | sudo bash
+  - sudo apt-get install leptonica=99-1
+  - sudo apt-get install tesseract=99-1
 
   - tesseract -v
 
