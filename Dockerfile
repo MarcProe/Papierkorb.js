@@ -9,14 +9,14 @@ RUN apt-get update && apt-get -y install ghostscript pdftk poppler-utils && apt-
 #RUN apt-get -y install autoconf-archive automake g++ libtool libleptonica-dev pkg-config
 RUN apt-get -y install automake g++ libtool libleptonica-dev pkg-config autoconf-archive
 
-#RUN git clone https://github.com/DanBloomberg/leptonica.git leptonica
-#RUN cd leptonica && ./autobuild && ./configure && make && make install && ldconfig
-#RUN git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
-#RUN cd tesseract-ocr && ./autogen.sh && ./configure && make && make install && ldconfig
+RUN git clone https://github.com/DanBloomberg/leptonica.git leptonica
+RUN cd leptonica && ./autobuild && ./configure && make && make install && ldconfig
+RUN git clone https://github.com/tesseract-ocr/tesseract.git tesseract-ocr
+RUN cd tesseract-ocr && ./autogen.sh && ./configure && make && make install && ldconfig
 
-RUN wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/leptonica_99-1_armhf.deb/download.deb
-RUN wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/tesseract_99-1_armhf.deb/download.deb
-RUN dpkg -i *.deb
+#RUN wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/leptonica_99-1_armhf.deb/download.deb
+#RUN wget --content-disposition https://packagecloud.io/marcproe/tesseract-rpi/packages/raspbian/stretch/tesseract_99-1_armhf.deb/download.deb
+#RUN dpkg -i *.deb
 
 ENV TESSDATA_PREFIX /usr/local/share/tesseract-ocr/tessdata/
 
