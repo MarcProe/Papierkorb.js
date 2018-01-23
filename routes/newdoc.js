@@ -16,12 +16,24 @@ const fse = require('fs-extra');
 
 let inspect = require('eyes').inspector({maxLength:20000});
 
+
 router.get('/:filename?/:func?', function(req, res, next) {
+    handle(req, res, next);
+});
+
+router.post('/:filename?/:func?', function (req, res, next) {
+    handle(req, res, next);
+});
+
+function handle(req, res, next) {
     switch(req.params.func) {
         case "create":
-            create(req, res, next)
+            create(req, res, next);
             break;
 
+        case "upload":
+            upload(req, res, next);
+            break;
         default:
 
             glob( '*.pdf', {cwd: conf.doc.newpath}, function (err, files) {
@@ -43,7 +55,18 @@ router.get('/:filename?/:func?', function(req, res, next) {
             });
             break;
     }
-});
+}
+
+function upload(req, res, next) {
+    console.log('upload calling!');
+    console.log(req.files);
+    let targetfile = req.files.file.name;
+    req.files.file.mv(conf.doc.newpath + targetfile).then(function () {
+        console.log(conf.doc.newpath + targetfile);
+        res.end();
+    });
+    //res.end();
+}
 
 function create(req, res, next) {
     let targetfile = moment().toISOString().replace(/:/g,'-') + '.pdf';

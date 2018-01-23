@@ -1,6 +1,32 @@
 extends layout
 
 block content
+    script(src='/javascripts/dropzone.min.js')
+    script.
+        Dropzone.autoDiscover = false;
+        $(document).ready(function () {
+            $("#dropzoneform").dropzone({
+                paramName: 'file',
+                url: '/new/null/upload',
+                dictDefaultMessage: "Klick oder PDF-Datei mit Drag&Drop fallenlassen.",
+                clickable: true,
+                enqueueForUpload: true,
+                maxFilesize: 50,
+                acceptedFiles: ".pdf",
+                init: function () {
+                    this.on("complete", function (file) {
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            location.reload();
+                        }
+                    });
+                },
+                uploadMultiple: false,
+                addRemoveLinks: false
+            });
+
+        });
+    form#dropzoneform.dropzone.center-align(action='')
+    a(href='/new/') Alle Dateien hochgeladen
     if(data)
         table.striped.blue.lighten-5
             tbody

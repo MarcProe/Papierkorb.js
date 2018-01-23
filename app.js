@@ -17,6 +17,8 @@ let remove = require('./routes/remove');
 let mongo = require('mongodb').MongoClient;
 let config = require('config');
 
+const fileUpload = require('express-fileupload');
+
 let conf = config.get('conf');
 
 let app = express();
@@ -59,6 +61,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(fileUpload());
 
 app.use('/', index);
 app.use('/doc/', docs);
