@@ -27,6 +27,9 @@ before_script:
 script:
   - npm test
   
+after_script:
+  - pm2 logs
+
 node_js:
   - "lts/*"
   
