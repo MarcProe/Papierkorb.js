@@ -39,4 +39,7 @@ jobs:
       # run tests!
       - run: npm test
 
+machine:
+  environment:
+    NODE_ENV: circleci
 
