@@ -28,7 +28,9 @@ script:
   - npm test
   
 after_script:
-  - pm2 desc 0
+  - sleep 120
+  - pm2 desc 0  
+  - pm2 stop all
   - cat /home/travis/.pm2/logs/www-out-0.log
   - cat /home/travis/.pm2/logs/www-error-0.log
 
