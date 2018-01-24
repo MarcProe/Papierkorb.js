@@ -29,6 +29,8 @@ script:
   
 after_script:
   - pm2 desc 0
+  - cat /home/travis/.pm2/logs/www-out-0.log
+  - cat /home/travis/.pm2/logs/www-error-0.log
 
 node_js:
   - "lts/*"
