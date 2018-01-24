@@ -7,15 +7,20 @@ let fse = require('fs-extra');
 describe("Prepare Tests", function () {
     describe("create new directory", function () {
         let path = conf.doc.newpath;
-        //fs.mkdir(path, function (err) {
-            //ignore if it already exists
-        //});
         fse.ensureDirSync(path);
         it("should have created the new folder", function (done) {
             expect(fs.existsSync(path)).to.equal(true);
             done();
         });
     }),
+        describe("create doc directory", function () {
+            let path = conf.doc.basepath;
+            fse.ensureDirSync(path);
+            it("should have created the new folder", function (done) {
+                expect(fs.existsSync(path)).to.equal(true);
+                done();
+            });
+        }),
         describe("copy testfile /", function () {
             let path = conf.doc.newpath + 'test.nld.pdf';
             fs.copyFileSync('./share/test.nld.pdf', path);
