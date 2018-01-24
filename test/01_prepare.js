@@ -16,7 +16,15 @@ describe("Prepare Tests", function () {
         describe("create doc directory", function () {
             let path = conf.doc.basepath;
             fse.ensureDirSync(path);
-            it("should have created the new folder", function (done) {
+            it("should have created the doc folder", function (done) {
+                expect(fs.existsSync(path)).to.equal(true);
+                done();
+            });
+        }),
+        describe("create image directory", function () {
+            let path = conf.doc.imagepath;
+            fse.ensureDirSync(path);
+            it("should have created the image folder", function (done) {
                 expect(fs.existsSync(path)).to.equal(true);
                 done();
             });
