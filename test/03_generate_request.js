@@ -31,9 +31,10 @@ describe("Document Creation", function () {
                 mongo.connect(dburl, function (err, db) {
                     db.collection(conf.db.c_doc).findOne({}, function (err, result) {
                         expect(result._id).to.not.be.undefined;
+                        done();
                     });
                 });
-                done();
+                
             });
         }),
         describe("check the previews", function () {
@@ -42,9 +43,9 @@ describe("Document Creation", function () {
                 mongo.connect(dburl, function (err, db) {
                     db.collection(conf.db.c_doc).findOne({}, function (err, result) {
                         expect(result.previews).to.equal(5);
+                        done();
                     });
                 });
-                done();
             });
             it("should return status 200", function (done) {
                 let dburl = conf.db.constring + conf.db.db;
@@ -58,7 +59,6 @@ describe("Document Creation", function () {
 
                     });
                 });
-                done();
             });
             it("should return content-type image/png", function (done) {
                 let dburl = conf.db.constring + conf.db.db;
@@ -71,7 +71,6 @@ describe("Document Creation", function () {
                         });
                     });
                 });
-                done();
             });
         });
 });
