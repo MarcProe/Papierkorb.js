@@ -1,0 +1,23 @@
+{
+  "conf": {
+    "net": {
+      "port": "3000"
+    },
+    "doc": {
+      "basepath": "./opt/papierkorb/docs/",
+      "imagepath": "./opt/papierkorb/images/",
+      "newpath": "./opt/papierkorb/new/"
+    },
+    "db": {
+      "constring": "mongodb://localhost:27017/",
+      "db": "papierkorb-travis",
+      "c_user": "user",
+      "c_doc": "doc",
+      "c_tag": "tag",
+      "c_partner": "partner"
+    },
+    "ocr": {
+      "lang": "deu+nld"
+    }
+  }
+}
