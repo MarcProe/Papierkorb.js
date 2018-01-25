@@ -37,6 +37,8 @@ after_script:
 
 node_js:
   - "lts/*"
+  - "8"
+  - "9"
   
 notifications:
   email: false

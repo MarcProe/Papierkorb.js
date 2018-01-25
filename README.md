@@ -9,7 +9,7 @@ This is a personal development repository.
 
 Papierkorb is a web application used to manage private documents.
 
-Papierkorb uses [Node.js](https://github.com/nodejs/node), [Pug](https://github.com/pugjs/pug), [MaterializeCSS](https://github.com/Dogfalo/materialize) and [MongoDB](https://github.com/mongodb/mongo).
+Papierkorb uses [Node.js](https://github.com/nodejs/node), [Pug](https://github.com/pugjs/pug), [MaterializeCSS](https://github.com/Dogfalo/materialize), [MongoDB](https://github.com/mongodb/mongo) and [some other libraries](https://github.com/MarcProe/Papierkorb.js/blob/master/package.json).
 
 Papierkorb runs on a Raspberry Pi 3 in Docker. It uses [arm32v7/node](https://hub.docker.com/r/arm32v7/node/) and [sumglobal/rpi-mongodb](https://hub.docker.com/r/sumglobal/rpi-mongodb/)
 
@@ -50,3 +50,8 @@ Add line `deb https://download.docker.com/linux/debian stretch stable`
 ### Access the app
 
 http://raspberry:3000
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/MarcProe/Papierkorb.js/badge.svg?style=beer-square)](https://beerpay.io/MarcProe/Papierkorb.js)  [![Beerpay](https://beerpay.io/MarcProe/Papierkorb.js/make-wish.svg?style=flat-square)](https://beerpay.io/MarcProe/Papierkorb.js?focus=wish)
