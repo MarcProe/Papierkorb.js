@@ -66,7 +66,7 @@ let ghwrapper = {
                 }
 
                 inspect(stdout, 'gh output');
-                let retval = stdout.replace(/(\r\n|\n|\r)/gm, "");
+                let retval = Number(stdout.replace(/(\r\n|\n|\r)/gm, ""));
                 resolve(retval)
             });
         });

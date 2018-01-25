@@ -97,7 +97,7 @@ function create(req, res, next) {
     console.time('newtess');
 
     //execute promises
-    fse.rename(src, target).then(function (data) {                                       //move file from new to work
+    fse.rename(src, target).then(function (data) {                                      //move file from new to work
 
         return null;                                                                    //continue processing in backend
 
@@ -132,7 +132,7 @@ function create(req, res, next) {
         } else {
             return null;
         }
-    }).then(function () {                                                                //other previews where
+    }).then(function () {                                                               //other previews where
         if (numpages > 1) {                                                             //only create more previews if
             return ghwrapper.create(targetfile, imagepath, false, conf);                //there is more than 1 page
 
