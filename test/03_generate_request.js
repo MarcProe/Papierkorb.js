@@ -17,7 +17,7 @@ describe("Document Creation", function () {
         }).timeout(20000);
     }),
         describe("wait for 15 seconds", function () {
-            this.slow(20000);
+            this.slow(99999);
             it("should wait 15 seconds", function (done) {
                 sleep(15000).then(function () {
                     expect(true).to.equal(true);
@@ -34,8 +34,7 @@ describe("Document Creation", function () {
                         expect(result._id).to.not.be.undefined;
                         done();
                     });
-                });
-                
+                });                
             });
         }),
         describe("check the previews", function () {
@@ -58,7 +57,6 @@ describe("Document Creation", function () {
                             expect(response.statusCode).to.equal(200);
                             done();
                         });
-
                     });
                 });
             });
