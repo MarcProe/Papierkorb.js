@@ -65,7 +65,8 @@ let render = {
                 data: data,
                 conf: conf,
                 title: title,
-                session: req.session
+                session: req.session,
+                qhost: req.protocol + '://' + req.get('host')
             });
 
         }).catch(function(err) {

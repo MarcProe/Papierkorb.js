@@ -1,7 +1,8 @@
 extends layout
 
 block content
-    script(src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js')
+    //script(src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js')
+    script(src=qhost + '/javascripts/tesseract.js')
     div.row
         div.col.s8
             -var n = 0
@@ -292,26 +293,35 @@ block content
         });
 
         function ocr(img) {
+
+            let qhost = !{JSON.stringify(qhost).replace(/<\//g, '<\\/')}
+
+            window.Tesseract = Tesseract.create({
+                workerPath: qhost + '/javascripts/worker.js',
+                langPath: qhost + '/tessdata/',
+                corePath: qhost + '/javascripts/index.js',
+            })
+
             $(img).ready(function () {
                 //$('#tess').on('click', function () {
                 var docdata = !{JSON.stringify(data).replace(/<\//g, '<\\/')};
-                //console.log(docdata);
                 Tesseract.recognize('/doc/' + docdata._id + '/preview/0', {
                     lang: 'deu'
                 }).progress(function (message) {
-                    console.log(message);
+
                     if (message.status === "recognizing text") {
                         $('#ocr').attr('class', 'determinate');
                         $('#ocr').css('width', (message.progress * 100) + '%')
                     } else {
                         $('#ocr').attr('class', 'indeterminate');
+                        console.log(message);
                     }
                 }).then(function (result) {
-                    console.log(result)
                     $('.doctext').val(result.text);
                 });
-
                 //});
+                //post to a node service that saves it to the database
+                //add button functionality to scan all preview images
             });
         }
 
