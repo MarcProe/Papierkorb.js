@@ -50,3 +50,8 @@ Add line `deb https://download.docker.com/linux/debian stretch stable`
 ### Access the app
 
 http://raspberry:3000
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/MarcProe/Papierkorb.js/badge.svg?style=beer-square)](https://beerpay.io/MarcProe/Papierkorb.js)  [![Beerpay](https://beerpay.io/MarcProe/Papierkorb.js/make-wish.svg?style=flat-square)](https://beerpay.io/MarcProe/Papierkorb.js?focus=wish)
