@@ -39,11 +39,21 @@ mongo.connect(url, function(err, db) {
 
     app.locals.db = dbase;
 
-    createcol(dbase, conf.db.c_user);
-    createcol(dbase, conf.db.c_doc);
-    createcol(dbase, conf.db.c_tag);
-    createcol(dbase, conf.db.c_partner);
-
+    createcol(dbase, conf.db.c_user).then(function () {
+        console.log('Collection ' + conf.db.c_user + ' created');
+        return createcol(dbase, conf.db.c_doc);
+    }).then(function () {
+        console.log('Collection ' + conf.db.c_doc + ' created');
+        return createcol(dbase, conf.db.c_tag);
+    }).then(function () {
+        console.log('Collection ' + conf.db.c_tag + ' created');
+        return createcol(dbase, conf.db.c_partner);
+    }).then(function () {
+        console.log('Collection ' + conf.db.c_partner + ' created');
+    }).catch(function (err) {
+        console.log('Error creating collections.');
+        console.log(err);
+    });
 });
 
 // view engine setup
@@ -88,9 +98,6 @@ app.use(function(err, req, res, next) {
 });
 
 function createcol(db, name) {
-    db.createCollection(name, function(err, res) {
-        if (err) throw err;
-        console.log('Collection ' + name + ' created.');
-    });
+    return db.createCollection(name);
 }
 module.exports = app;

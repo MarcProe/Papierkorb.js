@@ -26,7 +26,6 @@ block content
 
         });
     form#dropzoneform.dropzone.center-align(action='')
-    a(href='/new/') Alle Dateien hochgeladen
     if(data)
         table.striped.blue.lighten-5
             tbody
@@ -38,5 +37,8 @@ block content
                         =' ' + file.size + ' KB '
                     td
                         =moment(file.mtime).format('DD.MM.YYYY HH:mm')
+                    td(width='5%')
+                        a(href='/new/' + file.file + '/remove/')
+                            i.material-icons.red-text delete_forever
     else
         span Keine neuen Dateien

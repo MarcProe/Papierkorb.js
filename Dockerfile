@@ -18,9 +18,9 @@ ENV TESSDATA_PREFIX /usr/local/share/tesseract-ocr/tessdata/
 RUN tesseract -v
 RUN which tesseract
 
-RUN wget -P $TESSDATA_PREFIX https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/eng.traineddata
-RUN wget -P $TESSDATA_PREFIX https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/deu.traineddata
-RUN wget -P $TESSDATA_PREFIX https://raw.githubusercontent.com/tesseract-ocr/tessdata/master/nld.traineddata
+RUN wget -P $TESSDATA_PREFIX https://github.com/tesseract-ocr/tessdata_fast/raw/master/nld.traineddata
+RUN wget -P $TESSDATA_PREFIX https://github.com/tesseract-ocr/tessdata_fast/raw/master/deu.traineddata
+RUN wget -P $TESSDATA_PREFIX https://github.com/tesseract-ocr/tessdata_fast/raw/master/nld.traineddata
 
 COPY package*.json ./
 

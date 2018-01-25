@@ -34,6 +34,11 @@ function handle(req, res, next) {
         case "upload":
             upload(req, res, next);
             break;
+
+        case "remove":
+            remove(req, res, next);
+            break;
+
         default:
 
             glob( '*.pdf', {cwd: conf.doc.newpath}, function (err, files) {
@@ -57,6 +62,17 @@ function handle(req, res, next) {
     }
 }
 
+function remove(req, res, next) {
+    let filepath = conf.doc.newpath + req.params.filename;
+    console.log(filepath);
+    fse.remove(filepath).then(function () {
+        //noop
+    }).catch(function (err) {
+        console.log('Error deleting file' + err);
+    });
+    res.redirect('/new/');
+}
+
 function upload(req, res, next) {
     console.log('upload calling!');
     console.log(req.files);
@@ -69,7 +85,7 @@ function upload(req, res, next) {
 }
 
 function create(req, res, next) {
-    let targetfile = moment().toISOString().replace(/:/g,'-') + '.pdf';
+    let targetfile = moment().utc().toISOString().replace(/:/g, '-') + '.pdf';
     let src = conf.doc.newpath + req.params.filename;
     let target = conf.doc.basepath + targetfile;
     let imagepath = conf.doc.imagepath + targetfile;
@@ -77,10 +93,11 @@ function create(req, res, next) {
     let numpages = 0;
     let firstPageExtract = '';
 
+    console.time('newproc');
+    console.time('newgh');
+    console.time('newtess');
     //execute promises
     fse.rename(src, target).then(function (data) {                                       //move file from new to work
-
-        redirect(res);                                                                  //redirect to /new/
 
         return;                                                                         //continue processing in backend
 
@@ -91,7 +108,11 @@ function create(req, res, next) {
 
         return pdfextractwrapper.go(targetfile, conf.ocr.lang, req.app.locals.db, conf);
     }).then(function (data) {
-        inspect(data, 'tesseract promise was resolved and returned');
+
+        console.timeEnd('newproc');
+        redirect(res);                                                                  //redirect to /new/
+
+        inspect(data, 'tesseract promise was resolved and returned, rest of pages will be processed in the background');
 
         numpages = data.num_pages;
         firstPageExtract = [data.text];
@@ -118,8 +139,11 @@ function create(req, res, next) {
 
     }).then(function() {                                                                //other previews where
         console.log('Other Previews done!');                                            //created if more than 1 page
+        console.timeEnd('newgh');
     }).catch(function(err) {
         console.error(err);
+        res.send(err);
+        res.end();
     });
 }
 

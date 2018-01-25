@@ -35,6 +35,7 @@ let pdfextractwrapper = {
                     inspect(data, 'oncomplete data');
                     console.log('document ' + file + ' was fully extracted and saved in the database');
                     inspect(result.result, "dbop");
+                    console.timeEnd('newtess');
                 });
             });
 

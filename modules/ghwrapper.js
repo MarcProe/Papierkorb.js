@@ -17,8 +17,8 @@ let ghwrapper = {
             lastpage = 999;
         }
         let pdffilepath = conf.doc.basepath + pdffile;
-        let cmd = 'gs -dBATCH -dNOPAUSE -sDEVICE=pngalpha -dFirstPage=' + firstpage +
-            ' -dLastPage=' + lastpage + ' -sOutputFile=' + targetpath + '.' + count + '.png -r300 ' + pdffilepath;
+        let cmd = 'gs -dBATCH -dNOPAUSE -sDEVICE=png16m  -dFirstPage=' + firstpage +
+            ' -dLastPage=' + lastpage + ' -sOutputFile=' + targetpath + '.' + count + '.png -r150 ' + pdffilepath;
 
         let procoptions = {maxBuffer: 4096 * 4096};
 
