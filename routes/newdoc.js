@@ -8,7 +8,6 @@ let config = require('config');
 let conf = config.get('conf');
 
 let render = require('../modules/render.js');
-let pdfextractwrapper = require('../modules/pdfextractwrapper.js');
 let ghwrapper = require('../modules/ghwrapper.js');
 
 let fs = require('fs');
@@ -96,48 +95,52 @@ function create(req, res, next) {
     console.time('newproc');
     console.time('newgh');
     console.time('newtess');
+
     //execute promises
     fse.rename(src, target).then(function (data) {                                       //move file from new to work
 
-        return;                                                                         //continue processing in backend
+        return null;                                                                    //continue processing in backend
 
     }).then(function () {                                                               //write first page extract to db
-        return ghwrapper.create(targetfile, imagepath, true, conf);
 
-    }).then(function () {                                                                //extract the first pdf file
+        return ghwrapper.create(targetfile, imagepath, true, conf);                     //create page one preview
 
-        return pdfextractwrapper.go(targetfile, conf.ocr.lang, req.app.locals.db, conf);
+    }).then(function () {                                                               //extract the first pdf file
+
+        return ghwrapper.create(targetfile, imagepath, true, conf, true);               //create page one thumb
     }).then(function (data) {
 
         console.timeEnd('newproc');
-        redirect(res);                                                                  //redirect to /new/
 
-        inspect(data, 'tesseract promise was resolved and returned, rest of pages will be processed in the background');
+        return ghwrapper.pagecount(target);
 
-        numpages = data.num_pages;
-        firstPageExtract = [data.text];
+    }).then(function (pagecount) {
 
-        inspect(firstPageExtract);
-
-        return req.app.locals.db.collection(conf.db.c_doc)
-            .updateOne({_id: targetfile}, {$set: {previews: data.num_pages}}, {upsert: true});
-
-    }).then(function () {                                                    //write numpages to db
+        numpages = pagecount;
+        console.log(numpages);
 
         return req.app.locals.db.collection(conf.db.c_doc)
-            .updateOne({_id: targetfile}, {$set: {plaintext: firstPageExtract}}, {upsert: true});
+            .updateOne({_id: targetfile}, {$set: {previews: numpages}}, {upsert: true});
 
     }).then(function() {                                                                //create 1st preview
 
-        //redirect(res, targetfile);                                                      //redirect to the doc
+        redirect(res, targetfile);                                                      //redirect to the doc
 
-        if (numpages > 1) {                                                             //only create more previews if
-            return ghwrapper.create(targetfile, imagepath, false, conf);                //there is more than 1 page
+        if (numpages > 1) {                                                             //only create more thumbs if
+            return ghwrapper.create(targetfile, imagepath, false, conf, true);          //there is more than 1 page
+
         } else {
             return null;
         }
+    }).then(function () {                                                                //other previews where
+        if (numpages > 1) {                                                             //only create more previews if
+            return ghwrapper.create(targetfile, imagepath, false, conf);                //there is more than 1 page
 
-    }).then(function() {                                                                //other previews where
+        } else {
+            return null;
+        }
+    }).then(function () {
+
         console.log('Other Previews done!');                                            //created if more than 1 page
         console.timeEnd('newgh');
     }).catch(function(err) {
@@ -147,10 +150,10 @@ function create(req, res, next) {
     });
 }
 
-function redirect(res) {
+function redirect(res, targetfile) {
 
     res.writeHead(302, {
-        'Location': '/new/'
+        'Location': '/doc/' + targetfile + '/'
     });
     res.end();
 }

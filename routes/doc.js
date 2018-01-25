@@ -21,6 +21,9 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
             preview(req, res, next);
             break;
         case 'thumb':
+            preview(req, res, next, true);
+            break;
+        case 'thumb':
             thumb(req, res, next);
             break;
         case 'update':
@@ -111,9 +114,13 @@ function download(req, res, docid) {
     res.end(file, 'binary');
 }
 
-function preview(req, res, next) {
+function preview(req, res, next, thumb) {
+    let thumbname = '';
+    if (thumb) {
+        thumbname = '.thumb';
+    }
     let id = req.params.genid ? req.params.genid : 0;
-    let img = fs.readFileSync(conf.doc.imagepath + req.params.docid + '.' + id + '.png');
+    let img = fs.readFileSync(conf.doc.imagepath + req.params.docid + '.' + id + thumbname + '.png');
     res.writeHead(200, {'Content-Type': 'image/png' });
     res.end(img, 'binary');
 }
@@ -206,7 +213,7 @@ function update(req, res, next) {
                 result.users = [];
             }
 
-            if(!result.docdate && result.plaintext) {
+            if (false && !result.docdate && result.plaintext) {
                 //versuche das Datum zu finden
                 let regex = /([\d]{1,2})\.\s?([\d]{1,2}|[\w]{3,9})\.?\s?(\d{4}|\d{2})/;
                 let dateregex = result.plaintext[0].match(regex);

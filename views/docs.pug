@@ -42,7 +42,7 @@ block content
                                 -linktitle = item._id;
                             a.overview(href="/doc/" + item._id + '/update/')= linktitle
                         td.ppgrind
-                            if(item.previews === item.plaintext.length)
+                            if(item.plaintext && item.previews && item.previews === item.plaintext.length)
                                 i.material-icons check_circle
                             else
                                 i.material-icons cancel

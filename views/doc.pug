@@ -56,7 +56,10 @@ block content
                 div.row
                     div.col.s12
                         div.previewcontainer(style='min-height: 600px;')
-                            img.preview(id='image_' + n, src='/images/wait.png', data-src='/doc/' + data._id + '/preview/' + n)
+                            if(n !== 0)
+                                img.preview(id='image_' + n, src='/images/wait.png', data-src='/doc/' + data._id + '/preview/' + n)
+                            else
+                                img.preview(id='image_' + n, src='/doc/' + data._id + '/thumb/0', data-src='/doc/' + data._id + '/preview/' + n)
                 -n++
         div.col.s4
             form(method='POST' action='/doc/' + data._id + '/update/true' autocomplete="off")
@@ -288,8 +291,36 @@ block content
             $('#tagstooltip').tooltip({delay: 50});
         });
 
+        function ocr(img) {
+            $(img).ready(function () {
+                //$('#tess').on('click', function () {
+                var docdata = !{JSON.stringify(data).replace(/<\//g, '<\\/')};
+                //console.log(docdata);
+                Tesseract.recognize('/doc/' + docdata._id + '/preview/0', {
+                    lang: 'deu'
+                }).progress(function (message) {
+                    console.log(message);
+                    if (message.status === "recognizing text") {
+                        $('#ocr').attr('class', 'determinate');
+                        $('#ocr').css('width', (message.progress * 100) + '%')
+                    } else {
+                        $('#ocr').attr('class', 'indeterminate');
+                    }
+                }).then(function (result) {
+                    console.log(result)
+                    $('.doctext').val(result.text);
+                });
+
+                //});
+            });
+        }
+
         $(document).ready(function () {
-            $('img').unveil();
+            $('img').unveil(50, function () {
+                if ($(this).attr('id') === 'image_0') {
+                    ocr($(this));
+                }
+            });
             setTimeout(function(){
                 $('.previewcontainer').css('min-height', '0px');
             }, 600);
@@ -310,25 +341,6 @@ block content
             })
         });
 
-        $(document).ready(function () {
-            $('#tess').on('click', function () {
-                var docdata = !{JSON.stringify(data).replace(/<\//g, '<\\/')};
-                //console.log(docdata);
-                Tesseract.recognize('/doc/' + docdata._id + '/preview/0', {
-                    lang: 'deu'
-                }).progress(function (message) {
-                    console.log(message);
-                    if (message.status === "recognizing text") {
-                        $('#ocr').attr('class', 'determinate');
-                        $('#ocr').css('width', (message.progress * 100) + '%')
-                    } else {
-                        $('#ocr').attr('class', 'indeterminate');
-                    }
-                }).then(function (result) {
-                    console.log(result)
-                    $('.doctext').val(result.text);
-                });
+        //$(document).ready(function () {
 
-            });
-        });
 
