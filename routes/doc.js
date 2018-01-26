@@ -23,9 +23,6 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
         case 'thumb':
             preview(req, res, next, true);
             break;
-        case 'thumb':
-            thumb(req, res, next);
-            break;
         case 'update':
             update(req, res, next);
             break;
