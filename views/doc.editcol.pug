@@ -1,0 +1,42 @@
+div.valign-wrapper(style='height:100%')
+    -var offset = '3'
+    if(n > 1)
+        -offset = '-9'
+    else
+    div.right-align(style='position: relative; height: 75px;')
+        div.fixed-action-btn.horizontal(style='position: absolute; display: inline-block; right: 24px; top:' + offset + 'px; z-index: -0')
+            a.btn-floating.btn-large.blue.waves-effect.waves-light.lighten-1
+                i.material-icons.medium edit
+            ul
+                li
+                    a.deletepreview.btn-floating.tooltipped(id='delpage_' + n, data-position='bottom' data-delay='50' data-tooltip='Diese Seite löschen. Das ursprüngliche PDF bleibt unverändert, es wird nur das Vorschaubild gelöscht.')
+                        i.material-icons.medium.red.white-text delete_forever
+                li.divider
+                li
+                    a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=-90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach links drehen')
+                        i.material-icons.medium.white.blue-text rotate_left
+                li
+                    a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=180&#page' + n, data-position='bottom' data-delay='50' data-tooltip='180° drehen')
+                        i.material-icons.medium.white.blue-text refresh
+                li
+                    a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach rechts drehen')
+                        i.material-icons.medium.white.blue-text rotate_right
+                li.divider
+                li
+                    if(n === 0)
+                        a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben(diese Seite ist die erste Seite)', style='cursor: default;')
+                            i.grey-text.material-icons.white.medium arrow_upward
+                    else
+                        a.btn-floating.tooltipped(href='/doc/' + data._id + '/move/up/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach oben verschieben')
+                            i.material-icons.medium.white.blue-text arrow_upward
+                li
+                    if(n < data.previews - 1)
+                        a.btn-floating.tooltipped(href='/doc/' + data._id + '/move/down/?page=' + n + '#page' + n, data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben')
+                            i.material-icons.medium.white.blue-text arrow_downward
+                    else
+                        a.btn-floating.tooltipped(data-position='bottom' data-delay='50' data-tooltip='Seite nach unten verschieben (diese Seite ist die letzte Seite)', style='cursor: default;')
+                            i.grey-text.material-icons.medium.white.blue-text arrow_downward
+                li.divider
+                li
+                    a.reloadpreview.btn-floating.tooltipped(id='reloadpage_' + n, data-id='image_' + n, data-position='bottom' data-delay='50' data-tooltip='Diese Vorschau erneut laden.')
+                        i.material-icons.medium.white.blue-text sync_problem

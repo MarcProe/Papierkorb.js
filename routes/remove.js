@@ -26,13 +26,13 @@ router.get('/:docid/:func?/:genid?', function(req, res, next) {
 });
 
 function noop(req, res, next, err){
-    throw err;
+    render.rendercallback(err, req, res, 'error', null, conf, null);
 }
 
 function hard(req, res, next) {
     fs.unlink(conf.doc.basepath + req.params.docid, function(err) {
         if(err) {
-            noop(req, res, next, err);
+            throw err
         } else {
             cleanup(req, res, next, true);
         }
@@ -48,7 +48,7 @@ function soft(req, res, next) {
             let target = conf.doc.newpath;
             let src= conf.doc.basepath + req.params.docid;
 
-            if(result.subject) {
+            if (result && result.subject) {
                 target += sanitize(result.subject) + '.pdf';
             } else {
                 target += req.params.docid;
@@ -72,7 +72,7 @@ function cleanup(req, res, next, hard) {
 }
 
 function cleanuppreview(req, res, next) {
-    glob(req.params.docid + '.*.png', {cwd: conf.doc.imagepath}, function (err, files) {
+    glob(req.params.docid + '.*' + '.png', {cwd: conf.doc.imagepath}, function (err, files) {
         files.forEach(function(entry) {
             fs.unlink(conf.doc.imagepath + entry, function(err) {
                 if(err) {
@@ -86,7 +86,7 @@ function cleanuppreview(req, res, next) {
 function cleanupdb(req, res, next) {
     req.app.locals.db.collection(conf.db.c_doc).removeOne({_id: req.params.docid}, function(err, obj) {
         if(err)
-            throw err;
+            noop(req, res, next, err);
     });
 }
 

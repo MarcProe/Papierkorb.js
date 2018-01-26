@@ -85,9 +85,10 @@ function deletepage(req, res, docid, page, maxpages ) {
 
     //move all lower pages
     //#todo pages start at 0
-    for(let i = parseInt(page); i < maxpages; i++) {
+    for (let i = parseInt(page); i < maxpages - 1; i++) {
         let filenew = conf.doc.imagepath + docid + '.' + i + '.png';
         let fileold = conf.doc.imagepath + docid + '.' + (i + 1) + '.png';
+        console.log(fileold + ' => ' + filenew);
         fs.renameSync(fileold, filenew);
     }
 

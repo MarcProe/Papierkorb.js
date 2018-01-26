@@ -1,0 +1,34 @@
+div.modal-content
+    h4 Suche
+    form#modalsearchform(autocomplete="off" method='POST' action='/doc/')
+        div.row
+            div.col.s6
+                label(for='docdatesearchinputfrom') Datum von:
+            div.col.s6
+                label(for='docdatesearchinputto') Datum bis:
+        div.row
+            div.col.s6
+                input#docdatesearchinputfrom.form-control.datepicker(value=session.plain.docdatefrom, name='docdatefrom')
+            div.col.s6
+                input#docdatesearchinputto.form-control.datepicker(value=session.plain.docdateto, name='docdateto')
+        div.row
+            div.col.s10
+                label(for='partnersearchinput') Partner:
+            div.col.s2
+                div.right-align
+                    i#pstt.tooltipped.material-icons(data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
+        div.row
+            div.col.s12
+                input#partnersearchinput.autocomplete(value=session.plain.partner, name='partner')
+        div.row
+            div.col.s10
+                label(for='tagsearchinput') Tags:
+            div.col.s2
+                div.right-align
+                    i#tstt.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
+        div.row
+            div.col.s12
+                input#tagsearchinput.autocomplete(value=session.plain.tags, name='tags')
+div.modal-footer
+    a#modalsearchbutton.modal-action.modal-close.waves-effect.btn.blue(href='#')
+        i.material-icons.large search
