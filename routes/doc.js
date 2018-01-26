@@ -13,8 +13,6 @@ let conf = require('config').get('conf');
 
 let inspect = require('eyes').inspector({maxLength: 20000});
 
-const months = ['Januar','Februar','März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-
 router.get('/:docid/:func?/:genid?/', function(req, res, next) {
     switch (req.params.func) {
         case 'preview':
@@ -210,59 +208,7 @@ function update(req, res, next) {
             if(!result.users) {
                 result.users = [];
             }
-
-            if (false && !result.docdate && result.plaintext) {
-                //versuche das Datum zu finden
-                let regex = /([\d]{1,2})\.\s?([\d]{1,2}|[\w]{3,9})\.?\s?(\d{4}|\d{2})/;
-                let dateregex = result.plaintext[0].match(regex);
-                if (dateregex) {
-
-                    let day = dateregex[1];
-                    let month = dateregex[2];
-                    let year = dateregex[3];
-
-                    if (isNaN(month)) {
-                        month = months.indexOf(month) + 1;
-                    }
-
-                    let tempdate = padStart(day, 2, '0') + '-' + padStart(month, 2, '0') + '-' + padStart(year, 4, '20');
-                    result.docdate = moment.utc(tempdate, 'DD.MM.YYYY').toISOString();
-                    result.founddate = true;
-
-                } else {
-                    result.founddate = false;
-                }
-            }
-
-            let bestpartner = {"name": "", "score": "0"};
-
-            if(!result.partner && result.plaintext) {
-                req.app.locals.db.collection(conf.db.c_partner).find({}).toArray(function(err, partners) {
-                    let score = 0;
-                    partners.forEach(function(partner) {
-                        if(partner.search) {
-                            partner.search.forEach(function(search) {
-                                let partnerfind = result.plaintext[0].match(new RegExp(search));
-
-                                if(partnerfind) {
-                                    score++;
-                                }
-                            });
-                            if(score > bestpartner.score) {
-                                bestpartner.name = partner.name;
-                                bestpartner.score = score;
-                            }
-                        }
-                    });
-
-                    result.partner = bestpartner.name;
-                    result.foundpartner = true;
-                    preparerender(req, res, next, result)
-
-                });
-            } else {
-                preparerender(req, res, next, result)
-            }
+            preparerender(req, res, next, result)
         });
     }
 }

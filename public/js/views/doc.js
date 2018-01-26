@@ -1,3 +1,96 @@
+const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+
+function finddate(singletext) {
+    if (singletext) {
+        //versuche das Datum zu finden
+        let regex = /([\d]{1,2})\.\s?([\d]{1,2}|[\w]{3,9})\.?\s?(\d{4}|\d{2})/;
+        let dateregex = singletext.match(regex);
+        if (dateregex) {
+            let day = dateregex[1];
+            let month = dateregex[2];
+            let year = dateregex[3];
+
+            if (isNaN(month)) {
+                month = months.indexOf(month) + 1;
+            }
+            let tempdate = ('0' + day).slice(-2) + '-' + ('0' + month).slice(-2) + '-' + ('200' + year).slice(-4);
+
+            return moment.utc(tempdate, 'DD.MM.YYYY').toISOString();
+        } else {
+            return null;
+        }
+    }
+}
+
+function findpartner(singletext) {
+    let bestpartner = {"name": "", "score": "0"};
+
+    if (singletext) {
+        console.log(window.partnerlist);
+        window.partnerlist.forEach(function (partner) {
+            let score = 0;
+
+            if (!partner.search) {
+                partner.search = [];
+            }
+            partner.search.push(partner.name);
+
+            partner.search.forEach(function (search) {
+                let partnerfind = singletext.match(new RegExp(search));
+
+                if (partnerfind) {
+                    score++;
+                }
+            });
+            if (score > bestpartner.score) {
+                bestpartner.name = partner.name;
+                bestpartner.score = score;
+            }
+
+        });
+        return bestpartner;
+    } else {
+        return null;
+    }
+}
+
+function finduser(singletext) {
+    let userarr = [];
+    let maxscore = 1;   //filters all scores lower than this
+
+    if (singletext) {
+        window.userlist.forEach(function (user) {
+            let score = 0;
+
+            if (!user.search) {
+                user.search = [];
+            }
+            user.search.push(user.name);
+
+            user.search.forEach(function (search) {
+                let userfind = singletext.match(new RegExp(search));
+
+                if (userfind) {
+                    score++;
+                }
+                if (score > maxscore) {
+                    maxscore = score;
+                }
+            });
+
+            let match = {};
+            match.name = user.name;
+            match.score = score;
+
+            userarr.push(match);
+
+        });
+        return userarr.filter(usr => usr.score === maxscore);
+    } else {
+        return [];
+    }
+}
+
 function ocr(img) {
 
     let qhost = window.qhost; //!{JSON.stringify(qhost).replace(/<\//g, '<\\/')}
@@ -11,6 +104,8 @@ function ocr(img) {
     $(img).ready(function () {
         //$('#tess').on('click', function () {
         let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
+        let doctextsel = $('.doctext');
+        let ocrtext = '';
         Tesseract.recognize('/doc/' + docdata._id + '/preview/0', {
             lang: 'deu'
         }).progress(function (message) {
@@ -25,10 +120,44 @@ function ocr(img) {
                 console.log(message);
             }
         }).then(function (result) {
-            $('.doctext').val(result.text);
+            doctextsel.val(result.text);
+            ocrtext = result.text;
+        }).then(function post() {
+            let retval = {};
+            retval.plaintext = [];
+            retval.plaintext.push(ocrtext);
+            $.post("/api/v1/ocr/" + window.docdata._id + "/", $.param(retval, true), function (data, status) {
+                console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+            }, "json");
+        }).then(function () {
+            let founddate = finddate(ocrtext);
+            let docdatesel = $('#docdate');
+
+            if (founddate && (!docdatesel.val() || docdatesel.val() === '')) {
+                docdatesel.val(moment.utc(founddate).format('DD.MM.YYYY').toString());
+            }
+
+            let foundpartner = findpartner(ocrtext);
+            let partnersel = $('#partner');
+
+            if (foundpartner && (!partnersel.val() || partnersel.val() === '')) {
+                partnersel.val(foundpartner.name);
+            }
+
+            let founduser = finduser(ocrtext);
+
+            $('.jqusers').each(function () {
+                let jqusers = $(this);
+                let username = $(this).attr('id').split('_')[1];
+                founduser.forEach(function (element) {
+                    if (username === element.name) {
+                        jqusers.attr('checked', true);
+                    }
+                });
+            });
         });
         //});
-        //post to a node service that saves it to the database
+
         //add button functionality to scan all preview images
     });
 }
@@ -169,7 +298,8 @@ $(document).ready(function () {
     //init unveil
     let imgsel = $('img');
     imgsel.unveil(50, function () {
-        if ($(this).attr('id') === 'image_0') {
+        let doctextsel = $('.doctext');
+        if ($(this).attr('id') === 'image_0' && doctextsel.val() === '') {
             ocr($(this));
         }
     });

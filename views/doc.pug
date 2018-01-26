@@ -35,9 +35,9 @@ block content
                     br
                     each user in session.userlist
                         if(data.users.indexOf(user.name) > -1)
-                            input(type='checkbox' id='user_' + user.name name='users' value=user.name checked='checked')
+                            input.jqusers(type='checkbox' id='user_' + user.name name='users' value=user.name checked='checked')
                         else
-                            input(type='checkbox' id='user_' + user.name name='users' value=user.name)
+                            input.jqusers(type='checkbox' id='user_' + user.name name='users' value=user.name)
                         label(for='user_' + user.name)= user.name
                         br
                         br
