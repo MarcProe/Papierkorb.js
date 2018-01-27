@@ -278,8 +278,8 @@ $(document).ready(function () {
     });
 
     let seltags = [];
-    if (docdata.tags) {
-        docdata.tags.forEach(function (tag) {
+    if (window.docdata.tags) {
+        window.docdata.tags.forEach(function (tag) {
             seltags.push({tag: tag});
         })
     }
