@@ -3,7 +3,7 @@ let express = require('express');
 let router = express.Router();
 
 let fs = require('fs');
-let padStart = require('pad-start');
+var Jimp = require("jimp");
 let moment = require('moment');
 
 let render = require('../modules/render.js');
@@ -35,6 +35,7 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
             break;
         case 'download':
             download(req, res, req.params.docid);
+            break;
         default:
             update(req, res, next);
             break;
@@ -111,14 +112,32 @@ function download(req, res, docid) {
 }
 
 function preview(req, res, next, thumb) {
+    let w = Number((req.query.w) ? req.query.w : Jimp.AUTO);
+    let h = Number((req.query.h) ? req.query.h : Jimp.AUTO);
+
     let thumbname = '';
     if (thumb) {
         thumbname = '.thumb';
     }
+
+    let img = null;
     let id = req.params.genid ? req.params.genid : 0;
-    let img = fs.readFileSync(conf.doc.imagepath + req.params.docid + '.' + id + thumbname + '.png');
-    res.writeHead(200, {'Content-Type': 'image/png' });
-    res.end(img, 'binary');
+    let imagepath = conf.doc.imagepath + req.params.docid + '.' + id + thumbname + '.png';
+
+    if (w && w > 0 || h && h > 0) {
+        console.log(w + ' ' + h);
+        Jimp.read(imagepath, function (err, image) {
+            img = image.scaleToFit(w, h).getBuffer(Jimp.MIME_PNG, function (err, buffer) {
+                res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
+
+                res.end(buffer, 'binary');
+            });
+        });
+    } else {
+        img = fs.readFileSync(imagepath);
+        res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
+        res.end(img, 'binary');
+    }
 }
 
 function update(req, res, next) {

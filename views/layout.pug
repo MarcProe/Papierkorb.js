@@ -34,37 +34,18 @@ html
             div#navbar.navbar-fixed
                 nav.blue
                     div.nav-wrapper
-                        a.brand-logo(href='/')
+                        a.brand-logo(href='/doc/')
                             div.valign-wrapper &nbsp;
                                 img(src='/images/icon-inv-48x48.png')
                                 span &nbsp;
                                     = title
+                        a.button-collapse(href="#" data-activates="slide-out")
+                            i.material-icons menu
                         ul.right.hide-on-med-and-down
-                            li
-                                form#navform(method='POST' action='/doc/')
-                                    input#navsearch(name='navsearch', style='margin-left:200px;width:100px')
-                            li
-                                a#navbutton(href='#')
-                                    i.material-icons(style='cursor:pointer;') search
-                            li(class=active_user)
-                                a.dropdown-button(href='#!' data-activates="dropdownuser" data-beloworigin="true")
-                                    ='Benutzer'
-                                    i.material-icons.right arrow_drop_down
-                                    i.material-icons.left account_circle
-                            li(class=active_alldocs)
-                                a(href='/doc/?delusers=1&delpartner=1&deltags=1') Alle
-                                    i.material-icons.left view_list
-                            li(class=active_new)
-                                a(href='/new/') Neu
-                                    i.material-icons.left add_circle
-                            li(class=active_orphan)
-                                a.dropdown-button(href='#!' data-activates="dropdownorphan" data-beloworigin="true")
-                                    ='Waisen'
-                                    i.material-icons.right arrow_drop_down
-                                    i.material-icons.left warning
-                                //a(href='/doc/?orphan=users') Waisen
-                                    i.material-icons.left warning
+                            include layout.menu.pug
             br
+            ul#slide-out.side-nav
+                include layout.menu.pug
         main
             div.container.customcontainer
                 block content
@@ -72,16 +53,22 @@ html
                 br
             div#modalsearch.modal
                 include layout.modalsearch.pug
-        footer.footer.page-footer.blue
-            div.valign-wrapper.right
-                if(data._id)
-                    -var n = 0
-                    while n++ < data.previews
-                        a.white-text(href='#page' + n style='font-size: 24px')= n
-                        span &nbsp;
-                    a(href='/doc/')
-                        i.material-icons.right.white-text arrow_back
-                a#button(href='#')
-                    i.material-icons.right.white-text arrow_upward
+        footer.footer.page-footer.blue(style="height:36px")
+            div.row
+                div.col.s2
+                    div.valign-wrapper.left
+                        a.white-text(href="/")
+                            i.material-icons home
+                div.col.s10
+                    div.valign-wrapper.right
+                        if(data._id)
+                            -var n = 0
+                            while n++ < data.previews
+                                a.white-text(href='#page' + n style='font-size: 24px')= n
+                                span &nbsp;
+                            a(href='/doc/')
+                                i.material-icons.right.white-text arrow_back
+                        a#button(href='#')
+                            i.material-icons.right.white-text arrow_upward
         include layout.js.pug
         script(src='/js/views/layout.js')

@@ -1,5 +1,23 @@
 const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
+function subjectautocomplete(singletext) {
+    //Initialize Partner Autocomplete
+
+    let arr = singletext.split("\n").filter(line => line.length > 6);
+    let subjlist = {};
+
+    arr.forEach(function (element) {
+        subjlist[element] = null;
+    });
+
+    let subjectsel = $('#subject');
+    subjectsel.autocomplete({
+        data: subjlist,
+        limit: 20,
+        minLength: 1,
+    });
+}
+
 function finddate(singletext) {
     if (singletext) {
         //versuche das Datum zu finden
@@ -26,31 +44,36 @@ function findpartner(singletext) {
     let bestpartner = {"name": "", "score": "0"};
 
     if (singletext) {
-        console.log(window.partnerlist);
-        window.partnerlist.forEach(function (partner) {
-            let score = 0;
+        return new Promise(function (resolve, reject) {
+            $.getJSON('/api/v1/partners', function (partnerlist) {
+                partnerlist.forEach(function (partner) {
+                    let score = 0;
 
-            if (!partner.search) {
-                partner.search = [];
-            }
-            partner.search.push(partner.name);
+                    if (!partner.search) {
+                        partner.search = [];
+                    }
+                    partner.search.push(partner.name);
 
-            partner.search.forEach(function (search) {
-                let partnerfind = singletext.match(new RegExp(search));
+                    partner.search.forEach(function (search) {
+                        let partnerfind = singletext.match(new RegExp(search));
 
-                if (partnerfind) {
-                    score++;
-                }
+                        if (partnerfind) {
+                            score++;
+                        }
+                    });
+                    if (score > bestpartner.score) {
+                        bestpartner.name = partner.name;
+                        bestpartner.score = score;
+                    }
+
+                });
+                resolve(bestpartner);
             });
-            if (score > bestpartner.score) {
-                bestpartner.name = partner.name;
-                bestpartner.score = score;
-            }
-
         });
-        return bestpartner;
     } else {
-        return null;
+        return new Promise(function (resolve, reject) {
+            resolve(null);
+        });
     }
 }
 
@@ -59,40 +82,48 @@ function finduser(singletext) {
     let maxscore = 1;   //filters all scores lower than this
 
     if (singletext) {
-        window.userlist.forEach(function (user) {
-            let score = 0;
+        return new Promise(function (resolve, reject) {
+            $.getJSON('/api/v1/user', function (userlist) {
+                userlist.forEach(function (user) {
+                    let score = 0;
 
-            if (!user.search) {
-                user.search = [];
-            }
-            user.search.push(user.name);
+                    if (!user.search) {
+                        user.search = [];
+                    }
+                    user.search.push(user.name);
 
-            user.search.forEach(function (search) {
-                let userfind = singletext.match(new RegExp(search));
+                    user.search.forEach(function (search) {
+                        let userfind = singletext.match(new RegExp(search));
 
-                if (userfind) {
-                    score++;
-                }
-                if (score > maxscore) {
-                    maxscore = score;
-                }
+                        if (userfind) {
+                            score++;
+                        }
+                        if (score > maxscore) {
+                            maxscore = score;
+                        }
+                    });
+
+                    let match = {};
+                    match.name = user.name;
+                    match.score = score;
+
+                    userarr.push(match);
+
+                });
+
+                resolve(userarr.filter(usr => usr.score === maxscore));
             });
-
-            let match = {};
-            match.name = user.name;
-            match.score = score;
-
-            userarr.push(match);
-
         });
-        return userarr.filter(usr => usr.score === maxscore);
     } else {
-        return [];
+        return new Promise(function (resolve, reject) {
+            resolve([]);
+        });
     }
 }
 
 function ocr(img) {
 
+    let retval = {};
     let qhost = window.qhost; //!{JSON.stringify(qhost).replace(/<\//g, '<\\/')}
 
     window.Tesseract = Tesseract.create({
@@ -101,51 +132,49 @@ function ocr(img) {
         corePath: qhost + '/javascripts/index.js',
     });
 
-    $(img).ready(function () {
-        //$('#tess').on('click', function () {
-        let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
-        let doctextsel = $('.doctext');
-        let ocrtext = '';
-        Tesseract.recognize('/doc/' + docdata._id + '/preview/0', {
-            lang: 'deu'
-        }).progress(function (message) {
+    let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
+    let doctextsel = $('.doctext');
+    let ocrtext = '';
+    Tesseract.recognize('/doc/' + docdata._id + '/preview/' + img, {
+        lang: 'deu',
+    }).progress(function (message) {
 
-            let ocrsel = $('#ocr');
-            if (message.status === "recognizing text") {
+        let ocrsel = $('#ocr');
+        if (message.status === "recognizing text") {
 
-                ocrsel.attr('class', 'determinate');
-                ocrsel.css('width', (message.progress * 100) + '%')
-            } else {
-                ocrsel.attr('class', 'indeterminate');
-                console.log(message);
-            }
-        }).then(function (result) {
-            doctextsel.val(result.text);
-            ocrtext = result.text;
-        }).then(function post() {
-            let retval = {};
-            retval.plaintext = [];
-            retval.plaintext.push(ocrtext);
-            $.post("/api/v1/ocr/" + window.docdata._id + "/", $.param(retval, true), function (data, status) {
-                console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
-            }, "json");
-        }).then(function () {
-            let founddate = finddate(ocrtext);
-            let docdatesel = $('#docdate');
+            ocrsel.attr('class', 'determinate');
+            ocrsel.css('width', (message.progress * 100) + '%')
+        } else {
+            ocrsel.attr('class', 'indeterminate');
+        }
+    }).then(function (result) {
 
-            if (founddate && (!docdatesel.val() || docdatesel.val() === '')) {
-                docdatesel.val(moment.utc(founddate).format('DD.MM.YYYY').toString());
-            }
+        ocrtext = result.text;
+        doctextsel.val(ocrtext);
+        let retval = {}
+        retval.plaintext = [];
+        retval.plaintext.push(ocrtext);
 
-            let foundpartner = findpartner(ocrtext);
+        $.post("/api/v1/ocr/" + window.docdata._id + "/", $.param(retval, true), function (data, status) {
+        }, "json");
+
+        let founddate = finddate(ocrtext);
+        let docdatesel = $('#docdate');
+
+        if (founddate && (!docdatesel.val() || docdatesel.val() === '')) {
+            docdatesel.val(moment.utc(founddate).format('DD.MM.YYYY').toString());
+        }
+
+        findpartner(ocrtext).then(function (foundpartner) {
             let partnersel = $('#partner');
 
             if (foundpartner && (!partnersel.val() || partnersel.val() === '')) {
                 partnersel.val(foundpartner.name);
             }
+        });
 
-            let founduser = finduser(ocrtext);
-
+        finduser(ocrtext).then(function (fu) {
+            let founduser = fu;
             $('.jqusers').each(function () {
                 let jqusers = $(this);
                 let username = $(this).attr('id').split('_')[1];
@@ -156,9 +185,8 @@ function ocr(img) {
                 });
             });
         });
-        //});
 
-        //add button functionality to scan all preview images
+        subjectautocomplete(ocrtext);
     });
 }
 
@@ -198,27 +226,28 @@ $(document).ready(function () {
     $('select').material_select();
 
     //Initialize Partner Autocomplete
-    let partnerlist = window.partnerlist;// !{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
-    let plist = {};
-    for (index = 0; index < partnerlist.length; ++index) {
-        plist[partnerlist[index].name] = partnerlist[index].logo;
-    }
+    $.getJSON('/api/v1/partners', function (partnerlist) {
+        //let partnerlist = window.partnerlist;// !{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
+        let plist = {};
+        for (index = 0; index < partnerlist.length; ++index) {
+            plist[partnerlist[index].name] = partnerlist[index].logo;
+        }
 
-    let partnersel = $('#partner');
-    partnersel.autocomplete({
-        data: plist,
-        limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
-        onAutocomplete: function (val) {
-            // Callback function when value is autcompleted.
-        },
-        minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+        let partnersel = $('#partner');
+        partnersel.autocomplete({
+            data: plist,
+            limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+            onAutocomplete: function (val) {
+                // Callback function when value is autcompleted.
+            },
+            minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+        });
+
+        partnersel.on('click', function () {
+            $(this).val('')
+            $(this).removeClass('red-text');
+        });
     });
-
-    partnersel.on('click', function () {
-        $(this).val('')
-        $(this).removeClass('red-text');
-    });
-
     //Initialize modal delete dialogue
     let modaldeletesel = $('#modaldelete');
     modaldeletesel.modal();
@@ -267,8 +296,6 @@ $(document).ready(function () {
     tagstooltipsel.attr('data-tooltip', '<div class="flow-text">' + tagtooltip + '</div>');
     tagstooltipsel.tooltip({delay: 50});
 
-    console.log(seltags);
-
     let chipssel = $('.chips');
     let chipsautocompletesel = $('.chips-autocomplete');
     chipssel.material_chip();
@@ -294,21 +321,24 @@ $(document).ready(function () {
         hiddentagssel.val(JSON.stringify(chipsautocompletesel.material_chip('data')));
     });
 
-
     //init unveil
     let imgsel = $('img');
     imgsel.unveil(50, function () {
         let doctextsel = $('.doctext');
         if ($(this).attr('id') === 'image_0' && doctextsel.val() === '') {
-            ocr($(this));
+            ocr(0);
         }
     });
+
+    $('#ocr1').on('click', function () {
+        ocr(0);
+    });
+
     setTimeout(function () {
         $('.previewcontainer').css('min-height', '0px');
     }, 600);
 
     //load a placeholder if preview image is not (yet) created
-
     imgsel.on('error', function () {
         $(this).unbind("error");
         $(this).attr("src", "/images/papierkorb-logo.png");
@@ -321,4 +351,5 @@ $(document).ready(function () {
         let src = numimagesel.attr("data-src");
         numimagesel.attr("src", src + '?timestamp=' + new Date().getTime());
     })
+
 });

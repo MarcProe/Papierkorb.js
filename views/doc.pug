@@ -14,14 +14,14 @@ block content
                 div.row
                     div.col.s12
                         div.previewcontainer(style='min-height: 600px;')
-                            img.preview(id='image_' + n, src='/doc/' + data._id + '/thumb/0', data-src='/doc/' + data._id + '/preview/' + n)
+                            img.preview(id='image_' + n, src='/doc/' + data._id + '/thumb/' + n, data-src='/doc/' + data._id + '/preview/' + n)
                 -n++
         div.col.s4
             form(method='POST' action='/doc/' + data._id + '/update/true' autocomplete="off")
                 input#hidden_tags(type='hidden' name='tags')
                 div.form-group
                     label(for='subject') Betreff:
-                    input#subject.form-control(type='text', placeholder='Betreff' name='subject' value=data.subject)
+                    input#subject.form-control.autocomplete(type='text', placeholder='Betreff' name='subject' value=data.subject)
                 div.form-group
                     label(for='docdate') Datum:
                     if(data.founddate)
@@ -59,22 +59,27 @@ block content
                             i#tagstooltip.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
                 div.row
                     div.col.s12.xl6.center
-                        button.btn.blue.z-depth-5(type='submit') Speichern
+                        button.btn.blue.z-depth-5(type='submit' style='width:100%') Speichern
                             i.material-icons.left save
                     div.col.s12.xl6.center
-                        a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/' + data._id + '/download/') Download
+                        a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/' + data._id + '/download/' style='width:100%') Download
                             i.material-icons.left file_download
                 div.row
                     div.col.s12.xl6.center
-                        a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/') Zurück
+                        a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/doc/' style='width:100%') Zurück
                             i.material-icons.left arrow_back
                     div.col.s12.xl6.center
-                        a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href="#modaldelete") Löschen
+                        a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href="#modaldelete" style='width:100%') Löschen
                             i.material-icons.left delete_forever
                 div.row
+                    div.col.s12.xl6.center
+                        a#ocr1.waves-effect.waves-light.btn.blue.z-depth-5(href='#!' style='width:100%') OCR
+                            i.material-icons.left photo
+                    div.col.s12.xl6.center
+                        //a#ocrx.waves-effect.waves-light.btn.blue.z-depth-5(href='#!') OCR
+                            i.material-icons.left photo_library
+                div.row
                     div.col.s12.xl12.center
-                        a#tess.waves-effect.waves-light.btn.blue.z-depth-5(href='#!') Texterkennung
-                            i.material-icons.left description
                         div.progress
                             div#ocr.determinate
             textarea.doctext= data.plaintext

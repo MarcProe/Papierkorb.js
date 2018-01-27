@@ -1,0 +1,22 @@
+li
+    form#navform(method='POST' action='/doc/')
+        input#navsearch(name='navsearch', style='margin-left:200px;width:100px')
+li
+    a#navbutton(href='#')
+        i.material-icons(style='cursor:pointer;') search
+li(class=active_user)
+    a.dropdown-button(href='#!' data-activates="dropdownuser" data-beloworigin="true")
+        ='Benutzer'
+        i.material-icons.right arrow_drop_down
+        i.material-icons.left account_circle
+li(class=active_alldocs)
+    a(href='/doc/?delusers=1&delpartner=1&deltags=1') Alle
+        i.material-icons.left view_list
+li(class=active_new)
+    a(href='/new/') Neu
+        i.material-icons.left add_circle
+li(class=active_orphan)
+    a.dropdown-button(href='#!' data-activates="dropdownorphan" data-beloworigin="true")
+        ='Waisen'
+        i.material-icons.right arrow_drop_down
+        i.material-icons.left warning

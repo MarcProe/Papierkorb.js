@@ -19,6 +19,8 @@ $(document).ready(function () {
         }
     });
 
+    $(".button-collapse").sideNav();
+
     //Initialize Partner Autocomplete
 
     let lpartnerlist = window.lpartnerlist;//!{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}

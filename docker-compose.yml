@@ -1,17 +1,17 @@
 version: "2"
 services:
-  app:
-    container_name: app
-    restart: always
-    build: .
-    ports:
-      - "3000:3000"
-    links:
-      - mongo
-    environment:
-      - NODE_ENV=docker
-    volumes:
-     - ./mnt/papierkorb.js:/opt/papierkorb
+  #app:
+  #  container_name: app
+  #  restart: always
+  #  build: .
+  #  ports:
+  #    - "3000:3000"
+  #  links:
+  #    - mongo
+  #  environment:
+  #    - NODE_ENV=docker
+  #  volumes:
+  #   - ./mnt/papierkorb.js:/opt/papierkorb
   mongo:
     container_name: mongo
     image: sumglobal/rpi-mongodb

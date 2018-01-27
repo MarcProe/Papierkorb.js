@@ -55,7 +55,7 @@ function handle(req, res, next) {
 
                 });
 
-                render.rendercallback(err, req, res, 'newdoc', filearr , conf);
+                render.rendercallback(err, req, res, 'newdoc', filearr, conf, 'Neue Dokumente');
             });
             break;
     }
