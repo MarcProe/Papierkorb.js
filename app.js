@@ -29,7 +29,6 @@ app.locals.moment = require('moment');
 let url = conf.db.constring + conf.db.db;
 
 inspect(conf.doc, 'Storage config');
-inspect(conf.ocr, 'OCR config');
 
 mongo.connect(url, function(err, db) {
 
