@@ -61,12 +61,9 @@ function handle(req, res, next) {
 
             req.app.locals.db.collection(conf.db.c_doc).aggregate(query).toArray(function (err, result) {
                 if (err) {
-                    console.log(err);
+                    render.rendercallback(err, req, res, 'error', err, conf, 'Fehler');
                 }
-                console.log('WAA!');
-                console.log(err);
-                inspect(result);
-                render.rendercallback(null, req, res, 'partners', result, conf, 'Partner');
+                render.rendercallback(err, req, res, 'partners', result, conf, 'Partner');
             });
             break;
     }

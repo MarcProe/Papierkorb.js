@@ -125,9 +125,9 @@ function ocr(img, docdata) {
     let qhost = hostregex.exec(window.location.href)[1];
 
     window.Tesseract = Tesseract.create({
-        workerPath: qhost + '/javascripts/worker.js',
+        workerPath: qhost + '/js/t/worker.js',
         langPath: qhost + '/tessdata/',
-        corePath: qhost + '/javascripts/index.js',
+        corePath: qhost + '/js/t/index.js',
     });
 
     //let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};

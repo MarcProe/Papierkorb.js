@@ -73,5 +73,4 @@ let ghwrapper = {
     }
 };
 
-
 module.exports = ghwrapper;

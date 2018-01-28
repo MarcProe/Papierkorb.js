@@ -32,7 +32,7 @@ function noop(req, res, next, err){
 function hard(req, res, next) {
     fs.unlink(conf.doc.basepath + req.params.docid, function(err) {
         if(err) {
-            throw err
+            render.rendercallback(err, req, res, 'error', err, conf, null);
         } else {
             cleanup(req, res, next, true);
         }
