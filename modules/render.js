@@ -66,7 +66,8 @@ let render = {
                 conf: conf,
                 title: title,
                 session: req.session,
-                qhost: req.protocol + '://' + req.get('host')
+                qhost: req.protocol + '://' + req.get('host'),
+                confenv: process.env.NODE_ENV
             });
 
         }).catch(function(err) {

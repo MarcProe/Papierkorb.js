@@ -1,14 +1,9 @@
 div.modal-content
     div.row
         div.col.s6.center
-            p.flow-text.blue.white-text Zurücksetzen
+            p= 'Die Metadaten (Betreff, Partner, etc) werden unwiderruflich gelöscht und das PDF-Dokument in den "Neu" Ordner verschoben'
         div.col.s6.center
-            p.red.flow-text.white-text Löschen
-    div.row
-        div.col.s6.center
-            p.flow-text= 'Die Metadaten (Betreff, Partner, etc) werden unwiderruflich gelöscht und das PDF-Dokument in den "Neu" Ordner verschoben'
-        div.col.s6.center
-            p.flow-text= 'Die Metadaten (Betreff, Partner, etc) und '
+            p= 'Die Metadaten (Betreff, Partner, etc) und '
             span.red-text= 'das Dokument'
             =' werden unwiderruflich gelöscht.'
     div.row
@@ -16,9 +11,9 @@ div.modal-content
             p.flow-text Keine weitere Sicherheitsabfrage!
     div.row
         div.col.s6.center
-            a.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/remove/' + data._id + '/soft/') Zurücksetzen
+            a.oneclick.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='/remove/' + data._id + '/soft/') Zurücksetzen
         div.col.s6.center
-            a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href='/remove/' + data._id + '/hard/') Löschen
+            a.oneclick.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5(href='/remove/' + data._id + '/hard/') Löschen
     div.row
         div.col.s12.center
             a#canceldelete.waves-effect.waves-light.btn.modal-trigger.blue.z-depth-5(href='#') Abbrechen

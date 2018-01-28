@@ -1,4 +1,13 @@
 $(document).ready(function () {
+
+    //allow click only once
+    $(".oneclick").one("click", function () {
+        $(this).click(function () {
+            return false;
+        });
+        $(this).css('cursor', 'wait');
+    });
+
     $('#modalsearch').modal();
 
     $("#button").click(function () {
@@ -19,10 +28,11 @@ $(document).ready(function () {
         }
     });
 
-    $(".button-collapse").sideNav();
+    //$(".button-collapse").sideNav();
+    //orphan menu drowpdown
+    $(".dropdown-button").dropdown();
 
     //Initialize Partner Autocomplete
-
     let lpartnerlist = window.lpartnerlist;//!{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
     let plist = [];
     let tooltippartnerlist = "";
@@ -40,24 +50,25 @@ $(document).ready(function () {
         minLength: 1
     });
 
-    let taglist = window.taglist; //!{JSON.stringify(session.taglist).replace(/<\//g, '<\\/')}
-    let tooltiptaglist = "";
-    for (index = 0; index < taglist.length; ++index) {
-        taglist[taglist[index]._id] = null;
-        tooltiptaglist += taglist[index]._id + ", ";
-    }
+    $.getJSON('/api/v1/tags', function (taglist) {
 
-    let tsttsel = $('#tstt');
-    tsttsel.attr('data-tooltip', '<div class="flow-text">' + tooltiptaglist + '</div>');
+        let tooltiptaglist = "";
+        for (index = 0; index < taglist.length; ++index) {
+            taglist[taglist[index]._id] = null;
+            tooltiptaglist += taglist[index]._id + ", ";
+        }
 
-    $('#tagsearchinput').autocomplete({
-        data: taglist,
-        limit: 20,
-        minLength: 1
+        let tsttsel = $('#tstt');
+        tsttsel.attr('data-tooltip', '<div class="flow-text">' + tooltiptaglist + '</div>');
+
+        $('#tagsearchinput').autocomplete({
+            data: taglist,
+            limit: 20,
+            minLength: 1
+        });
+        psttsel.tooltip({delay: 50});
+        tsttsel.tooltip({delay: 50});
     });
-
-    psttsel.tooltip({delay: 50});
-    tsttsel.tooltip({delay: 50});
 
 
     $('#modalsearchbutton').on('click', function () {
@@ -91,4 +102,6 @@ $(document).ready(function () {
         min: false,
         max: 365
     });
+
+
 });

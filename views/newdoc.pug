@@ -32,7 +32,7 @@ block content
             each file in data
                 tr
                     td
-                        a(class='overview' href="/new/" + file.file + "/create/")= file.file
+                        a.oneclick(class='overview' href="/new/" + file.file + "/create/")= file.file
                     td
                         =' ' + file.size + ' KB '
                     td

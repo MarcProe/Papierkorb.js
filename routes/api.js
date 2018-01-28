@@ -15,13 +15,12 @@ router.get('/:version/:func/:docid?/', function (req, res, next) {
             process.exit(1);
             break;
         case('partners'):
-            getpartner(req, res, next).then(function (result) {
+            getpartners(req, res, next).then(function (result) {
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.end(JSON.stringify(result));
             }).catch(function (err) {
                 throw err;
             });
-
             break;
         case('user'):
             getuser(req, res, next).then(function (result) {
@@ -30,7 +29,14 @@ router.get('/:version/:func/:docid?/', function (req, res, next) {
             }).catch(function (err) {
                 throw err;
             });
-
+            break;
+        case('tags'):
+            gettags(req, res, next).then(function (result) {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(result));
+            }).catch(function (err) {
+                throw err;
+            });
             break;
     }
 });
@@ -57,7 +63,7 @@ router.post('/:version/:func/:docid?/', function (req, res, next) {
     }
 });
 
-function getpartner(req, res, next) {
+function getpartners(req, res, next) {
     return new Promise(function (resolve, reject) {
         if (req.session.partnerlist) {
             resolve(req.session.partnerlist);
@@ -67,8 +73,24 @@ function getpartner(req, res, next) {
                     reject(err);
                 } else {
                     req.session.partnerlist = partnerlistres;
-                    console.log('resolving');
                     resolve(partnerlistres);
+                }
+            });
+        }
+    });
+}
+
+function gettags(req, res, next) {
+    return new Promise(function (resolve, reject) {
+        if (req.session.taglist) {
+            resolve(req.session.taglist);
+        } else {
+            req.app.locals.db.collection(conf.db.c_tag).find({}).toArray(function (err, taglistres) {
+                if (err) {
+                    reject(err);
+                } else {
+                    req.session.taglist = taglistres;
+                    resolve(taglistres);
                 }
             });
         }
@@ -85,7 +107,6 @@ function getuser(req, res, next) {
                     reject(err);
                 } else {
                     req.session.userlist = userlistres;
-                    console.log('resolving');
                     resolve(userlistres);
                 }
             });
