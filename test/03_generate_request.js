@@ -35,7 +35,7 @@ describe("Document Creation", function () {
                         db.close();
                         done();
                     });
-                });                
+                });
             });
         }),
         describe("check the previews", function () {
@@ -154,6 +154,9 @@ describe("Document Creation", function () {
                     });
                 });
             });
+        }),
+        describe("check the document", function () {
+            this.slow(0);
             it("should return the doc update page", function (done) {
                 let dburl = conf.db.constring + conf.db.db;
                 mongo.connect(dburl, function (err, db) {
