@@ -29,7 +29,7 @@ describe("Prepare Tests", function () {
                 done();
             });
         }),
-        describe("copy testfile /", function () {
+        describe("copy testfile", function () {
             let path = conf.doc.newpath + 'test.nld.pdf';
             fs.copyFileSync('./share/test.nld.pdf', path);
             it("should exist in the new folder", function (done) {

@@ -48,7 +48,7 @@ describe("Document Creation", function () {
                     });
                 });
             });
-            it("should return status 200 for the 1st preview", function (done) {
+            it("should return status 200 for the first preview", function (done) {
                 let dburl = conf.db.constring + conf.db.db;
                 mongo.connect(dburl, function (err, db) {
                     db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
@@ -72,7 +72,7 @@ describe("Document Creation", function () {
                     });
                 });
             });
-            it("should return status 200 for the 1st thumb", function (done) {
+            it("should return status 200 for the first thumb", function (done) {
                 let dburl = conf.db.constring + conf.db.db;
                 mongo.connect(dburl, function (err, db) {
                     db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
@@ -95,6 +95,67 @@ describe("Document Creation", function () {
                         });
                     });
                 });
+            });
+            it("should return status 200 for the second preview", function (done) {
+                let dburl = conf.db.constring + conf.db.db;
+                mongo.connect(dburl, function (err, db) {
+                    db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
+                        let url = "http://localhost:3000/doc/" + result._id + "/preview/1";
+                        request(url, function (error, response, body) {
+                            expect(response.statusCode).to.equal(200);
+                            done();
+                        });
+                    });
+                });
+            });
+            it("should return content-type image/png for the second preview", function (done) {
+                let dburl = conf.db.constring + conf.db.db;
+                mongo.connect(dburl, function (err, db) {
+                    db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
+                        let url = "http://localhost:3000/doc/" + result._id + "/preview/1";
+                        request(url, function (error, response, body) {
+                            expect(response.headers['content-type']).to.equal('image/png');
+                            done();
+                        });
+                    });
+                });
+            });
+            it("should return status 200 for the second thumb", function (done) {
+                let dburl = conf.db.constring + conf.db.db;
+                mongo.connect(dburl, function (err, db) {
+                    db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
+                        let url = "http://localhost:3000/doc/" + result._id + "/thumb/1";
+                        request(url, function (error, response, body) {
+                            expect(response.statusCode).to.equal(200);
+                            done();
+                        });
+                    });
+                });
+            });
+            it("should return content-type image/png for the second thumb", function (done) {
+                let dburl = conf.db.constring + conf.db.db;
+                mongo.connect(dburl, function (err, db) {
+                    db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
+                        let url = "http://localhost:3000/doc/" + result._id + "/thumb/1";
+                        request(url, function (error, response, body) {
+                            expect(response.headers['content-type']).to.equal('image/png');
+                            done();
+                        });
+                    });
+                });
+            });
+            it("should return the doc update page", function (done) {
+                let dburl = conf.db.constring + conf.db.db;
+                mongo.connect(dburl, function (err, db) {
+                    db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
+                        let url = "http://localhost:3000/doc/" + result._id + "/update/";
+                        request(url, function (error, response, body) {
+                            expect(response.statusCode).to.equal(200);
+                            done();
+                        });
+                    });
+                });
+                mongo.close();
             });
         });
 });
