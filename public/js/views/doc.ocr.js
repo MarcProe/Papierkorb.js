@@ -17,6 +17,7 @@ function subjectautocomplete(singletext) {
 }
 
 function finddate(singletext) {
+    const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
     if (singletext) {
         //versuche das Datum zu finden
         let regex = /([\d]{1,2})\.\s?([\d]{1,2}|[\w]{3,9})\.?\s?(\d{4}|\d{2})/;
@@ -107,6 +108,7 @@ function finduser(singletext) {
                     userarr.push(match);
 
                 });
+                console.log(userarr);
                 resolve(userarr.filter(usr => usr.score === maxscore));
             });
         });
@@ -117,9 +119,10 @@ function finduser(singletext) {
     }
 }
 
-function ocr(img) {
+function ocr(img, docdata) {
 
-    let qhost = window.qhost; //!{JSON.stringify(qhost).replace(/<\//g, '<\\/')}
+    let hostregex = /(^(([^:\/?#]+):)?(\/\/([^\/?#]*)))?([^?#]*)(\?([^#]*))?(#(.*))?/g;
+    let qhost = hostregex.exec(window.location.href)[1];
 
     window.Tesseract = Tesseract.create({
         workerPath: qhost + '/javascripts/worker.js',
@@ -127,7 +130,7 @@ function ocr(img) {
         corePath: qhost + '/javascripts/index.js',
     });
 
-    let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
+    //let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
     let doctextsel = $('.doctext');
     let ocrtext = '';
     Tesseract.recognize('/doc/' + docdata._id + '/preview/' + img, {
@@ -150,7 +153,7 @@ function ocr(img) {
         retval.plaintext = [];
         retval.plaintext.push(ocrtext);
 
-        $.post("/api/v1/ocr/" + window.docdata._id + "/", $.param(retval, true), function (data, status) {
+        $.post("/api/v1/ocr/" + docdata._id + "/", $.param(retval, true), function (data, status) {
             //noop
         }, "json");
 

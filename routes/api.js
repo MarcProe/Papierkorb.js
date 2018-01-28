@@ -19,7 +19,8 @@ router.get('/:version/:func/:docid?/', function (req, res, next) {
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.end(JSON.stringify(result));
             }).catch(function (err) {
-                throw err;
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(err));
             });
             break;
         case('user'):
@@ -27,7 +28,8 @@ router.get('/:version/:func/:docid?/', function (req, res, next) {
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.end(JSON.stringify(result));
             }).catch(function (err) {
-                throw err;
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(err));
             });
             break;
         case('tags'):
@@ -35,9 +37,20 @@ router.get('/:version/:func/:docid?/', function (req, res, next) {
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.end(JSON.stringify(result));
             }).catch(function (err) {
-                throw err;
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(err));
             });
             break;
+        case('doc'): {
+            getdoc(req, res, next).then(function (result) {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(result));
+            }).catch(function (err) {
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(err));
+            });
+            break;
+        }
     }
 });
 
@@ -111,6 +124,23 @@ function getuser(req, res, next) {
                 }
             });
         }
+    });
+}
+
+function getdoc(req, res, next) {
+    return new Promise(function (resolve, reject) {
+        let query = {_id: req.params.docid};
+        req.app.locals.db.collection(conf.db.c_doc).find(query).toArray(function (err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                if (doc[0]) {
+                    resolve(doc[0]);
+                } else {
+                    reject({"message": "no result"});
+                }
+            }
+        });
     });
 }
 

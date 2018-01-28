@@ -40,7 +40,7 @@ function handle(req, res, next) {
 
         default:
 
-            glob( '*.pdf', {cwd: conf.doc.newpath}, function (err, files) {
+            glob('*.pdf', {cwd: conf.doc.newpath, nocase: true}, function (err, files) {
 
                 let filearr = [];
 

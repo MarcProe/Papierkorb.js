@@ -32,22 +32,26 @@ $(document).ready(function () {
     //orphan menu drowpdown
     $(".dropdown-button").dropdown();
 
+
     //Initialize Partner Autocomplete
-    let lpartnerlist = window.lpartnerlist;//!{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
-    let plist = [];
-    let tooltippartnerlist = "";
+    $.getJSON('/api/v1/partners', function (partnerlist) {
+        //let lpartnerlist = window.lpartnerlist;//!{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
+        let plist = [];
+        let tooltippartnerlist = "";
 
-    for (index = 0; index < lpartnerlist.length; ++index) {
-        plist[lpartnerlist[index].name] = lpartnerlist[index].logo;
-        tooltippartnerlist += lpartnerlist[index].name + ", ";
-    }
-    let psttsel = $('#pstt');
-    psttsel.attr('data-tooltip', '<div class="flow-text">' + tooltippartnerlist + '</div>');
+        for (index = 0; index < partnerlist.length; ++index) {
+            plist[partnerlist[index].name] = partnerlist[index].logo;
+            tooltippartnerlist += partnerlist[index].name + ", ";
+        }
+        let psttsel = $('#pstt');
+        psttsel.attr('data-tooltip', '<div class="flow-text">' + tooltippartnerlist + '</div>');
 
-    $('#partnersearchinput').autocomplete({
-        data: plist,
-        limit: 20,
-        minLength: 1
+        $('#partnersearchinput').autocomplete({
+            data: plist,
+            limit: 20,
+            minLength: 1
+        });
+        psttsel.tooltip({delay: 50});
     });
 
     $.getJSON('/api/v1/tags', function (taglist) {
@@ -66,7 +70,6 @@ $(document).ready(function () {
             limit: 20,
             minLength: 1
         });
-        psttsel.tooltip({delay: 50});
         tsttsel.tooltip({delay: 50});
     });
 
