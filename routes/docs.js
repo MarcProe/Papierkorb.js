@@ -72,7 +72,7 @@ function handle(req, res, next) {
     inspect(req.body, 'req body');
     inspect(query, 'query');
 
-    req.app.locals.db.collection(conf.db.c_doc).find(query).sort( { docdate: -1 } ).toArray(function(err, result) {
+    req.app.locals.db.collection(conf.db.c_doc).find(query).limit(100).sort({docdate: -1}).toArray(function (err, result) {
         req.session.query = query;
         req.session.plain = plain;
         render.rendercallback(err, req, res, 'docs', result, conf, 'Dokumentenübersicht');
