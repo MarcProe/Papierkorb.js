@@ -10,18 +10,24 @@ let editpreview = {
                 break;
         }
     },
-    rotate: function(res, docid, page, degrees) {
-        let filename = conf.doc.imagepath + docid + '.' + page + '.png';
+    rotate: function (res, docid, page, degrees, thumb) {
+        let sthumb = (thumb) ? '.thumb' : '';
+        let filename = conf.doc.imagepath + docid + '.' + page + sthumb + '.png';
         Jimp.read(filename, function (err, pic) {
             if (err) throw err;
             pic.rotate(parseInt(degrees))
                 .write(filename, function(err) {
-                    res.writeHead(302, {
-                        'Location': '/doc/' +docid + '/update/'
-                    });
-                    res.end();
+                    if (!thumb) {
+                        res.writeHead(302, {
+                            'Location': '/doc/' + docid + '/update/'
+                        });
+                        res.end();
+                    }
                 });
         });
+        if (!thumb) {
+            this.rotate(res, docid, page, degrees, true);
+        }
     }
 };
 
