@@ -50,6 +50,11 @@ let render = {
             }
         });
 
+        let active = {};
+        active.all = template === 'docs' ? 'active' : '';
+        active.partners = template === 'partners' ? 'active' : '';
+        active.new = template === 'newdoc' ? 'active' : '';
+
         promiseLoadUsers.then(function() {
 
             return promiseLoadPartnerlist;
@@ -67,7 +72,8 @@ let render = {
                 title: title,
                 session: req.session,
                 qhost: req.protocol + '://' + req.get('host'),
-                confenv: process.env.NODE_ENV
+                confenv: process.env.NODE_ENV,
+                active: active
             });
 
         }).catch(function(err) {

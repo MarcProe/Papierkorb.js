@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    table.striped
+        tbody
+            th Partner
+            th Dokumente
+            each partner in data
+                tr
+                    td.ppgrid
+                        a(href='/doc/?partner=' + partner._id)
+                            span= partner.name
+                    td.ppgrid= partner.count

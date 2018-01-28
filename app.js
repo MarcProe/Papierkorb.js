@@ -13,6 +13,7 @@ let docs = require('./routes/docs');
 let doc = require('./routes/doc');
 let newdoc = require('./routes/newdoc');
 let remove = require('./routes/remove');
+let partners = require('./routes/partners');
 let api = require('./routes/api');
 
 let mongo = require('mongodb').MongoClient;
@@ -78,6 +79,7 @@ app.use('/doc/', docs);
 app.use('/doc', doc);
 app.use('/new', newdoc);
 app.use('/remove', remove);
+app.use('/partners', partners);
 app.use('/api', api);
 
 // catch 404 and forward to error handler

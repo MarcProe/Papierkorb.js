@@ -4,18 +4,16 @@ li
 li
     a#navbutton(href='#')
         i.material-icons(style='cursor:pointer;') search
-//li(class=active_user)
-    a.dropdown-button(href='#!' data-activates="dropdownuser" data-beloworigin="true")
-        ='Benutzer'
-        i.material-icons.right arrow_drop_down
-        i.material-icons.left account_circle
-li(class=active_alldocs)
-    a(href='/doc/?delpartner=1&deltags=1&deldocdate=1') Alle
+li(class=active.all)
+    a(href='/doc/?delpartner=1&deltags=1&deldocdate=1') Übersicht
         i.material-icons.left view_list
-li(class=active_new)
+li(class=active.partners)
+    a(href='/partners/') Partner
+        i.material-icons.left store_mall_directory
+li(class=active.new)
     a(href='/new/') Neu
         i.material-icons.left add_circle
-li(class=active_orphan)
+li
     a.dropdown-button(href='#!' data-activates="dropdownorphan" data-beloworigin="true")
         ='Waisen'
         i.material-icons.right arrow_drop_down
