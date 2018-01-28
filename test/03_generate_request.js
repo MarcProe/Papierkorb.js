@@ -31,7 +31,7 @@ describe("Document Creation", function () {
                 let dburl = conf.db.constring + conf.db.db;
                 mongo.connect(dburl, function (err, db) {
                     db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
-                        expect(result._id).to.not.be.undefined;
+                        expect(result._id).to.match(/\d{4}\-\d{2}\-\d{2}T\d{2}\-\d{2}\-\d{2}\.\d{3}Z\.pdf/);
                         done();
                     });
                 });                
@@ -48,7 +48,7 @@ describe("Document Creation", function () {
                     });
                 });
             });
-            it("should return status 200", function (done) {
+            it("should return status 200 for the 1st preview", function (done) {
                 let dburl = conf.db.constring + conf.db.db;
                 mongo.connect(dburl, function (err, db) {
                     db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
@@ -60,11 +60,35 @@ describe("Document Creation", function () {
                     });
                 });
             });
-            it("should return content-type image/png", function (done) {
+            it("should return content-type image/png for the first preview", function (done) {
                 let dburl = conf.db.constring + conf.db.db;
                 mongo.connect(dburl, function (err, db) {
                     db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
                         let url = "http://localhost:3000/doc/" + result._id + "/preview/0";
+                        request(url, function (error, response, body) {
+                            expect(response.headers['content-type']).to.equal('image/png');
+                            done();
+                        });
+                    });
+                });
+            });
+            it("should return status 200 for the 1st thumb", function (done) {
+                let dburl = conf.db.constring + conf.db.db;
+                mongo.connect(dburl, function (err, db) {
+                    db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
+                        let url = "http://localhost:3000/doc/" + result._id + "/thumb/0";
+                        request(url, function (error, response, body) {
+                            expect(response.statusCode).to.equal(200);
+                            done();
+                        });
+                    });
+                });
+            });
+            it("should return content-type image/png for the first thumb", function (done) {
+                let dburl = conf.db.constring + conf.db.db;
+                mongo.connect(dburl, function (err, db) {
+                    db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
+                        let url = "http://localhost:3000/doc/" + result._id + "/thumb/0";
                         request(url, function (error, response, body) {
                             expect(response.headers['content-type']).to.equal('image/png');
                             done();
