@@ -16,10 +16,10 @@ describe("Document Creation", function () {
             });
         }).timeout(20000);
     }),
-        describe("wait for 15 seconds", function () {
+        describe("wait for 5 seconds", function () {
             this.slow(99999);
             it("should wait 15 seconds", function (done) {
-                sleep(15000).then(function () {
+                sleep(5000).then(function () {
                     expect(true).to.equal(true);
                     done();
                 });
@@ -32,6 +32,7 @@ describe("Document Creation", function () {
                 mongo.connect(dburl, function (err, db) {
                     db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
                         expect(result._id).to.match(/\d{4}\-\d{2}\-\d{2}T\d{2}\-\d{2}\-\d{2}\.\d{3}Z\.pdf/);
+                        db.close();
                         done();
                     });
                 });                
@@ -44,6 +45,7 @@ describe("Document Creation", function () {
                 mongo.connect(dburl, function (err, db) {
                     db.db(conf.db.db).collection(conf.db.c_doc).findOne({}, function (err, result) {
                         expect(result.previews).to.equal(5);
+                        db.close();
                         done();
                     });
                 });
@@ -55,6 +57,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/preview/0";
                         request(url, function (error, response, body) {
                             expect(response.statusCode).to.equal(200);
+                            db.close();
                             done();
                         });
                     });
@@ -67,6 +70,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/preview/0";
                         request(url, function (error, response, body) {
                             expect(response.headers['content-type']).to.equal('image/png');
+                            db.close();
                             done();
                         });
                     });
@@ -79,6 +83,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/thumb/0";
                         request(url, function (error, response, body) {
                             expect(response.statusCode).to.equal(200);
+                            db.close();
                             done();
                         });
                     });
@@ -91,6 +96,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/thumb/0";
                         request(url, function (error, response, body) {
                             expect(response.headers['content-type']).to.equal('image/png');
+                            db.close();
                             done();
                         });
                     });
@@ -103,6 +109,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/preview/1";
                         request(url, function (error, response, body) {
                             expect(response.statusCode).to.equal(200);
+                            db.close();
                             done();
                         });
                     });
@@ -115,6 +122,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/preview/1";
                         request(url, function (error, response, body) {
                             expect(response.headers['content-type']).to.equal('image/png');
+                            db.close();
                             done();
                         });
                     });
@@ -127,6 +135,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/thumb/1";
                         request(url, function (error, response, body) {
                             expect(response.statusCode).to.equal(200);
+                            db.close();
                             done();
                         });
                     });
@@ -139,6 +148,7 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/thumb/1";
                         request(url, function (error, response, body) {
                             expect(response.headers['content-type']).to.equal('image/png');
+                            db.close();
                             done();
                         });
                     });
@@ -151,11 +161,11 @@ describe("Document Creation", function () {
                         let url = "http://localhost:3000/doc/" + result._id + "/update/";
                         request(url, function (error, response, body) {
                             expect(response.statusCode).to.equal(200);
+                            db.close();
                             done();
                         });
                     });
                 });
-                mongo.close();
             });
         });
 });
