@@ -3,10 +3,10 @@ div.modal-content
         div.row
             div.col.s6
                 label(for='docdatesearchinputfrom') Datum von:
-                input#docdatesearchinputfrom.form-control.datepicker(value=session.plain.docdatefrom, name='docdatefrom')
+                input#docdatesearchinputfrom.form-control.datepicker.datelayout(value=session.plain.docdatefrom, name='docdatefrom')
             div.col.s6
                 label(for='docdatesearchinputto') Datum bis:
-                input#docdatesearchinputto.form-control.datepicker(value=session.plain.docdateto, name='docdateto')
+                input#docdatesearchinputto.form-control.datepicker.datelayout(value=session.plain.docdateto, name='docdateto')
         div.row
             div.col.s5
                 label(for='partnersearchinput') Partner:

@@ -1,3 +1,4 @@
+li.divider
 //li
     form#navform(method='POST' action='/doc/')
         input#navsearch(name='navsearch', style='margin-left:200px;width:100px')
@@ -10,13 +11,31 @@
         i.material-icons.right arrow_drop_down
         i.material-icons.left account_circle
 li(class=active_alldocs)
-    a(href='/doc/?delpartner=1&deltags=1&deldocdate=1') Alle
+    a(href='/doc/?delpartner=1&deltags=1&deldocdate=1') Übersicht
         i.material-icons.left view_list
+li
+    a(href='/doc/?orphan=partner') Partner
+        i.material-icons.left store_mall_directory
 li(class=active_new)
     a(href='/new/') Neu
         i.material-icons.left add_circle
 li(class=active_orphan)
-    a#dropdownorphanc.dropdown-button(href='#!' data-activates="dropdownorphan" data-beloworigin="true")
-        ='Waisen'
-        i.material-icons.right arrow_drop_down
-        i.material-icons.left warning
+    ul.collapsible
+        li
+            a.collapsible-header.waves-effect.waves-teal Waisen
+                i.material-icons.left warning
+                i.material-icons.right arrow_drop_down
+            div.collapsible-body
+                ul
+                    li
+                        a(href='/doc/?orphan=docdate') Datum
+                            i.material-icons.left date_range
+                    li
+                        a(href='/doc/?orphan=partner') Partner
+                            i.material-icons.left store_mall_directory
+                    li
+                        a(href='/doc/?orphan=users') Besitzer
+                            i.material-icons.left account_circle
+                    li
+                        a(href='/doc/?orphan=tags') Tags
+                            i.material-icons.left label

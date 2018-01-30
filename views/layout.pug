@@ -30,6 +30,8 @@ html
                 li
                     a.blue-text(href='/doc/?orphan=tags') Tags
                         i.material-icons.left label
+            ul#slide-out.side-nav
+                include layout.menu.collapsed.pug
             div#navbar.navbar-fixed
                 nav.blue
                     div.nav-wrapper
@@ -38,9 +40,9 @@ html
                                 img(src='/images/icon-inv-48x48.png')
                                 span &nbsp;
                                     = title
-                        //a.button-collapse(href="#" data-activates="slide-out")
+                        a.button-collapse(href="#" data-activates="slide-out")
                             i.material-icons menu
-                        ul.right
+                        ul.right.hide-on-med-and-down
                             include layout.menu.pug
             br
             //ul#slide-out.side-nav

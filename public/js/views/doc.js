@@ -1,6 +1,10 @@
 //init a lot of stuff
 $(document).ready(function () {
 
+    function redsave() {
+        $('#save').removeClass('blue').removeClass('red').addClass('red');
+    }
+
     $('select').material_select();
 
     let idregex = /.*(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}\.\d{3}Z\.pdf).*/g;
@@ -9,16 +13,18 @@ $(document).ready(function () {
     $.getJSON('/api/v1/doc/' + docid, function (docdata) {
 
         //Initialize Datepicker
-        $('.datepicker').pickadate({
+        $('.datedoc').pickadate({
             onStart: function () {
                 let docdatesel = $('#docdate');
                 year = moment.utc(docdatesel.val(), 'DD.MM.YYYY').format("YYYY");
                 month = moment.utc(docdatesel.val(), 'DD.MM.YYYY').format("MM");
                 day = moment.utc(docdatesel.val(), 'DD.MM.YYYY').format("DD");
                 this.set(year, month, day);
+                console.log('starting');
             },
             onOpen: function () {
-                $('#docdate').removeClass('red-text')
+                $('#docdate').removeClass('red-text');
+                redsave();
             },
             format: 'dd.mm.yyyy',
             selectMonths: true, // Creates a dropdown to control month
@@ -37,7 +43,6 @@ $(document).ready(function () {
 
         //Initialize Partner Autocomplete
         $.getJSON('/api/v1/partners', function (partnerlist) {
-            //let partnerlist = window.partnerlist;// !{JSON.stringify(session.partnerlist).replace(/<\//g, '<\\/')}
             let plist = {};
             for (index = 0; index < partnerlist.length; ++index) {
                 plist[partnerlist[index].name] = partnerlist[index].logo;
@@ -46,16 +51,17 @@ $(document).ready(function () {
             let partnersel = $('#partner');
             partnersel.autocomplete({
                 data: plist,
-                limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+                limit: 20,
                 onAutocomplete: function (val) {
-                    // Callback function when value is autcompleted.
+                    redsave();
                 },
-                minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+                minLength: 1,
             });
 
             partnersel.on('click', function () {
-                $(this).val('')
+                $(this).val('');
                 $(this).removeClass('red-text');
+                redsave();
             });
         });
 
@@ -165,4 +171,60 @@ $(document).ready(function () {
             ocr(0, docdata);
         }
     });
+
+    $('#save').on('click', function () {
+        console.log('click');
+        let docdata = {};
+
+        docdata.subject = $('#subject').val();
+        docdata.partner = $('#partner').val();
+        docdata.docdate = $('#docdate').val();
+        let tags = $('#hidden_tags').val();
+        docdata.tags = [];
+        $.each(JSON.parse(tags), function (key, value) {
+            if (value.tag && value.tag !== '') {
+                docdata.tags.push(value.tag);
+            }
+        });
+        if (docdata.tags.length === 0) {
+            delete docdata.tags;
+        }
+        docdata.users = [];
+        $('input:checked[name="users"]').each(function () {
+            if ($(this).val() && $(this).val() !== '') {
+                docdata.users.push($(this).val());
+            }
+        });
+        if (docdata.users.length === 0) {
+            delete docdata.users;
+        }
+
+        console.log(docdata);
+
+        $.post("/api/v1/doc/" + docid + "/", $.param(docdata, true), function (data, status) {
+            if (status === 'success') {
+                $('#save').removeClass('red').removeClass('blue').addClass('blue');
+                $('#saveicon').text('done');
+                Materialize.toast('Gespeichert.', 4000);
+                setTimeout(function () {
+                    $('#saveicon').text('save')
+                }, 2000);
+            } else {
+                Materialize.toast('Fehler: ' + status, 4000);
+            }
+        }, "json");
+
+    });
+
+    $('#partner,#subject').on('input', function () {
+        redsave();
+    });
+
+    $('.chips').on('chip.delete chip.add', function (e, chip) {
+        redsave();
+    });
+    $('.jqusers').on('click', function () {
+        redsave();
+    })
+
 });

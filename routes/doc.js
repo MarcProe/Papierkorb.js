@@ -3,8 +3,7 @@ let express = require('express');
 let router = express.Router();
 
 let fs = require('fs');
-var Jimp = require("jimp");
-let moment = require('moment');
+let Jimp = require("jimp");
 
 let render = require('../modules/render.js');
 let editpre = require('../modules/editpreview.js');
@@ -21,9 +20,6 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
         case 'thumb':
             preview(req, res, next, true);
             break;
-        case 'update':
-            update(req, res, next);
-            break;
         case 'edit':
             editpre.edit(res, req.params.genid, req.params.docid, req.query.preview, req.query.degrees);
             break;
@@ -37,21 +33,11 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
             download(req, res, req.params.docid);
             break;
         default:
-            update(req, res, next);
+            show(req, res, next);
             break;
     }
 });
 
-router.post('/:docid/:func?/:genid?', function(req, res, next) {
-    switch (req.params.func) {
-        case 'update':
-            update(req, res, next);
-            break;
-        default:
-            view(req, res, next);
-            break;
-    }
-});
 
 function movepage(res, docid, direction, page) {
     let filetemp = conf.doc.imagepath + docid + '.temp.png';
@@ -140,96 +126,19 @@ function preview(req, res, next, thumb) {
     }
 }
 
-function update(req, res, next) {
+function show(req, res, next) {
 
-    if(req.params.genid === "true") {  //execute update
+    req.app.locals.db.collection(conf.db.c_doc).findOne({_id: req.params.docid}, function (err, result) {
 
-        let tags = [];
-        (JSON.parse(req.body.tags)).forEach(function (tag) {
-
-            tags.push(tag.tag);
-
-            let dbtag = {};
-            dbtag._id = tag.tag;
-
-            let foundtag = req.session.taglist.some(function (el) {
-                return el._id === dbtag._id;
-            });
-
-            if(!foundtag) req.session.taglist.push(dbtag);
-        });
-
-        //save the tags. this may fire async, we don't care
-        //ordered: false will also ignore any duplicate errors
-        if (req.body.tags && req.body.tags[0]) {
-            req.app.locals.db.collection(conf.db.c_tag).insertMany(req.session.taglist, {ordered: false}, function (err, res) {
-                if (err) {
-                    //console.error(err);
-                }
-            });
+        if (!result) {
+            result = {};
         }
-
-        if (req.body.partner) {
-
-            let foundpartner = req.session.partnerlist.some(function (element) {
-                return element._id === req.body.partner;
-            });
-
-            if(!foundpartner) {
-                req.session.partnerlist.push({_id: req.body.partner, name: req.body.partner});
-            }
-
-            //same for partner (but there's only one)
-            req.app.locals.db.collection(conf.db.c_partner).insertOne({_id: req.body.partner, name: req.body.partner}, function (err, res) {
-                if (err) {
-                    console.error(err);
-                }
-            });
+        if (!result.users) {
+            result.users = [];
         }
+        preparerender(req, res, next, result)
+    });
 
-        let users;
-        if (req.body.users && req.body.users.constructor === Array) {      //If only one element is given, the type is string, which is bad
-            users = req.body.users
-        } else {
-            users = [req.body.users];
-        }
-
-        let isodate = moment.utc(req.body.docdate, 'DD.MM.YYYY').toISOString();
-
-        let docdata = {
-            $set: {
-                subject: req.body.subject,
-                users: users,
-                docdate: isodate,
-                partner: req.body.partner,
-                tags: tags
-            }
-        };
-
-        inspect(docdata, 'docdata');
-
-        req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: req.params.docid}, docdata, { upsert : true },  function(err, result) {
-            if (err) throw err;
-
-            res.writeHead(302, {
-                'Location': '/doc/' + req.params.docid + '/update/'
-            });
-            res.end();
-        });
-
-    } else { //show update form
-
-        req.app.locals.db.collection(conf.db.c_doc).findOne( {_id: req.params.docid}, function(err, result) {
-
-            if(!result) {
-                result = {};
-            }
-            if(!result.users) {
-                result.users = [];
-            }
-            preparerender(req, res, next, result)
-        });
-    }
 }
 
 function preparerender(req, res, next, data) {

@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 
 let conf = require('config').get('conf');
+let moment = require('moment');
 
 let inspect = require('eyes').inspector({maxLength: 20000});
 
@@ -73,6 +74,15 @@ router.post('/:version/:func/:docid?/', function (req, res, next) {
                 res.end();
             }
             break;
+        case 'doc':
+            savedoc(req, res, next);
+            break;
+        default:
+            res.writeHead(404, {
+                'message': 'method not found'
+            });
+            res.end();
+            break;
     }
 });
 
@@ -141,6 +151,99 @@ function getdoc(req, res, next) {
                 }
             }
         });
+    });
+}
+
+function savedoc(req, res, next) {
+    console.log(req.body);
+    //now, what?
+
+    //prepare data
+    let isodate = moment.utc(req.body.docdate, 'DD.MM.YYYY').toISOString();
+
+    let users = [];
+    if (req.body.users) {
+        if (req.body.users.constructor === Array) {     //If only one element is given, the type is string, which is bad
+            users = req.body.users
+        } else {
+            users = [req.body.users];
+        }
+    }
+
+    let tags = [];
+    if (req.body.tags) {
+        if (req.body.tags.constructor === Array) {      //If only one element is given, the type is string, which is bad
+            tags = req.body.tags
+        } else {
+            tags = [req.body.tags];
+        }
+    }
+
+    let savetags = [];
+
+    //create new tags
+    tags.forEach(function (tag) {
+        let dbtag = {};
+        dbtag._id = tag;
+
+        let foundtag = req.session.taglist.some(function (el) {
+            return el._id === dbtag._id;
+        });
+        if (!foundtag) {
+            req.session.taglist.push(dbtag);    //all tags
+            savetags.push(dbtag);               //only new tags
+        }
+    });
+
+    if (savetags && savetags[0]) {
+        req.app.locals.db.collection(conf.db.c_tag).insertMany(savetags, {ordered: false}, function (err, res) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    }
+
+    //create new partner
+    if (req.body.partner) {
+
+        let foundpartner = req.session.partnerlist.some(function (element) {
+            return element._id === req.body.partner;
+        });
+
+        if (!foundpartner) {
+            let dbpartner = {
+                _id: req.body.partner,
+                name: req.body.partner
+            };
+            req.session.partnerlist.push(dbpartner);
+
+            req.app.locals.db.collection(conf.db.c_partner).insertOne(dbpartner, function (err, res) {
+                if (err) {
+                    console.error(err);
+                }
+            });
+        }
+    }
+
+    //update document
+    let docdata = {
+        $set: {
+            subject: req.body.subject,
+            users: users ? users : [],
+            docdate: (isodate) ? isodate : '',
+            partner: req.body.partner,
+            tags: tags ? tags : []
+        }
+    };
+    console.log(docdata);
+    req.app.locals.db.collection(conf.db.c_doc).updateOne({_id: req.params.docid}, docdata, {upsert: true}, function (err, result) {
+        if (err) {
+            res.send({message: err});
+            res.end();
+        } else {
+            res.send({message: 'ok'});
+            res.end();
+        }
     });
 }
 

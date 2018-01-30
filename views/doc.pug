@@ -17,69 +17,73 @@ block content
                             img.preview(id='image_' + n, src='/doc/' + data._id + '/thumb/' + n, data-src='/doc/' + data._id + '/preview/' + n)
                 -n++
         div.col.s4
-            form(method='POST' action='/doc/' + data._id + '/update/true' autocomplete="off")
-                input#hidden_tags(type='hidden' name='tags')
-                div.row
-                    div.col.s2.xl2.center
-                        button.btn.blue.z-depth-5.tooltipped(type='submit' style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Speichern")
-                            i.material-icons save
-                    div.col.s2.xl2.center
+            input#hidden_tags(type='hidden' name='tags')
+            div.row
+                div.col.s6.xl2.center
+                    p
+                        a#save.waves-effect.waves-light.btn.blue.z-depth-5.tooltipped(href='#' style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Speichern")
+                            i#saveicon.material-icons.white-text save
+                div.col.s6.xl2.center
+                    p
                         a.waves-effect.waves-light.btn.blue.z-depth-5.tooltipped(href='/doc/' + data._id + '/download/' target="_blank" style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Download")
                             i.material-icons file_download
-                    div.col.s2.xl2.center
+                div.col.s6.xl2.center
+                    p
                         a#ocr1.waves-effect.waves-light.btn.blue.z-depth-5.tooltipped(href='#!' style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Texterkennung")
                             i.material-icons photo
-                    div.col.s2.xl2.center
+                div.col.s6.xl2.center
+                    p
                         a.waves-effect.waves-light.btn.blue.z-depth-5.tooltipped(href='/doc/' style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Zurück")
                             i.material-icons arrow_back
-                    div.col.s12.xl2.center
-                        //a#ocrx.waves-effect.waves-light.btn.blue.z-depth-5(href='#!') OCR
-                            i.material-icons.left photo_library
-                    div.col.s2.xl2.center
+                div.col.s6.xl2.center
+                    //a#ocrx.waves-effect.waves-light.btn.blue.z-depth-5(href='#!') OCR
+                        i.material-icons.left photo_library
+                div.col.s6.xl2.center
+                    p
                         a.waves-effect.waves-light.btn.modal-trigger.red.z-depth-5.tooltipped(href="#modaldelete" style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Löschen")
                             i.material-icons delete_forever
-                div.row
-                    div.col.s12.xl12.center
-                        div.progress
-                            div#ocr.determinate
-                div.form-group
-                    label(for='subject') Betreff:
-                    input#subject.form-control.autocomplete(type='text', placeholder='Betreff' name='subject' value=data.subject)
-                div.form-group
-                    label(for='docdate') Datum:
-                    if(data.founddate)
-                        input#docdate.form-control.datepicker.red-text(type='text', placeholder='Datum' name='docdate' value=(moment.utc(data.docdate).format("DD.MM.YYYY")))
-                    else if (data.docdate)
-                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value=(moment.utc(data.docdate).format("DD.MM.YYYY")))
+            div.row
+                div.col.s12.xl12.center
+                    div.progress
+                        div#ocr.determinate
+            div.form-group
+                label(for='subject') Betreff:
+                input#subject.form-control.autocomplete(type='text', placeholder='Betreff' name='subject' value=data.subject)
+            div.form-group
+                label(for='docdate') Datum:
+                if(data.founddate)
+                    input#docdate.form-control.datepicker.red-text.datedoc(type='text', placeholder='Datum' name='docdate' value=(moment.utc(data.docdate).format("DD.MM.YYYY")))
+                else if (data.docdate)
+                    input#docdate.form-control.datepicker.datedoc(type='text', placeholder='Datum' name='docdate' value=(moment.utc(data.docdate).format("DD.MM.YYYY")))
+                else
+                    input#docdate.form-control.datepicker.datedoc(type='text', placeholder='Datum' name='docdate' value='')
+            div.form-group
+                label(for='users') Besitzer:
+                br
+                each user in session.userlist
+                    if(data.users.indexOf(user.name) > -1)
+                        input.jqusers(type='checkbox' id='user_' + user.name name='users' value=user.name checked='checked')
                     else
-                        input#docdate.form-control.datepicker(type='text', placeholder='Datum' name='docdate' value='')
-                div.form-group
-                    label(for='users') Besitzer:
+                        input.jqusers(type='checkbox' id='user_' + user.name name='users' value=user.name)
+                    label(for='user_' + user.name)= user.name
                     br
-                    each user in session.userlist
-                        if(data.users.indexOf(user.name) > -1)
-                            input.jqusers(type='checkbox' id='user_' + user.name name='users' value=user.name checked='checked')
-                        else
-                            input.jqusers(type='checkbox' id='user_' + user.name name='users' value=user.name)
-                        label(for='user_' + user.name)= user.name
-                        br
-                        br
-                div.form-group
-                    -var partnerval = '';
-                    if(data.partner)
-                        -partnerval = data.partner
-                    label(for='partner') Partner:
-                    if(data.foundpartner)
-                        input#partner.autocomplete.red-text(name='partner' value=partnerval)
-                    else
-                        input#partner.autocomplete(name='partner' value=partnerval)
+                    br
+            div.form-group
+                -var partnerval = '';
+                if(data.partner)
+                    -partnerval = data.partner
+                label(for='partner') Partner:
+                if(data.foundpartner)
+                    input#partner.autocomplete.red-text(name='partner' value=partnerval)
+                else
+                    input#partner.autocomplete(name='partner' value=partnerval)
 
-                div.row &nbsp;
-                div.row
-                    div.col.s11
-                        div#taginputparent.chips.chips-autocomplete
-                    div.right-align.col.s1
-                            i#tagstooltip.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
+            div.row &nbsp;
+            div.row
+                div.col.s11
+                    div#taginputparent.chips.chips-autocomplete
+                div.right-align.col.s1
+                    i#tagstooltip.tooltipped.material-icons(style='cursor: help;', data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
             textarea.doctext= data.plaintext
     div#modaldelete.modal
         include doc.modaldelete.pug

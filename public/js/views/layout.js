@@ -28,7 +28,9 @@ $(document).ready(function () {
         }
     });
 
-    //$(".button-collapse").sideNav();
+    $(".button-collapse").sideNav();
+    $('.collapsible').collapsible();
+
     //orphan menu drowpdown
     $(".dropdown-button").dropdown();
 
@@ -80,7 +82,7 @@ $(document).ready(function () {
 
     //Initialize Datepicker
 
-    $('.datepicker').pickadate({
+    $('.datelayout').pickadate({
         onStart: function () {
             let docdateval = $('#docdate').val();
             year = moment(docdateval, 'DD.MM.YYYY').format("YYYY");
