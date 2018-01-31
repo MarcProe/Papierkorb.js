@@ -13,10 +13,6 @@ html
         script(src='/materialize/js/materialize.min.js')
     body
         header
-            //ul#dropdownuser.dropdown-content
-                each user in session.userlist
-                    li
-                        a.blue-text(href='/doc/?users=' + user._id)= user.name
             ul#dropdownorphan.dropdown-content
                 li
                     a.blue-text(href='/doc/?orphan=docdate') Datum
@@ -35,7 +31,7 @@ html
             div#navbar.navbar-fixed
                 nav.blue
                     div.nav-wrapper
-                        a.brand-logo(href='/doc/')
+                        a.brand-logo.truncate(href='/doc/')
                             div.valign-wrapper &nbsp;
                                 img(src='/images/icon-inv-48x48.png')
                                 span &nbsp;
@@ -45,8 +41,6 @@ html
                         ul.right.hide-on-med-and-down
                             include layout.menu.pug
             br
-            //ul#slide-out.side-nav
-            //    include layout.menu.collapsed.pug
         main
             div.container.customcontainer
                 block content

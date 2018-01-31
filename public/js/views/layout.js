@@ -28,7 +28,10 @@ $(document).ready(function () {
         }
     });
 
-    $(".button-collapse").sideNav();
+    $(".button-collapse").sideNav({
+        draggable: true,
+        menuWidth: 500
+    });
     $('.collapsible').collapsible();
 
     //orphan menu drowpdown

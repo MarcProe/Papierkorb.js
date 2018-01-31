@@ -1,41 +1,48 @@
 li.divider
-//li
+li
     form#navform(method='POST' action='/doc/')
-        input#navsearch(name='navsearch', style='margin-left:200px;width:100px')
-//li
+        input#navsearchc(placeholder='Suchbegriff' name='navsearch', style='margin-left:20px;width:250px')
+li
     a#navbutton(href='#')
+        span.flow-text Suchen
         i.material-icons(style='cursor:pointer;') search
-//li(class=active_user)
-    a.dropdown-button(href='#!' data-activates="dropdownuser" data-beloworigin="true")
-        ='Benutzer'
-        i.material-icons.right arrow_drop_down
-        i.material-icons.left account_circle
+li.divider
 li(class=active_alldocs)
-    a(href='/doc/?delpartner=1&deltags=1&deldocdate=1') Übersicht
+
+    a(href='/doc/?delpartner=1&deltags=1&deldocdate=1')
+        span.flow-text Übersicht
         i.material-icons.left view_list
 li
-    a(href='/doc/?orphan=partner') Partner
+    a(href='/doc/?orphan=partner')
+        span.flow-text Partner
         i.material-icons.left store_mall_directory
 li(class=active_new)
-    a(href='/new/') Neu
+    a(href='/new/')
+        span.flow-text Neu
         i.material-icons.left add_circle
+li.divider
 li(class=active_orphan)
     ul.collapsible
         li
-            a.collapsible-header.waves-effect.waves-teal Waisen
+            a.collapsible-header.waves-effect.waves-teal
+                span.flow-text Waisen
                 i.material-icons.left warning
                 i.material-icons.right arrow_drop_down
             div.collapsible-body
                 ul
                     li
-                        a(href='/doc/?orphan=docdate') Datum
+                        a(href='/doc/?orphan=docdate')
+                            span.flow-text Datum
                             i.material-icons.left date_range
                     li
-                        a(href='/doc/?orphan=partner') Partner
+                        a(href='/doc/?orphan=partner')
+                            span.flow-text Partner
                             i.material-icons.left store_mall_directory
                     li
-                        a(href='/doc/?orphan=users') Besitzer
+                        a(href='/doc/?orphan=users')
+                            span.flow-text Besitzer
                             i.material-icons.left account_circle
                     li
-                        a(href='/doc/?orphan=tags') Tags
+                        a(href='/doc/?orphan=tags')
+                            span.flow-text Tags
                             i.material-icons.left label

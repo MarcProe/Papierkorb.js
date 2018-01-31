@@ -120,71 +120,82 @@ function finduser(singletext) {
 }
 
 function ocr(img, docdata) {
-
-    let hostregex = /(^(([^:\/?#]+):)?(\/\/([^\/?#]*)))?([^?#]*)(\?([^#]*))?(#(.*))?/g;
-    let qhost = hostregex.exec(window.location.href)[1];
-
-    window.Tesseract = Tesseract.create({
-        workerPath: qhost + '/js/t/worker.js',
-        langPath: qhost + '/tessdata/',
-        corePath: qhost + '/js/t/index.js',
-    });
-
-    //let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
-    let doctextsel = $('.doctext');
-    let ocrtext = '';
-    Tesseract.recognize('/doc/' + docdata._id + '/preview/' + img, {
-        lang: 'deu',
-    }).progress(function (message) {
-
-        let ocrsel = $('#ocr');
-        if (message.status === "recognizing text") {
-
-            ocrsel.attr('class', 'determinate');
-            ocrsel.css('width', (message.progress * 100) + '%')
-        } else {
-            ocrsel.attr('class', 'indeterminate');
+    try {
+        let ocrbtnsel = $('#ocr1');
+        if (ocrbtnsel.hasClass('pulse')) {
+            return;
         }
-    }).then(function (result) {
+        ocrbtnsel.addClass('pulse').addClass('disabled');
+        let hostregex = /(^(([^:\/?#]+):)?(\/\/([^\/?#]*)))?([^?#]*)(\?([^#]*))?(#(.*))?/g;
+        let qhost = hostregex.exec(window.location.href)[1];
 
-        ocrtext = result.text;
-        doctextsel.val(ocrtext);
-        let retval = {};
-        retval.plaintext = [];
-        retval.plaintext.push(ocrtext);
-
-        $.post("/api/v1/ocr/" + docdata._id + "/", $.param(retval, true), function (data, status) {
-            //noop
-        }, "json");
-
-        let founddate = finddate(ocrtext);
-        let docdatesel = $('#docdate');
-
-        if (founddate && (!docdatesel.val() || docdatesel.val() === '')) {
-            docdatesel.val(moment.utc(founddate).format('DD.MM.YYYY').toString());
-        }
-
-        findpartner(ocrtext).then(function (foundpartner) {
-            let partnersel = $('#partner');
-
-            if (foundpartner && (!partnersel.val() || partnersel.val() === '')) {
-                partnersel.val(foundpartner.name);
-            }
+        window.Tesseract = Tesseract.create({
+            workerPath: qhost + '/js/t/worker.js',
+            langPath: qhost + '/tessdata/',
+            corePath: qhost + '/js/t/index.js',
         });
 
-        finduser(ocrtext).then(function (fu) {
-            let founduser = fu;
-            $('.jqusers').each(function () {
-                let jqusers = $(this);
-                let username = $(this).attr('id').split('_')[1];
-                founduser.forEach(function (element) {
-                    if (username === element.name) {
-                        jqusers.attr('checked', true);
-                    }
+        //let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
+        let doctextsel = $('.doctext');
+        let ocrtext = '';
+        Tesseract.recognize('/doc/' + docdata._id + '/preview/' + img, {
+            lang: 'deu',
+        }).progress(function (message) {
+
+            let ocrsel = $('#ocr');
+            if (message.status === "recognizing text") {
+
+                ocrsel.attr('class', 'determinate');
+                ocrsel.css('width', (message.progress * 100) + '%')
+            } else {
+                ocrsel.attr('class', 'indeterminate');
+            }
+        }).then(function (result) {
+
+            ocrtext = result.text;
+            doctextsel.val(ocrtext);
+            let retval = {};
+            retval.plaintext = [];
+            retval.plaintext.push(ocrtext);
+
+            $.post("/api/v1/ocr/" + docdata._id + "/", $.param(retval, true), function (data, status) {
+                //noop
+            }, "json");
+
+            let founddate = finddate(ocrtext);
+            let docdatesel = $('#docdate');
+
+            if (founddate && (!docdatesel.val() || docdatesel.val() === '')) {
+                docdatesel.val(moment.utc(founddate).format('DD.MM.YYYY').toString());
+            }
+
+            findpartner(ocrtext).then(function (foundpartner) {
+                let partnersel = $('#partner');
+
+                if (foundpartner && (!partnersel.val() || partnersel.val() === '')) {
+                    partnersel.val(foundpartner.name);
+                }
+            });
+
+            finduser(ocrtext).then(function (fu) {
+                let founduser = fu;
+                $('.jqusers').each(function () {
+                    let jqusers = $(this);
+                    let username = $(this).attr('id').split('_')[1];
+                    founduser.forEach(function (element) {
+                        if (username === element.name) {
+                            jqusers.attr('checked', true);
+                        }
+                    });
                 });
             });
-        });
 
-        subjectautocomplete(ocrtext);
-    });
+            subjectautocomplete(ocrtext);
+            ocrbtnsel.removeClass('pulse').removeClass('disabled');
+
+        });
+    } catch (err) {
+        Materialize.Toast('Unerwarteter Fehler. Bitte Seite neu laden.', 10000);
+        console.log(err);
+    }
 }
