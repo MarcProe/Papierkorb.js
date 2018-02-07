@@ -90,11 +90,11 @@ function finduser(singletext) {
                     }
                     user.search.push(user.name);
 
-                    user.search.forEach(function (search) {
-                        let userfind = singletext.match(new RegExp(search));
+                    user.search.forEach(function (s) {
+                        let userfind = singletext.match(new RegExp(s, "gi"));
 
                         if (userfind) {
-                            score++;
+                            score += userfind.length;
                         }
                         if (score > maxscore) {
                             maxscore = score;
