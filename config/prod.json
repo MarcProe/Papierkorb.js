@@ -4,12 +4,12 @@
       "port": "3000"
     },
     "doc": {
-      "basepath": "/opt/papierkorb/docs/",
-      "imagepath": "/opt/papierkorb/images/",
-      "newpath": "/opt/papierkorb/new/"
+      "basepath": "/opt/papierkorb/data/docs/",
+      "imagepath": "/opt/papierkorb/data/images/",
+      "newpath": "/opt/papierkorb/data/new/"
     },
     "db": {
-      "constring": "mongodb://papierkorb:27017/",
+      "constring": "mongodb://localhost:27017/",
       "db": "papierkorb-prod",
       "c_user": "user",
       "c_doc": "doc",

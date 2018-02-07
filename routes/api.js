@@ -3,10 +3,12 @@ let router = express.Router();
 
 let conf = require('config').get('conf');
 let moment = require('moment');
+let Jimp = require("jimp");
+let fs = require('fs');
 
 let inspect = require('eyes').inspector({maxLength: 20000});
 
-router.get('/:version/:func/:docid?/', function (req, res, next) {
+router.get('/:version/:func/:docid?/:genid?', function (req, res, next) {
     switch (req.params.func) {
         case('end'):
             res.writeHead(200, {
@@ -52,6 +54,24 @@ router.get('/:version/:func/:docid?/', function (req, res, next) {
             });
             break;
         }
+        case('docs'): {
+            getdocs(req, res, next).then(function (result) {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(result));
+            }).catch(function (err) {
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(err));
+            });
+            break;
+        }
+        case('preview'): {
+            getpreview(req, res, next);
+            break;
+        }
+        case('download'): {
+            download(req, res, next);
+            break;
+        }
     }
 });
 
@@ -83,6 +103,18 @@ router.post('/:version/:func/:docid?/', function (req, res, next) {
             });
             res.end();
             break;
+    }
+});
+
+router.put('/:version/:func/:docid?/', function (req, res, next) {
+    switch (req.params.func) {
+        case 'doc': {
+            console.log('putting');
+            inspect(req.body);
+            console.log(moment.utc(req.body.docdate));
+            res.end();
+            break;
+        }
     }
 });
 
@@ -140,12 +172,32 @@ function getuser(req, res, next) {
 function getdoc(req, res, next) {
     return new Promise(function (resolve, reject) {
         let query = {_id: req.params.docid};
+
         req.app.locals.db.collection(conf.db.c_doc).find(query).toArray(function (err, doc) {
             if (err) {
                 reject(err);
             } else {
                 if (doc[0]) {
                     resolve(doc[0]);
+                } else {
+                    reject({"message": "no result"});
+                }
+            }
+        });
+    });
+}
+
+function getdocs(req, res, next) {
+    return new Promise(function (resolve, reject) {
+        let query = {};
+        let proj = {plaintext: 0};
+
+        req.app.locals.db.collection(conf.db.c_doc).find(query).project(proj).toArray(function (err, docs) {
+            if (err) {
+                reject(err);
+            } else {
+                if (docs) {
+                    resolve(docs);
                 } else {
                     reject({"message": "no result"});
                 }
@@ -245,6 +297,42 @@ function savedoc(req, res, next) {
             res.end();
         }
     });
+}
+
+
+function getpreview(req, res, next, thumb) {
+    let w = Number((req.query.w) ? req.query.w : Jimp.AUTO);
+    let h = Number((req.query.h) ? req.query.h : Jimp.AUTO);
+
+    let thumbname = '';
+    if (thumb) {
+        thumbname = '.thumb';
+    }
+
+    let img = null;
+    let id = req.params.genid ? req.params.genid : 0;
+    let imagepath = conf.doc.imagepath + req.params.docid + '.' + id + thumbname + '.png';
+
+    /*if (w && w > 0 || h && h > 0) {
+        console.log(w + ' ' + h);
+        Jimp.read(imagepath, function (err, image) {
+            img = image.scaleToFit(w, h).getBuffer(Jimp.MIME_PNG, function (err, buffer) {
+                res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
+
+                res.end(buffer, 'binary');
+            });
+        });
+    } else {*/
+    img = fs.readFileSync(imagepath);
+    res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
+    res.end(img, 'binary');
+    //}
+}
+
+function download(req, res, docid) {
+    let file = fs.readFileSync(conf.doc.basepath + req.params.docid);
+    res.writeHead(200, {'Content-Type': 'application/pdf'});
+    res.end(file, 'binary');
 }
 
 module.exports = router;

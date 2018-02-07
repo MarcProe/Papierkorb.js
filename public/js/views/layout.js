@@ -30,7 +30,7 @@ $(document).ready(function () {
 
     $(".button-collapse").sideNav({
         draggable: true,
-        menuWidth: 500
+        menuWidth: 300
     });
     $('.collapsible').collapsible();
 
