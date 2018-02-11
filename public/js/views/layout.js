@@ -20,7 +20,7 @@ $(document).ready(function () {
         $('#navsearch').css({width: 400});
     });
 
-    $('#navbutton').click(function () {
+    $('#navsearchbutton').click(function () {
         if ($('#navsearch').val().length === 0) {
             $('#modalsearch').modal('open');
         } else {
@@ -110,6 +110,4 @@ $(document).ready(function () {
         min: false,
         max: 365
     });
-
-
 });
