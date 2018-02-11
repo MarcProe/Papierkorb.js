@@ -1,7 +1,7 @@
 {
   "name": "www",
   "script": "bin/www",
-  "watch: true",
+  "watch": true,
   "instance_var": "www",
   "env": {
     "PORT": 3000,
