@@ -3,10 +3,16 @@ div.modal-content
         div.row
             div.col.s6
                 label(for='docdatesearchinputfrom') Datum von:
-                input#docdatesearchinputfrom.form-control.datepicker.datelayout(value=session.plain.docdatefrom, name='docdatefrom')
+                -var mdatefrom = moment(new Date("1900-01-01")).format('DD.MM.YYYY');
+                if(session.plain.docdatefrom)
+                    -mdatefrom = session.plain.docdatefrom
+                input#docdatesearchinputfrom.form-control.datepicker.datelayout(value=mdatefrom, name='docdatefrom')
             div.col.s6
                 label(for='docdatesearchinputto') Datum bis:
-                input#docdatesearchinputto.form-control.datepicker.datelayout(value=session.plain.docdateto, name='docdateto')
+                -var mdateto = moment(new Date()).format('DD.MM.YYYY');
+                if(session.plain.docdateto)
+                    -mdateto = session.plain.docdateto
+                input#docdatesearchinputto.form-control.datepicker.datelayout(value=mdateto, name='docdateto')
         div.row
             div.col.s5
                 label(for='partnersearchinput') Partner:

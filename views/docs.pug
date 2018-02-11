@@ -7,8 +7,13 @@ block content
             th(width='7%') Seiten
             th(width='12%') Datum&nbsp;
                 if(session.plain.docdatefrom || session.plain.docdateto)
+                    -let ldateto = '';
+                    if(!session.plain.docdateto)
+                        -ldateto = '∞'
+                    else
+                        -ldateto = session.plain.docdateto
                     a(href='/doc/?deldocdate=1')
-                        i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip=session.plain.docdatefrom + ' - ' + session.plain.docdateto, data-html='true') filter_list
+                        i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip=session.plain.docdatefrom + ' - ' + ldateto, data-html='true') filter_list
                 else if(session.plain.orphan === 'docdate')
                     i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
             th(width='16%') Partner&nbsp;
