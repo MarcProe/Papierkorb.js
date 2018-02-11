@@ -36,6 +36,8 @@ html
                                 img(src='/images/icon-inv-48x48.png')
                                 span &nbsp;
                                     = title
+                                if(conf.warn)
+                                    span.red= '_WARNUNG!'
                         a.button-collapse(href="#" data-activates="slide-out")
                             i.material-icons menu
                         ul.right.hide-on-med-and-down
@@ -54,7 +56,7 @@ html
                     div.valign-wrapper.left
                         a.white-text(href="/")
                             i.material-icons home
-                        span= ' ' + (session.users) ? session.users : 'KEIN USERFILTER'
+                        nobr= ' ' + ((session.users) ? session.users : 'KEIN USERFILTER')
                         span(style="opacity: 0" title='' + confenv)= ' ' + confenv
                 div.col.s10
                     div.valign-wrapper.right

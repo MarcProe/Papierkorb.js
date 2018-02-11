@@ -15,6 +15,7 @@
       "c_doc": "doc",
       "c_tag": "tag",
       "c_partner": "partner"
-    }
+    },
+    "warn": false
   }
 }
