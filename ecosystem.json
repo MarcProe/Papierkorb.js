@@ -1,0 +1,10 @@
+{
+  "name": "www",
+  "script": "bin/www",
+  "watch: true",
+  "instance_var": "www",
+  "env": {
+    "PORT": 3000,
+    "NODE_ENV": "prod"
+  }
+}
