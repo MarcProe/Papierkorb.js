@@ -8,25 +8,25 @@ block content
             th(width='12%') Datum&nbsp;
                 if(session.plain.docdatefrom || session.plain.docdateto)
                     a(href='/doc/?deldocdate=1')
-                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.docdatefrom + ' - ' + session.plain.docdateto, data-html='true') filter_list
+                        i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip=session.plain.docdatefrom + ' - ' + session.plain.docdateto, data-html='true') filter_list
                 else if(session.plain.orphan === 'docdate')
                     i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
             th(width='16%') Partner&nbsp;
                 if(session.plain.partner)
                     a(href='/doc/?delpartner=1')
-                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.partner, data-html='true') filter_list
+                        i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip=session.plain.partner, data-html='true') filter_list
                 else if(session.plain.orphan === 'partner')
                     i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
             th(width='10%') Besitzer&nbsp;
                 if(session.plain.users)
                     a(href='/doc/?delusers=1')
-                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.users, data-html='true') filter_list
+                        i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip=session.plain.users, data-html='true') filter_list
                 else if(session.plain.orphan === 'users')
                     i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
             th(width='25%') Tags&nbsp;
                 if(session.plain.tags)
                     a(href='/doc/?deltags=1')
-                        i.tooltipped.material-icons.tiny.grey-text(data-position='right', data-delay='5', data-tooltip=session.plain.tags, data-html='true') filter_list
+                        i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip=session.plain.tags, data-html='true') filter_list
                 else if(session.plain.orphan === 'tags')
                     i.tooltipped.material-icons.tiny.red-text(data-position='right', data-delay='5', data-tooltip='Waisensuche aktiv', data-html='true') warning
             th(width='5%') Vorschau
