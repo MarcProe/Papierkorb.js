@@ -5,6 +5,6 @@
   "instance_var": "www",
   "env": {
     "PORT": 3000,
-    "NODE_ENV": "prod"
+    "NODE_ENV": "production"
   }
 }

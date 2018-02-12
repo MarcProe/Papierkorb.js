@@ -14,7 +14,6 @@ block content
                 div.row
                     div.col.s12
                         div.previewcontainer(style='min-height: 600px;')
-                            //img.preview(id='image_' + n, src='/doc/' + data._id + '/thumb/' + n, data-src='/doc/' + data._id + '/preview/' + n)
                             img.preview(id='image_' + n, src=conf.proxy.preview + data._id + '.' + n + '.thumb.png', data-src=conf.proxy.preview + data._id + '.' + n + '.png')
                 -n++
         div.col.s4

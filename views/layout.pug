@@ -36,7 +36,7 @@ html
                             div.valign-wrapper &nbsp;
                                 img(src=conf.proxy.public + 'images/icon-inv-48x48.png')
                                 span &nbsp;
-                                    = title
+                                    != title
                                 if(conf.warn)
                                     span.red= '_WARNUNG!'
                         a.button-collapse(href="#" data-activates="slide-out")

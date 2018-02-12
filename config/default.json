@@ -1,5 +1,10 @@
 {
   "conf": {
+    "proxy": {
+      "preview": "http://localhost/preview/",
+      "download": "http://localhost/download/",
+      "public": "http://localhost/public/"
+    },
     "net": {
       "port": "3000"
     },

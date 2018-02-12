@@ -2,24 +2,15 @@ let express = require('express');
 
 let router = express.Router();
 
-let fs = require('fs');
-let Jimp = require("jimp");
-
 let render = require('../modules/render.js');
 let editpre = require('../modules/editpreview.js');
 
+let fs = require('fs');
 let conf = require('config').get('conf');
-
 let inspect = require('eyes').inspector({maxLength: 20000});
 
 router.get('/:docid/:func?/:genid?/', function(req, res, next) {
     switch (req.params.func) {
-        case 'preview':
-            preview(req, res, next);
-            break;
-        case 'thumb':
-            preview(req, res, next, true);
-            break;
         case 'edit':
             editpre.edit(res, req.params.genid, req.params.docid, req.query.preview, req.query.degrees);
             break;
@@ -29,15 +20,11 @@ router.get('/:docid/:func?/:genid?/', function(req, res, next) {
         case 'delete':
             deletepage(req, res, req.params.docid, req.params.genid, req.query.previews);
             break;
-        case 'download':
-            download(req, res, req.params.docid);
-            break;
         default:
             show(req, res, next);
             break;
     }
 });
-
 
 function movepage(res, docid, direction, page) {
     let filetemp = conf.doc.imagepath + docid + '.temp.png';
@@ -96,41 +83,6 @@ function deletepage(req, res, docid, page, maxpages ) {
     });
 }
 
-function download(req, res, docid) {
-    let file = fs.readFileSync(conf.doc.basepath + req.params.docid);
-    res.writeHead(200, {'Content-Type': 'application/pdf'});
-    res.end(file, 'binary');
-}
-
-function preview(req, res, next, thumb) {
-    let w = Number((req.query.w) ? req.query.w : Jimp.AUTO);
-    let h = Number((req.query.h) ? req.query.h : Jimp.AUTO);
-
-    let thumbname = '';
-    if (thumb) {
-        thumbname = '.thumb';
-    }
-
-    let img = null;
-    let id = req.params.genid ? req.params.genid : 0;
-    let imagepath = conf.doc.imagepath + req.params.docid + '.' + id + thumbname + '.png';
-
-    if (w && w > 0 || h && h > 0) {
-        console.log(w + ' ' + h);
-        Jimp.read(imagepath, function (err, image) {
-            img = image.scaleToFit(w, h).getBuffer(Jimp.MIME_PNG, function (err, buffer) {
-                res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
-
-                res.end(buffer, 'binary');
-            });
-        });
-    } else {
-        img = fs.readFileSync(imagepath);
-        res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
-        res.end(img, 'binary');
-    }
-}
-
 function show(req, res, next) {
 
     req.app.locals.db.collection(conf.db.c_doc).findOne({_id: req.params.docid}, function (err, result) {
@@ -147,7 +99,7 @@ function show(req, res, next) {
 }
 
 function preparerender(req, res, next, data) {
-    render.rendercallback(null, req, res, 'doc', data, conf, data.subject ? data.subject : data._id)
+    render.rendercallback(null, req, res, 'doc', data, conf, data.subject ? data.subject.substring(0, 20) + '&hellip;' : data._id)
 }
 
 module.exports = router;

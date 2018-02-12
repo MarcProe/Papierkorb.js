@@ -301,32 +301,18 @@ function savedoc(req, res, next) {
 
 
 function getpreview(req, res, next, thumb) {
-    let w = Number((req.query.w) ? req.query.w : Jimp.AUTO);
-    let h = Number((req.query.h) ? req.query.h : Jimp.AUTO);
-
     let thumbname = '';
     if (thumb) {
         thumbname = '.thumb';
     }
 
-    let img = null;
     let id = req.params.genid ? req.params.genid : 0;
     let imagepath = conf.doc.imagepath + req.params.docid + '.' + id + thumbname + '.png';
 
-    /*if (w && w > 0 || h && h > 0) {
-        console.log(w + ' ' + h);
-        Jimp.read(imagepath, function (err, image) {
-            img = image.scaleToFit(w, h).getBuffer(Jimp.MIME_PNG, function (err, buffer) {
-                res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
-
-                res.end(buffer, 'binary');
-            });
-        });
-    } else {*/
     img = fs.readFileSync(imagepath);
     res.writeHead(200, {'Content-Type': Jimp.MIME_PNG});
     res.end(img, 'binary');
-    //}
+
 }
 
 function download(req, res, docid) {

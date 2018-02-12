@@ -19,7 +19,7 @@ router.post('/', function(req, res, next) {
 function handle(req, res, next) {
 
     let query = {};             //query to be passed to the database
-    let plain = {};             //plaintext query without to show the user
+    let plain = {};             //plaintext query to show the user
     let flags = 'i';            //regex flags used
 
     if(req.body.navsearch) {
