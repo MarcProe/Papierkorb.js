@@ -64,14 +64,19 @@ function movepage(res, docid, direction, page) {
 function deletepage(req, res, docid, page, maxpages ) {
     //delete page
     fs.unlinkSync(conf.doc.imagepath + docid + '.' + page + '.png');
+    fs.unlinkSync(conf.doc.imagepath + docid + '.' + page + '.thumb.png');
 
     //move all lower pages
-    //#todo pages start at 0
     for (let i = parseInt(page); i < maxpages - 1; i++) {
         let filenew = conf.doc.imagepath + docid + '.' + i + '.png';
         let fileold = conf.doc.imagepath + docid + '.' + (i + 1) + '.png';
-        console.log(fileold + ' => ' + filenew);
+
         fs.renameSync(fileold, filenew);
+
+        let thumbnew = conf.doc.imagepath + docid + '.' + i + '.thumb.png';
+        let thumbold = conf.doc.imagepath + docid + '.' + (i + 1) + '.thumb.png';
+
+        fs.renameSync(thumbold, thumbnew);
     }
 
     //update database preview field
