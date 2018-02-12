@@ -1,5 +1,10 @@
 {
   "conf": {
+    "proxy": {
+      "preview": "http://papierkorb/preview/",
+      "download": "http://papierkorb/download/",
+      "public": "http://papierkorb/public/"
+    },
     "net": {
       "port": "3000"
     },

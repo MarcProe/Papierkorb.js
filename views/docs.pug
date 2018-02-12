@@ -74,5 +74,5 @@ block content
                             a.hoverover(id=item._id, style='cursor: zoom-in;')
                                 i.material-icons.small attach_file
 
-        div#hoverimage.popup(style='display:none;z-index: 999;')= ' '
-        script(src='/js/views/docs.js')
+        div#hoverimage.popup(style='display:none;z-index: 999;' data-base=conf.proxy.preview)= ' '
+        script(src=conf.proxy.public + '/js/views/docs.js')

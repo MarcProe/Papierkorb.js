@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    script(src='/js/dropzone.min.js')
+    script(src=conf.proxy.public + '/js/dropzone.min.js')
     script.
         Dropzone.autoDiscover = false;
         $(document).ready(function () {

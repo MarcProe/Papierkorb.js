@@ -14,7 +14,8 @@ block content
                 div.row
                     div.col.s12
                         div.previewcontainer(style='min-height: 600px;')
-                            img.preview(id='image_' + n, src='/doc/' + data._id + '/thumb/' + n, data-src='/doc/' + data._id + '/preview/' + n)
+                            //img.preview(id='image_' + n, src='/doc/' + data._id + '/thumb/' + n, data-src='/doc/' + data._id + '/preview/' + n)
+                            img.preview(id='image_' + n, src=conf.proxy.preview + data._id + '.' + n + '.thumb.png', data-src=conf.proxy.preview + data._id + '.' + n + '.png')
                 -n++
         div.col.s4
             input#hidden_tags(type='hidden' name='tags')
@@ -25,7 +26,7 @@ block content
                             i#saveicon.material-icons.white-text save
                 div.col.s6.xl2.center
                     p
-                        a.waves-effect.waves-light.btn.blue.z-depth-5.tooltipped(href='/doc/' + data._id + '/download/' target="_blank" style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Download")
+                        a.waves-effect.waves-light.btn.blue.z-depth-5.tooltipped(href=conf.proxy.download + data._id target="_blank" style='padding:0px; width:100%' data-position="bottom" data-delay="50" data-tooltip="Download")
                             i.material-icons file_download
                 div.col.s6.xl2.center
                     p
@@ -87,10 +88,7 @@ block content
             textarea.doctext= data.plaintext
     div#modaldelete.modal
         include doc.modaldelete.pug
-    script(src='/js/unveil.js')
-    script(src=qhost + '/js/t/tesseract.js')
-    script(src='/js/views/doc.ocr.js')
-    script(src='/js/views/doc.js')
-
-
-
+    script(src=conf.proxy.public + 'js/unveil.js')
+    script(src=conf.proxy.public + 'js/t/tesseract.js')
+    script(src=conf.proxy.public + 'js/views/doc.ocr.js')
+    script(src=conf.proxy.public + 'js/views/doc.js')

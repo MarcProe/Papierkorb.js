@@ -2,16 +2,17 @@ doctype html
 html
     head
         title= 'Papierkorb :: ' + title
-        link(rel='stylesheet', href='/css/style.css')
-        link(rel='stylesheet', href='/css/basic.min.css')
-        link(rel='stylesheet', href='/css/dropzone.min.css')
+        link(rel='stylesheet' href=conf.proxy.public + 'css/style.css')
+        link(rel='stylesheet' href=conf.proxy.public + 'css/basic.min.css')
+        link(rel='stylesheet' href=conf.proxy.public + 'css/dropzone.min.css')
+        link(rel='stylesheet' href=conf.proxy.public + 'materialize/css/materialize.css')
         link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
         link(href='https://fonts.googleapis.com/css?family=Roboto', rel='stylesheet', type='text/css')
-        link(rel='stylesheet', type='text/css', href='/materialize/css/materialize.css')
-        script(src='/js/jquery-3.2.1.min.js')
-        script(src='/js/moment.min.js')
-        script(src='/materialize/js/materialize.min.js')
-    body
+        script(src=conf.proxy.public + 'js/jquery-3.2.1.min.js')
+        script(src=conf.proxy.public + 'js/moment.min.js')
+        script(src=conf.proxy.public + 'materialize/js/materialize.min.js')
+        script(src=conf.proxy.public + 'js/views/layout.js')
+    body(data-conf-proxy-public=conf.proxy.public data-conf-proxy-preview=conf.proxy.preview)
         header
             ul#dropdownorphan.dropdown-content
                 li
@@ -33,7 +34,7 @@ html
                     div.nav-wrapper
                         a.brand-logo.truncate(href='/doc/')
                             div.valign-wrapper &nbsp;
-                                img(src='/images/icon-inv-48x48.png')
+                                img(src=conf.proxy.public + 'images/icon-inv-48x48.png')
                                 span &nbsp;
                                     = title
                                 if(conf.warn)
@@ -69,4 +70,3 @@ html
                                 i.material-icons.right.white-text arrow_back
                         a#button(href='#')
                             i.material-icons.right.white-text arrow_upward
-        script(src='/js/views/layout.js')

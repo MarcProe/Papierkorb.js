@@ -27,12 +27,12 @@ $(document).ready(function () {
                 redsave();
             },
             format: 'dd.mm.yyyy',
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year,
+            selectMonths: true,
+            selectYears: 15,
             today: 'Heute',
             clear: 'L&ouml;schen',
             close: 'Ok',
-            closeOnSelect: false, // Close upon selecting a date,
+            closeOnSelect: false,
             monthsFull: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
             monthsShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
             weekdaysShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],

@@ -1,6 +1,5 @@
 function subjectautocomplete(singletext) {
     //Initialize Partner Autocomplete
-
     let arr = singletext.split("\n").filter(line => line.length > 6);
     let subjlist = {};
 
@@ -126,8 +125,9 @@ function ocr(img, docdata) {
             return;
         }
         ocrbtnsel.addClass('pulse').addClass('disabled');
-        let hostregex = /(^(([^:\/?#]+):)?(\/\/([^\/?#]*)))?([^?#]*)(\?([^#]*))?(#(.*))?/g;
-        let qhost = hostregex.exec(window.location.href)[1];
+        const bodySel = $('body');
+        const qhost = bodySel.attr('data-conf-proxy-public');
+        console.log(qhost);
 
         window.Tesseract = Tesseract.create({
             workerPath: qhost + '/js/t/worker.js',
@@ -135,10 +135,10 @@ function ocr(img, docdata) {
             corePath: qhost + '/js/t/index.js',
         });
 
-        //let docdata = window.docdata;//!{JSON.stringify(data).replace(/<\//g, '<\\/')};
         let doctextsel = $('.doctext');
         let ocrtext = '';
-        Tesseract.recognize('/doc/' + docdata._id + '/preview/' + img, {
+
+        Tesseract.recognize(bodySel.attr('data-conf-proxy-preview') + docdata._id + '.' + img + '.png', {
             lang: 'deu',
         }).progress(function (message) {
 
@@ -195,7 +195,7 @@ function ocr(img, docdata) {
 
         });
     } catch (err) {
-        Materialize.Toast('Unerwarteter Fehler. Bitte Seite neu laden.', 10000);
+        Materialize.toast('Unerwarteter Fehler. Bitte Seite neu laden.', 10000);
         console.log(err);
     }
 }
