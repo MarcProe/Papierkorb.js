@@ -1,11 +1,7 @@
 image: arm32v7/node
 
-cache:
-  paths:
-  - node_modules/
-
 before_script:
-  - npm isntall
+  - npm install
 
 script:
   - ls -alh
