@@ -3,6 +3,7 @@ image: arm32v7/node
 before_script:
   - npm install
 
-script:
-  - ls -alh
+job1:
+  script:
+    - ls -alh
 
