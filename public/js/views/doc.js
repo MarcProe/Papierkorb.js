@@ -20,7 +20,6 @@ $(document).ready(function () {
                 month = moment.utc(docdatesel.val(), 'DD.MM.YYYY').format("MM");
                 day = moment.utc(docdatesel.val(), 'DD.MM.YYYY').format("DD");
                 this.set(year, month, day);
-                console.log('starting');
             },
             onOpen: function () {
                 $('#docdate').removeClass('red-text');
@@ -32,7 +31,7 @@ $(document).ready(function () {
             today: 'Heute',
             clear: 'L&ouml;schen',
             close: 'Ok',
-            closeOnSelect: false,
+            closeOnSelect: true,
             monthsFull: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
             monthsShort: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
             weekdaysShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
@@ -173,11 +172,10 @@ $(document).ready(function () {
     });
 
     $('#save').on('click', function () {
-        console.log('click');
         let docdata = {};
 
-        docdata.subject = $('#subject').val();
-        docdata.partner = $('#partner').val();
+        docdata.subject = $('#subject').val().trim();
+        docdata.partner = $('#partner').val().trim();
         docdata.docdate = $('#docdate').val();
         let tags = $('#hidden_tags').val();
         docdata.tags = [];
@@ -198,8 +196,6 @@ $(document).ready(function () {
         if (docdata.users.length === 0) {
             delete docdata.users;
         }
-
-        console.log(docdata);
 
         $.post("/api/v1/doc/" + docid + "/", $.param(docdata, true), function (data, status) {
             if (status === 'success') {

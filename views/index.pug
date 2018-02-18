@@ -4,11 +4,11 @@ block content
   div.container.center-align
       each user in session.userlist
           div.row
-              a.waves-effect.waves-light.btn-large.blue.col.s2.offset-s5(href='/doc/?users=' + user._id + '&delpartner=1&deltags=1&deldate=1')= user.name
+              a.waves-effect.waves-light.btn-large.blue.col.s4.offset-s4(href='/doc/?users=' + user._id + '&delpartner=1&deltags=1&deldate=1')= user.name
                 i.material-icons.large.left account_circle
       div.row
-          a.waves-effect.waves-light.btn-large.blue.col.s2.offset-s5(href='/doc/?delusers=1&delpartner=1&deltags=1&deldate=1') Alle Dokumente
+          a.waves-effect.waves-light.btn-large.blue.col.s4.offset-s4(href='/doc/?delusers=1&delpartner=1&deltags=1&deldate=1') Alle Dokumente
               i.material-icons.left view_list
       div.row
-          a.waves-effect.waves-light.btn-large.blue.col.s2.offset-s5(href='/doc/?orphan=users') Waisen
+          a.waves-effect.waves-light.btn-large.blue.col.s4.offset-s4(href='/doc/?orphan=users') Waisen
               i.material-icons.left warning
