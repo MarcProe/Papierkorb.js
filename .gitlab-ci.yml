@@ -1,0 +1,13 @@
+image: arm32v7/node
+
+before_script:
+  - npm install
+  - npm install pm2 -g
+  - pm2 start bin/www
+
+job1:
+  script:
+    pm2 status www
+
+after_script:
+  - pm2 stop all
