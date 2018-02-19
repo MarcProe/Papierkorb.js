@@ -167,7 +167,7 @@ $(document).ready(function () {
         });
 
         if ($('.doctext').val() === '') {
-            ocr(0, docdata);
+            //ocr(0, docdata);
         }
     });
 
