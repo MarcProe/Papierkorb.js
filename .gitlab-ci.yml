@@ -1,13 +1,18 @@
 image: arm32v7/node
 
+services:
+  - nonoroazoro/rpi-mongo
+
 before_script:
   - npm install
   - npm install pm2 -g
   - pm2 start bin/www
+  - sleep 30
 
 job1:
   script:
-    pm2 status www
+    - npm test
 
 after_script:
   - pm2 stop all
+  - ls .pm2
