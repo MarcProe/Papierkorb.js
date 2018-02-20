@@ -14,7 +14,7 @@
       "newpath": "c:/temp/test/new/"
     },
     "db": {
-      "constring": "mongodb://papierkorb:27017/",
+      "constring": "mongodb://localhost:27017/",
       "db": "papierkorb-test",
       "c_user": "user",
       "c_doc": "doc",
