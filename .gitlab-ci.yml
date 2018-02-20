@@ -15,4 +15,4 @@ job1:
 
 after_script:
   - pm2 stop all
-  - ls .pm2
+  - ls -alh /root/.pm2
