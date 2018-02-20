@@ -1,7 +1,7 @@
 image: arm32v7/node
 
 services:
-  - nonoroazoro/rpi-mongo
+  - mangoraft/mongodb-arm
 
 before_script:
   - npm install
