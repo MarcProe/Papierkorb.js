@@ -166,6 +166,47 @@ $(document).ready(function () {
             numimagesel.attr("src", src + '?timestamp=' + new Date().getTime());
         });
 
+        //rotateleft button
+        $('.rotateleft').on('click', function () {
+            let image = $(this).attr('data-id');
+            $('#' + image).css({
+                "-webkit-transform": "rotate(-90deg)",
+                "-moz-transform": "rotate(-90deg)",
+                "transform": "rotate(-90deg)" /* For modern browsers(CSS3)  */
+            });
+        });
+
+        //rotateright button
+        $('.rotateright').on('click', function () {
+            let image = $(this).attr('data-id');
+            $('#' + image).css({
+                "-webkit-transform": "rotate(90deg)",
+                "-moz-transform": "rotate(90deg)",
+                "transform": "rotate(90deg)" /* For modern browsers(CSS3)  */
+            });
+        });
+
+        //rotate180 button
+        $('.rotate180').on('click', function () {
+            let image = $(this).attr('data-id');
+            $('#' + image).css({
+                "-webkit-transform": "rotate(180deg)",
+                "-moz-transform": "rotate(180deg)",
+                "transform": "rotate(180deg)" /* For modern browsers(CSS3)  */
+            });
+        });
+
+        //rotateback button
+        $('.rotateback').on('click', function () {
+            let image = $(this).attr('data-id');
+            $('#' + image).css({
+                "-webkit-transform": "rotate(0deg)",
+                "-moz-transform": "rotate(0deg)",
+                "transform": "rotate(0deg)" /* For modern browsers(CSS3)  */
+            });
+        });
+
+
         if ($('.doctext').val() === '') {
             //ocr(0, docdata);
         }

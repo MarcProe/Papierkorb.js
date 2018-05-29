@@ -13,13 +13,16 @@ div.valign-wrapper(style='height:100%')
                         i.material-icons.medium.red.white-text delete_forever
                 li.divider
                 li
-                    a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=-90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach links drehen')
+                    a.rotateback.btn-floating.tooltipped(id='rotateback' + n, data-id='image_' + n, data-position='bottom' data-delay='50' data-tooltip='Drehung zurücksetzen')
+                        i.material-icons.medium.white.blue-text vertical_align_bottom
+                li
+                    a.rotateleft.btn-floating.tooltipped(id='rotateleft' + n, data-id='image_' + n, data-position='bottom' data-delay='50' data-tooltip='links drehen')
                         i.material-icons.medium.white.blue-text rotate_left
                 li
-                    a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=180&#page' + n, data-position='bottom' data-delay='50' data-tooltip='180° drehen')
+                    a.rotate180.btn-floating.tooltipped(id='rotate180' + n, data-id='image_' + n, data-position='bottom' data-delay='50' data-tooltip='180° drehen')
                         i.material-icons.medium.white.blue-text refresh
                 li
-                    a.btn-floating.tooltipped(href='/doc/' + data._id + '/edit/rotate/?preview=' + n + '&degrees=90&#page' + n, data-position='bottom' data-delay='50' data-tooltip='90° nach rechts drehen')
+                    a.rotateright.btn-floating.tooltipped(id='rotateright' + n, data-id='image_' + n, data-position='bottom' data-delay='50' data-tooltip='rechts drehen')
                         i.material-icons.medium.white.blue-text rotate_right
                 li.divider
                 li
