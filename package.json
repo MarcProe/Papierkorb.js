@@ -31,7 +31,8 @@
     "pm2": "~2.10.2",
     "pug": "~2.0.0-rc.4",
     "sanitize-filename": "~1.6.1",
-    "serve-favicon": "~2.5.0"
+    "serve-favicon": "~2.5.0",
+    "hoek": "~5.0.3"
   },
   "devDependencies": {
     "mocha": "~5.0.0",
