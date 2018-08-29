@@ -34,23 +34,5 @@ describe("Basic Requests", function () {
                 done();
             });
         });
-    }),
-        describe("request /images/papierkorb-logo.png", function () {
-
-            let url = "http://localhost:3000/public/images/icon-inv-48x48.png";
-
-            it("should return status 200", function (done) {
-                request(url, function (error, response, body) {
-                    expect(response.statusCode).to.equal(200);
-                    done();
-                });
-            });
-
-            it("should return content-type image/png", function (done) {
-                request(url, function (error, response, body) {
-                    expect(response.headers['content-type']).to.equal('image/png');
-                    done();
-                });
-            });
-        });
+    });
 });
