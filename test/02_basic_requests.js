@@ -1,38 +1,35 @@
-let expect  = require("chai").expect;
+let expect = require("chai").expect;
 let request = require("request");
 
 describe("Basic Requests", function () {
-    describe("request /", function() {
+  describe("request / from node", function () {
+    let url = "http://localhost:3000/";
 
-        let url = "http://localhost:3000/";
-        
-        it("should return status 200", function(done) {
-            request(url, function(error, response, body) {
-                expect(response.statusCode).to.equal(200);
-                done();
-            });
+    it("should return status 200", function (done) {
+      request(url, function (error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        done();
+      });
+    }).timeout(60000);
+  }),
+    describe("request /new/ from node", function () {
+      let url = "http://localhost:3000/new/";
+
+      it("should return status 200", function (done) {
+        request(url, function (error, response, body) {
+          expect(response.statusCode).to.equal(200);
+          done();
         });
+      }).timeout(60000);
     }),
-    describe("request /new/", function() {
+    describe("request /doc/ from node", function () {
+      let url = "http://localhost:3000/doc/";
 
-        let url = "http://localhost:3000/new/";
-
-        it("should return status 200", function(done) {
-            request(url, function(error, response, body) {
-                expect(response.statusCode).to.equal(200);
-                done();
-            });
+      it("should return status 200", function (done) {
+        request(url, function (error, response, body) {
+          expect(response.statusCode).to.equal(200);
+          done();
         });
-    }),
-    describe("request /doc/", function() {
-
-        let url = "http://localhost:3000/new/";
-
-        it("should return status 200", function(done) {
-            request(url, function(error, response, body) {
-                expect(response.statusCode).to.equal(200);
-                done();
-            });
-        });
+      }).timeout(60000);
     });
 });

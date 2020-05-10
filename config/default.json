@@ -9,12 +9,12 @@
       "port": "3000"
     },
     "doc": {
-      "basepath": "c:/temp/test/",
+      "basepath": "c:/temp/test/docs/",
       "imagepath": "c:/temp/test/images/",
       "newpath": "c:/temp/test/new/"
     },
     "db": {
-      "constring": "mongodb://localhost:27017/",
+      "constring": "mongodb://docker:27017/",
       "db": "papierkorb-test",
       "c_user": "user",
       "c_doc": "doc",
