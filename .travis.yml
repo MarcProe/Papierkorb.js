@@ -1,5 +1,17 @@
 language: node_js
 
+arch:
+  - amd64
+  - arm64
+
+dist:
+  - bionic
+
+node_js:
+  - "lts/*"
+  - "10"
+  - "14"
+
 services:
   - mongodb
 
@@ -10,22 +22,17 @@ before_script:
   - sudo apt-get install -qq ghostscript
   - npm start
   - sleep 5
-  
+
 script:
   - npm test
-  
+
 after_script:
   - sleep 120
-  - pm2 desc 0  
+  - pm2 desc 0
   - pm2 stop all
   - sleep 5
   - cat /home/travis/.pm2/logs/www-out-0.log
   - cat /home/travis/.pm2/logs/www-error-0.log
 
-node_js:
-  - "lts/*"
-  - "8"
-  - "9"
-  
 notifications:
   email: false
