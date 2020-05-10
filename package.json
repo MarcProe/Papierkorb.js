@@ -11,6 +11,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "body-parser": "~1.18.2",
+    "bufferutil": "^4.0.1",
     "config": "~2.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~3.1.0",
@@ -33,7 +34,8 @@
     "pm2": "^4.4.0",
     "pug": "~2.0.0-rc.4",
     "sanitize-filename": "~1.6.1",
-    "serve-favicon": "~2.5.0"
+    "serve-favicon": "~2.5.0",
+    "utf-8-validate": "^5.0.2"
   },
   "devDependencies": {
     "asleep": "~1.0.3",
