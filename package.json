@@ -6,7 +6,8 @@
     "start": "pm2 start ./bin/www",
     "stop": "pm2 stop all",
     "postversion": "git push",
-    "test": "node_modules/.bin/mocha --exit --reporter spec"
+    "test": "node_modules/.bin/mocha --exit --reporter spec",
+    "pretest": "pm2-docker start ./bin/www &"
   },
   "dependencies": {
     "async": "^2.6.0",
