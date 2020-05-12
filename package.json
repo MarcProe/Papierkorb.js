@@ -6,7 +6,9 @@
     "start": "pm2 start ./bin/www",
     "stop": "pm2 stop all",
     "postversion": "git push",
-    "test": "node_modules/.bin/mocha --exit --reporter spec"
+    "test": "node_modules/.bin/mocha --exit --reporter spec",
+    "pretest": "forever start -c http-server . -p 81",
+    "posttest": "forever stopall"
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -41,6 +43,8 @@
   "devDependencies": {
     "asleep": "~1.0.3",
     "chai": "~4.1.2",
+    "forever": "^2.0.0",
+    "http-server": "^0.12.3",
     "mocha": "^7.1.2",
     "request": "~2.88.0",
     "should": "^13.2.3",
