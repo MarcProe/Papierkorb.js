@@ -14,14 +14,14 @@ div.modal-content
                     -mdateto = session.plain.docdateto
                 input#docdatesearchinputto.form-control.datepicker.datelayout(value=mdateto, name='docdateto')
         div.row
-            div.col.s5
-                label(for='partnersearchinput') Partner:
+            div.col.s5.input-field
+                label.active(for='partnersearchinput') Partner:
                 input#partnersearchinput.autocomplete(value=session.plain.partner, name='partner')
             div.col.s1
                 div.right-align
                     i#pstt.tooltipped.material-icons(data-position='left', data-delay='50', data-tooltip='Lade...', data-html='true') help_outline
-            div.col.s5
-                label(for='tagsearchinput') Tags:
+            div.col.s5.input-field
+                label.active(for='tagsearchinput') Tags:
                 input#tagsearchinput.autocomplete(value=session.plain.tags, name='tags')
             div.col.s1
                 div.right-align

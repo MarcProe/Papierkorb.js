@@ -7,7 +7,7 @@
     "stop": "pm2 stop all",
     "postversion": "git push",
     "test": "node_modules/.bin/mocha --exit --reporter spec",
-    "pretest": "forever start -c http-server . -p 81",
+    "pretest": "forever start -c http-server . -p 81 --cors -c-1",
     "posttest": "forever stopall"
   },
   "dependencies": {

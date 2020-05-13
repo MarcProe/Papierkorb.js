@@ -39,6 +39,9 @@ $(document).ready(function () {
   //orphan menu drowpdown
   $(".dropdown-trigger").dropdown();
 
+  //initialize general tooltips
+  $(".tooltipped").tooltip();
+
   //Initialize Partner Autocomplete
   $.getJSON("/api/v1/partners", function (partnerlist) {
     let plist = [];
@@ -54,7 +57,7 @@ $(document).ready(function () {
       '<div class="flow-text">' + tooltippartnerlist + "</div>"
     );
 
-    $("input.partnersearchinput").autocomplete({
+    $("#partnersearchinput").autocomplete({
       data: plist,
       limit: 20,
       minLength: 1,
@@ -75,7 +78,7 @@ $(document).ready(function () {
       '<div class="flow-text">' + tooltiptaglist + "</div>"
     );
 
-    $("input.tagsearchinput").autocomplete({
+    $("#tagsearchinput").autocomplete({
       data: taglist,
       limit: 20,
       minLength: 1,
