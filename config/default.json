@@ -1,17 +1,17 @@
 {
   "conf": {
     "proxy": {
-      "preview": "http://localhost:81/testdir/images/",
-      "download": "http://localhost:81/testdir/docs/",
-      "public": "http://localhost:81/public/"
+      "preview": "http://localhost:3000/testdir/images/",
+      "download": "http://localhost:3000/testdir/docs/",
+      "public": "http://localhost:3000/public/"
     },
     "net": {
       "port": "3000"
     },
     "doc": {
-      "basepath": "testdir/docs/",
-      "imagepath": "testdir/images/",
-      "newpath": "testdir/new/"
+      "basepath": "./testdir/docs/",
+      "imagepath": "./testdir/images/",
+      "newpath": "./testdir/new/"
     },
     "db": {
       "constring": "mongodb://docker:27017/",
