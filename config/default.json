@@ -1,20 +1,20 @@
 {
   "conf": {
     "proxy": {
-      "preview": "http://localhost/preview/",
-      "download": "http://localhost/download/",
-      "public": "http://localhost/public/"
+      "preview": "/testdir/images/",
+      "download": "/testdir/docs/",
+      "public": "/public/"
     },
     "net": {
       "port": "3000"
     },
     "doc": {
-      "basepath": "c:/temp/test/",
-      "imagepath": "c:/temp/test/images/",
-      "newpath": "c:/temp/test/new/"
+      "basepath": "./testdir/docs/",
+      "imagepath": "./testdir/images/",
+      "newpath": "./testdir/new/"
     },
     "db": {
-      "constring": "mongodb://localhost:27017/",
+      "constring": "mongodb://docker:27017/",
       "db": "papierkorb-test",
       "c_user": "user",
       "c_doc": "doc",

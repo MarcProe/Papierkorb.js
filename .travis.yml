@@ -1,35 +1,45 @@
+sudo: required
+
 language: node_js
 
 arch:
   - amd64
-  - arm64
 
 dist:
   - bionic
 
 node_js:
   - "lts/*"
-  - "10"
-  - "14"
 
 services:
-  - mongodb
+  - docker
 
 env:
   - NODE_ENV=travis
 
 before_script:
-  - sudo apt-get install -qq ghostscript
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  - docker-compose build
+  - docker-compose pull --ignore-pull-failures
+  - docker-compose up -d
+  - sleep 3
+  - docker ps
+  - sleep 30
+  - docker logs papierkorb-app
+  - sleep 1
+  - docker logs papierkorb-mongo
+  - sleep 1
 
 script:
   - npm test
 
 after_script:
   - sleep 10
-  - pm2 desc 0
-  - pm2 logs www --nostream
-  - pm2 stop all
-  - sleep 20
+  - docker logs papierkorb-app
+  - sleep 1
+  - docker logs papierkorb-mongo
+  - sleep 1
+  - docker-compose down
 
 notifications:
   email: false

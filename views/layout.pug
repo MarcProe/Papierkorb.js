@@ -8,7 +8,7 @@ html
         link(rel='stylesheet' type='text/css' href=conf.proxy.public + 'materialize/css/materialize.css')
         link(rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/icon?family=Material+Icons')
         link(rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Roboto')
-        script(src=conf.proxy.public + 'js/jquery-3.2.1.min.js')
+        script(src=conf.proxy.public + 'js/jquery-3.5.1.min.js')
         script(src=conf.proxy.public + 'js/moment.min.js')
         script(src=conf.proxy.public + 'materialize/js/materialize.min.js')
         script(src=conf.proxy.public + 'js/views/layout.js')
@@ -27,7 +27,7 @@ html
                 li
                     a.blue-text(href='/doc/?orphan=tags') Tags
                         i.material-icons.left label
-            ul#slide-out.side-nav
+            ul#slide-out.sidenav
                 include layout.menu.collapsed.pug
             div#navbar.navbar-fixed
                 nav.blue
@@ -39,7 +39,7 @@ html
                                     != title
                                 if(conf.warn)
                                     span.red= '_WARNUNG!'
-                        a.button-collapse(href="#" data-activates="slide-out")
+                        a.sidenav(href="#" data-activates="slide-out")
                             i.material-icons menu
                         ul.right.hide-on-med-and-down
                             include layout.menu.pug

@@ -6,8 +6,7 @@
     "start": "pm2 start ./bin/www",
     "stop": "pm2 stop all",
     "postversion": "git push",
-    "test": "node_modules/.bin/mocha --exit --reporter spec",
-    "pretest": "pm2-docker start ./bin/www &"
+    "test": "node_modules/.bin/mocha --exit --reporter spec"
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -26,6 +25,7 @@
     "jade-bootstrap": "~1.0.14",
     "jimp": "^0.10.3",
     "lodash": ">=4.17.12",
+    "materialize-css": "^1.0.0",
     "mkdirp": "~0.5.1",
     "moment": "~2.22.1",
     "mongodb": "^3.1.13",
@@ -41,8 +41,11 @@
   "devDependencies": {
     "asleep": "~1.0.3",
     "chai": "~4.1.2",
+    "forever": "^2.0.0",
+    "http-server": "^0.12.3",
     "mocha": "^7.1.2",
     "request": "~2.88.0",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
   }
 }
