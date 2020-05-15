@@ -144,13 +144,17 @@ function ocr(img, docdata) {
     }
     ocrbtnsel.addClass("pulse").addClass("disabled");
     const bodySel = $("body");
-    const qhost = bodySel.attr("data-conf-proxy-public");
+    const qhost =
+      location.protocol +
+      "//" +
+      location.host +
+      bodySel.attr("data-conf-proxy-public");
     console.log(qhost);
 
     window.Tesseract = Tesseract.create({
-      workerPath: qhost + "/js/t/worker.js",
-      langPath: qhost + "/tessdata/",
-      corePath: qhost + "/js/t/index.js",
+      workerPath: qhost + "js/t/worker.js",
+      langPath: qhost + "tessdata/",
+      corePath: qhost + "js/t/index.js",
     });
 
     let doctextsel = $(".doctext");

@@ -99,8 +99,8 @@ app.use("/partners", partners);
 app.use("/api", api);
 
 app.use("/public", express.static("public"));
-app.use("/images", express.static(conf.doc.imagepath));
-app.use("/docs", express.static(conf.doc.basepath));
+app.use(conf.proxy.preview, express.static(conf.doc.imagepath));
+app.use(conf.proxy.download, express.static(conf.doc.basepath));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

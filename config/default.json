@@ -1,9 +1,9 @@
 {
   "conf": {
     "proxy": {
-      "preview": "http://localhost:3000/testdir/images/",
-      "download": "http://localhost:3000/testdir/docs/",
-      "public": "http://localhost:3000/public/"
+      "preview": "/testdir/images/",
+      "download": "/testdir/docs/",
+      "public": "/public/"
     },
     "net": {
       "port": "3000"
