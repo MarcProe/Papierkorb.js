@@ -36,6 +36,8 @@
     "pug": "~2.0.0-rc.4",
     "sanitize-filename": "~1.6.1",
     "serve-favicon": "~2.5.0",
+    "tesseract.js": "^2.1.1",
+    "tesseract.js-core": "^2.2.0",
     "utf-8-validate": "^5.0.2"
   },
   "devDependencies": {

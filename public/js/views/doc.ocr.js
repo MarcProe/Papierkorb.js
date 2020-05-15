@@ -136,98 +136,114 @@ function finduser(singletext) {
   }
 }
 
-function ocr(img, docdata) {
+function progressUpdate(message) {
+  let ocrsel = $("#ocr");
+  if (message.status === "recognizing text") {
+    ocrsel.attr("class", "determinate");
+    ocrsel.css("width", message.progress * 100 + "%");
+  } else {
+    ocrsel.attr("class", "indeterminate");
+    console.log(message);
+  }
+}
+
+async function recognizeFile(file) {
+  const proxpub = $("body").attr("data-conf-proxy-public");
+
+  const asm = proxpub + "/js/t/tesseract-core.asm.js";
+  const wasm = proxpub + "/js/t/tesseract-core.wasm.js";
+
+  const corePath = window.navigator.userAgent.indexOf("Edge") > -1 ? asm : wasm;
+
+  const worker = Tesseract.createWorker({
+    workerPath: proxpub + "/js/t/worker.min.js",
+    langPath: proxpub + "/tessdata/",
+    corePath: corePath,
+    logger: progressUpdate,
+  });
+
+  let lang = "deu";
+  await worker.load();
+  await worker.loadLanguage(lang);
+  await worker.initialize(lang);
+  const data = await worker.recognize(file);
+  await worker.terminate();
+
+  return data;
+}
+
+async function ocr(img, docdata) {
   try {
     let ocrbtnsel = $("#ocr1");
     if (ocrbtnsel.hasClass("pulse")) {
       return;
     }
     ocrbtnsel.addClass("pulse").addClass("disabled");
-    const bodySel = $("body");
-    const qhost =
-      location.protocol +
-      "//" +
-      location.host +
-      bodySel.attr("data-conf-proxy-public");
-    console.log(qhost);
+    const proxpub = $("body").attr("data-conf-proxy-public");
+    await $.getScript(proxpub + "js/t/tesseract.min.js");
 
-    window.Tesseract = Tesseract.create({
-      workerPath: qhost + "js/t/worker.js",
-      langPath: qhost + "tessdata/",
-      corePath: qhost + "js/t/index.js",
-    });
+    const proxprv = $("body").attr("data-conf-proxy-preview");
+    const imgpath = proxprv + docdata._id + "." + img + ".png";
+
+    var rec = await recognizeFile(imgpath);
+
+    var result = rec.data;
 
     let doctextsel = $(".doctext");
     let ocrtext = "";
+    ocrtext = result.text;
 
-    Tesseract.recognize(
-      bodySel.attr("data-conf-proxy-preview") +
-        docdata._id +
-        "." +
-        img +
-        ".png",
-      {
-        lang: "deu",
+    doctextsel.val(ocrtext);
+    let retval = {};
+    retval.plaintext = [];
+    retval.plaintext.push(ocrtext);
+
+    $.post(
+      "/api/v1/ocr/" + docdata._id + "/",
+      $.param(retval, true),
+      function (data, status) {
+        //noop
+      },
+      "json"
+    );
+
+    let founddate = finddate(ocrtext);
+    let docdatesel = $("#docdate");
+
+    if (founddate && (!docdatesel.val() || docdatesel.val() === "")) {
+      docdatesel.val(moment.utc(founddate).format("DD.MM.YYYY").toString());
+    }
+
+    findpartner(ocrtext).then(function (foundpartner) {
+      let partnersel = $("#partner");
+
+      if (foundpartner && (!partnersel.val() || partnersel.val() === "")) {
+        partnersel.val(foundpartner.name);
       }
-    )
-      .progress(function (message) {
-        let ocrsel = $("#ocr");
-        if (message.status === "recognizing text") {
-          ocrsel.attr("class", "determinate");
-          ocrsel.css("width", message.progress * 100 + "%");
-        } else {
-          ocrsel.attr("class", "indeterminate");
-        }
-      })
-      .then(function (result) {
-        ocrtext = result.text;
-        doctextsel.val(ocrtext);
-        let retval = {};
-        retval.plaintext = [];
-        retval.plaintext.push(ocrtext);
+    });
 
-        $.post(
-          "/api/v1/ocr/" + docdata._id + "/",
-          $.param(retval, true),
-          function (data, status) {
-            //noop
-          },
-          "json"
-        );
-
-        let founddate = finddate(ocrtext);
-        let docdatesel = $("#docdate");
-
-        if (founddate && (!docdatesel.val() || docdatesel.val() === "")) {
-          docdatesel.val(moment.utc(founddate).format("DD.MM.YYYY").toString());
-        }
-
-        findpartner(ocrtext).then(function (foundpartner) {
-          let partnersel = $("#partner");
-
-          if (foundpartner && (!partnersel.val() || partnersel.val() === "")) {
-            partnersel.val(foundpartner.name);
+    finduser(ocrtext).then(function (fu) {
+      let founduser = fu;
+      $(".jqusers").each(function () {
+        let jqusers = $(this);
+        let username = $(this).attr("id").split("_")[1];
+        founduser.forEach(function (element) {
+          if (username === element.name) {
+            jqusers.attr("checked", true);
           }
         });
-
-        finduser(ocrtext).then(function (fu) {
-          let founduser = fu;
-          $(".jqusers").each(function () {
-            let jqusers = $(this);
-            let username = $(this).attr("id").split("_")[1];
-            founduser.forEach(function (element) {
-              if (username === element.name) {
-                jqusers.attr("checked", true);
-              }
-            });
-          });
-        });
-
-        subjectautocomplete(ocrtext);
-        ocrbtnsel.removeClass("pulse").removeClass("disabled");
       });
+    });
+
+    subjectautocomplete(ocrtext);
+    ocrbtnsel.removeClass("pulse").removeClass("disabled");
+
+    ocrbtnsel.removeClass("pulse").removeClass("disabled");
   } catch (err) {
-    Materialize.toast("Unerwarteter Fehler. Bitte Seite neu laden.", 10000);
+    M.toast({
+      html: "Unerwarteter Fehler. Bitte Seite neu laden.",
+      displayLength: 10000,
+    });
     console.log(err);
   }
 }
