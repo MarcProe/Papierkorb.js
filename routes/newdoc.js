@@ -85,7 +85,7 @@ function remove(req, res, next) {
 
 function upload(req, res, next) {
   console.log("upload calling!");
-  console.log(util.inspect(req));
+  //console.log(util.inspect(req));
   let targetfile = req.files.file.name;
   req.files.file.mv(conf.doc.newpath + targetfile).then(function () {
     console.log(conf.doc.newpath + targetfile);
