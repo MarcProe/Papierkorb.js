@@ -9,7 +9,7 @@ let conf = require("config").get("conf");
 describe("Document Creation", function () {
   describe("upload a test file", function () {
     it("should upload and respond with 200", function (done) {
-      supertest(conf.test.host + ":" + conf.test.port)
+      supertest(conf.test.host + ":" + conf.net.port)
         .post("/new/null/upload")
         .attach("file", "share/test.nld.pdf")
         .expect(200, done);
@@ -18,13 +18,18 @@ describe("Document Creation", function () {
     describe("request /new/test.nld.pdf/create/ from node", function () {
       this.slow(0);
       it("should return status 302", function (done) {
-        supertest(conf.test.host + ":" + conf.test.port)
+        supertest(conf.test.host + ":" + conf.net.port)
           .get("/new/test.nld.pdf/create/")
           .expect(302, done);
       }).timeout(60000);
     }),
     describe("request docs", function () {
-      let url = conf.test.host + ":" + conf.test.port + "/api/v1/docs";
+      let url =
+        conf.test.schema +
+        conf.test.host +
+        ":" +
+        conf.net.port +
+        "/api/v1/docs";
 
       it("one document should have plausible metadata", function (done) {
         request(url, function (error, response, body) {

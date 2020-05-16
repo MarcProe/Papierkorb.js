@@ -67,13 +67,16 @@ mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
     });
 });
 
-fse.ensureDirSync(conf.doc.newpath);
-fse.ensureDirSync(conf.doc.basepath);
-fse.ensureDirSync(conf.doc.imagepath);
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+
+fse.ensureDirSync(conf.doc.newpath);
+fse.ensureDirSync(conf.doc.basepath);
+fse.ensureDirSync(conf.doc.imagepath);
+app.use("/public", express.static("public"));
+app.use(conf.proxy.preview, express.static(conf.doc.imagepath));
+app.use(conf.proxy.download, express.static(conf.doc.basepath));
 
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(logger("dev"));
@@ -97,10 +100,6 @@ app.use("/new", newdoc);
 app.use("/remove", remove);
 app.use("/partners", partners);
 app.use("/api", api);
-
-app.use("/public", express.static("public"));
-app.use(conf.proxy.preview, express.static(conf.doc.imagepath));
-app.use(conf.proxy.download, express.static(conf.doc.basepath));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
