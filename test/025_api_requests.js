@@ -2,8 +2,8 @@ let expect = require("chai").expect;
 let request = require("request");
 
 describe("Basic Requests", function () {
-  describe("request / from node", function () {
-    let url = "http://localhost:3000/";
+  describe("request /todo from node", function () {
+    let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
 
     it("should return status 200", function (done) {
       request(url, function (error, response, body) {
@@ -12,8 +12,8 @@ describe("Basic Requests", function () {
       });
     }).timeout(60000);
   }),
-    describe("request /new/ from node", function () {
-      let url = "http://localhost:3000/new/";
+    describe("request /todo/ from node", function () {
+      let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
 
       it("should return status 200", function (done) {
         request(url, function (error, response, body) {
@@ -22,8 +22,8 @@ describe("Basic Requests", function () {
         });
       }).timeout(60000);
     }),
-    describe("request /doc/ from node", function () {
-      let url = "http://localhost:3000/doc/";
+    describe("request /todo/ from node", function () {
+      let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
 
       it("should return status 200", function (done) {
         request(url, function (error, response, body) {

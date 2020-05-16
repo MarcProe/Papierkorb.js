@@ -1,5 +1,9 @@
 {
   "conf": {
+    "test": {
+      "schema": "http://",
+      "host": "localhost"
+    },
     "proxy": {
       "preview": "/preview/",
       "download": "/download/",

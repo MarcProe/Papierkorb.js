@@ -19,7 +19,12 @@ describe("Check static assets", function () {
       "request " + conf.proxy.public + "images/loading.gif",
       function () {
         let url =
-          "http://localhost:3000" + conf.proxy.public + "images/loading.gif";
+          conf.test.schema +
+          conf.test.host +
+          ":" +
+          conf.net.port +
+          conf.proxy.public +
+          "images/loading.gif";
 
         it("should return status 200 and a body size of 654", function (done) {
           request(url, function (error, response, body) {
