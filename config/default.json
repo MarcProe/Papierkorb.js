@@ -4,6 +4,11 @@
       "schema": "http://",
       "host": "127.0.0.1"
     },
+    "lang": {
+      "deu": "Deutsch",
+      "nld": "Niederländisch",
+      "eng": "English"
+    },
     "proxy": {
       "preview": "/testdir/images/",
       "download": "/testdir/docs/",

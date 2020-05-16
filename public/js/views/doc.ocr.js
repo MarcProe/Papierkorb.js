@@ -162,7 +162,7 @@ async function recognizeFile(file) {
     logger: progressUpdate,
   });
 
-  let lang = "deu";
+  let lang = $("#lang option:selected").val();
   await worker.load();
   await worker.loadLanguage(lang);
   await worker.initialize(lang);
