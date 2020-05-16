@@ -14,6 +14,8 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN  apt-get remove --purge --auto-remove -y python3 build-essential
+
 COPY . .
 
 VOLUME ["/opt/papierkorb"]

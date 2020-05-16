@@ -71,6 +71,12 @@ mongo.connect(url, { useNewUrlParser: true }, function (err, db) {
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
+//add logging for all requests, so we get logs froms static file requests
+app.use(function (req, res, next) {
+  console.log(res.statusCode + " " + req.url);
+  next();
+});
+
 fse.ensureDirSync(conf.doc.newpath);
 fse.ensureDirSync(conf.doc.basepath);
 fse.ensureDirSync(conf.doc.imagepath);

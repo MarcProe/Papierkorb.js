@@ -2,11 +2,9 @@ version: "2"
 services:
   papierkorb-app:
     container_name: papierkorb-app
-    image: papierkorb
+    image: papierkorb-app
     build: .
     restart: always
-    ports:
-      - "3000:3000"
     links:
       - papierkorb-mongo
     environment:
@@ -20,3 +18,13 @@ services:
     image: sumglobal/rpi-mongodb
     volumes:
       - ./data:/data/db
+
+  papierkorb-nginx:
+    container_name: papierkorb-nginx
+    image: papierkorb-nginx
+    build: docker/nginx/
+    restart: always
+    ports:
+      - "80:80"
+    links:
+      - papierkorb-app

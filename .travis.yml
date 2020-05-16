@@ -24,10 +24,12 @@ before_script:
   - docker-compose up -d
   - sleep 3
   - docker ps
-  - sleep 30
+  - sleep 14
   - docker logs papierkorb-app
   - sleep 1
   - docker logs papierkorb-mongo
+  - sleep 1
+  - docker logs papierkorb-nginx
   - sleep 1
 
 script:
@@ -39,6 +41,7 @@ after_script:
   - sleep 1
   - docker logs papierkorb-mongo
   - sleep 1
+  - docker logs papierkorb-nginx
   - docker-compose down
 
 notifications:
