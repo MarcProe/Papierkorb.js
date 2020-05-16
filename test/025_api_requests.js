@@ -1,5 +1,6 @@
 let expect = require("chai").expect;
 let request = require("request");
+let conf = require("config").get("conf");
 
 describe("Basic Requests", function () {
   describe("request /todo from node", function () {
