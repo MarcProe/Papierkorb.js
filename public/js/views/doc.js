@@ -259,6 +259,7 @@ $(document).ready(function () {
     docdata.subject = $("#subject").val().trim();
     docdata.partner = $("#partner").val().trim();
     docdata.docdate = $("#docdate").val();
+    docdata.lang = $("#lang option:selected").val();
     let tags = document.querySelectorAll(".chips")[0].M_Chips.chipsData;
     docdata.tags = [];
     $.each(tags, function (key, value) {
@@ -303,6 +304,10 @@ $(document).ready(function () {
   });
 
   $(".jqusers").on("click", function () {
+    redsave();
+  });
+
+  $("#lang").on("change", function () {
     redsave();
   });
 });

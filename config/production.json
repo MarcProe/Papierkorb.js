@@ -5,6 +5,11 @@
       "download": "/download/",
       "public": "/public/"
     },
+    "lang": {
+      "deu": "Deutsch",
+      "nld": "Niederländisch",
+      "eng": "English"
+    },
     "net": {
       "port": "3000"
     },

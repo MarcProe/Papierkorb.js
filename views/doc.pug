@@ -47,6 +47,14 @@ block content
                     div.progress
                         div#ocr.determinate
             div.form-group.input-field
+                label.active(for='lang') Sprache für Texterkennung:
+                select#lang.form-control
+                    each val, key in conf.lang
+                        if(data.lang === key)
+                            option(value=(key) selected="selected")= val
+                        else             
+                            option(value=(key))= val
+            div.form-group.input-field
                 label.active(for='subject') Betreff:
                 input#subject.form-control.autocomplete(type='text', placeholder='Betreff' name='subject' value=data.subject)
             div.form-group
