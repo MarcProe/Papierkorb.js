@@ -47,27 +47,15 @@ var statics = [
   "tessdata/nld.traineddata.gz",
 ];
 
-describe("Check static assets on port 3000", function () {
+describe("Check static assets on port 80", function () {
   statics.forEach((file) => {
-    let url = conf.test.host + ":" + conf.net.port + conf.proxy.public;
+    let url = conf.test.host + ":80" + conf.proxy.public;
     describe("request " + url + file, function () {
       it("should return status 200 ", function (done) {
-        supertest(conf.test.host + ":" + conf.net.port)
+        supertest(conf.test.host + ":80")
           .get(conf.proxy.public + file)
           .expect(200, done);
       }).timeout(60000);
     });
   });
-}),
-  describe("Check static assets on port 80", function () {
-    statics.forEach((file) => {
-      let url = conf.test.host + ":80" + conf.proxy.public;
-      describe("request " + url + file, function () {
-        it("should return status 200 ", function (done) {
-          supertest(conf.test.host + ":80")
-            .get(conf.proxy.public + file)
-            .expect(200, done);
-        }).timeout(60000);
-      });
-    });
-  });
+});
