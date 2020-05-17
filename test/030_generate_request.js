@@ -13,7 +13,7 @@ describe("Document Creation", function () {
         .post("/new/null/upload")
         .attach("file", "share/test.nld.pdf")
         .expect(200, done);
-    });
+    }).timeout(60000);
   }),
     describe("request /new/test.nld.pdf/create/ from node", function () {
       this.slow(0);
