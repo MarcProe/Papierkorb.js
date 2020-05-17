@@ -9,7 +9,7 @@ let conf = require("config").get("conf");
 describe("Document Creation", function () {
   describe("upload a test file", function () {
     it("should upload and respond with 200", function (done) {
-      supertest(conf.test.host + ":" + conf.net.port)
+      supertest(conf.test.host + ":80")
         .post("/new/null/upload")
         .attach("file", "share/test.nld.pdf")
         .expect(200, done);

@@ -3,6 +3,7 @@ let request = require("request");
 let conf = require("config").get("conf");
 
 describe("Basic Requests", function () {
+  /*
   describe("request /todo from node", function () {
     let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
 
@@ -33,4 +34,5 @@ describe("Basic Requests", function () {
         });
       }).timeout(60000);
     });
+    */
 });
