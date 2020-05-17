@@ -18,18 +18,13 @@ describe("Document Creation", function () {
     describe("request /new/test.nld.pdf/create/ from node", function () {
       this.slow(0);
       it("should return status 302", function (done) {
-        supertest(conf.test.host + ":" + conf.net.port)
+        supertest(conf.test.host + ":80")
           .get("/new/test.nld.pdf/create/")
           .expect(302, done);
       }).timeout(60000);
     }),
     describe("request docs", function () {
-      let url =
-        conf.test.schema +
-        conf.test.host +
-        ":" +
-        conf.net.port +
-        "/api/v1/docs";
+      let url = conf.test.schema + conf.test.host + ":80" + "/api/v1/docs";
 
       it("one document should have plausible metadata", function (done) {
         request(url, function (error, response, body) {

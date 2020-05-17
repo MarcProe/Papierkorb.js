@@ -24,7 +24,7 @@ describe("Basic Requests", function () {
       }).timeout(60000);
     }),
     describe("request /todo/ from node", function () {
-      let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
+      let url = conf.test.schema + conf.test.host + ":80";
 
       it("should return status 200", function (done) {
         request(url, function (error, response, body) {
