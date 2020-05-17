@@ -18,9 +18,9 @@
       "port": "3000"
     },
     "doc": {
-      "basepath": "./opt/papierkorb/docs/",
-      "imagepath": "./opt/papierkorb/images/",
-      "newpath": "./opt/papierkorb/new/"
+      "basepath": "/opt/papierkorb/docs/",
+      "imagepath": "/opt/papierkorb/images/",
+      "newpath": "/opt/papierkorb/new/"
     },
     "db": {
       "constring": "mongodb://papierkorb-mongo:27017/",
