@@ -17,7 +17,6 @@ describe("API requests", function () {
         expect(doc.previews).to.equal(5);
 
         sdoc = doc;
-        console.log(sdoc);
 
         done();
       });
@@ -25,9 +24,6 @@ describe("API requests", function () {
       it("single document should have same metadata as in /docs", function (done) {
         request(url + "doc/" + sdoc._id, function (error, response, body) {
           let doc = JSON.parse(body);
-          console.log("-.-");
-          console.log(sdoc);
-          console.log(doc);
 
           expect(response.statusCode).to.equal(200);
           expect(doc._id).to.equal(sdoc._id);
