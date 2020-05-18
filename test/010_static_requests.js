@@ -50,7 +50,7 @@ var statics = [
 describe("Check static assets on port 80", function () {
   statics.forEach((file) => {
     let url = conf.test.host + ":80" + conf.proxy.public;
-    it(url + file + "should return status 200", function (done) {
+    it(url + file + " should return status 200", function (done) {
       supertest(conf.test.host + ":80")
         .get(conf.proxy.public + file)
         .expect(200, done);
