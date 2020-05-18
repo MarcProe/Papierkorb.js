@@ -53,8 +53,6 @@ describe("API requests", function () {
           expect(doc._id.to.equal(sdoc._id));
           expect(doc.previews).to.equal(sdic_previews);
 
-          sdoc = doc;
-
           done();
         });
       }).timeout(60000);
