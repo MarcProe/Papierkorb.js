@@ -21,6 +21,6 @@ describe("Document Creation", function () {
         supertest(conf.test.host + ":80")
           .get("/new/test.nld.pdf/create/")
           .expect(302, done);
-      }).timeout(60000);
+      }).timeout(120000);
     });
 });
