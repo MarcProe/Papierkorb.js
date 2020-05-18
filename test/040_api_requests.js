@@ -43,19 +43,20 @@ describe("API requests", function () {
         done();
       });
     }).timeout(60000);
-  }), describe("request docs", function () {
-    it("one document should have plausible metadata", function (done) {
-      request(url + "doc/"+sdoc, function (error, response, body) {
-        let doc = JSON.parse(body)[0];
+  }),
+    describe("request docs", function () {
+      it("single document should have same metadata as in /docs", function (done) {
+        request(url + "doc/" + sdoc, function (error, response, body) {
+          let doc = JSON.parse(body)[0];
 
-        expect(response.statusCode).to.equal(200);
-        expect(doc._id.to.equal(sdoc);
-        expect(doc.previews).to.equal(5);
+          expect(response.statusCode).to.equal(200);
+          expect(doc._id.to.equal(sdoc._id));
+          expect(doc.previews).to.equal(sdic_previews);
 
-        sdoc = doc;
+          sdoc = doc;
 
-        done();
-      });
-    }).timeout(60000);
-  });
+          done();
+        });
+      }).timeout(60000);
+    });
 });

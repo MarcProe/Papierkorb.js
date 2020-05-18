@@ -15,7 +15,7 @@ describe("Document Creation", function () {
         .expect(200, done);
     }).timeout(60000);
   }),
-    describe("request /new/test.nld.pdf/create/", function () {
+    describe("create /new/test.nld.pdf/create/", function () {
       this.slow(0);
       it("should return status 302", function (done) {
         supertest(conf.test.host + ":80")
