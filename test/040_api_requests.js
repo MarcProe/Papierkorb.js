@@ -44,14 +44,14 @@ describe("API requests", function () {
       });
     }).timeout(60000);
   }),
-    describe("request docs", function () {
+    describe("request single doc " + sdoc._id, function () {
       it("single document should have same metadata as in /docs", function (done) {
-        request(url + "doc/" + sdoc, function (error, response, body) {
+        request(url + "doc/" + sdoc._id, function (error, response, body) {
           let doc = JSON.parse(body)[0];
 
           expect(response.statusCode).to.equal(200);
           expect(doc._id.to.equal(sdoc._id));
-          expect(doc.previews).to.equal(sdic_previews);
+          expect(doc.previews).to.equal(sdoc_previews);
 
           done();
         });
