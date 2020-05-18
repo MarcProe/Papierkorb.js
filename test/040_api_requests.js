@@ -5,28 +5,7 @@ let conf = require("config").get("conf");
 let url = conf.test.schema + conf.test.host + ":80/api/v1/";
 
 describe("API requests", function () {
-  let sdoc = null;
-  /*
-  describe("request /todo from node", function () {
-    let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
-
-    it("should return status 200", function (done) {
-      request(url, function (error, response, body) {
-        expect(response.statusCode).to.equal(200);
-        done();
-      });
-    }).timeout(60000);
-  }),
-    describe("request /todo/ from node", function () {
-      let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
-
-      it("should return status 200", function (done) {
-        request(url, function (error, response, body) {
-          expect(response.statusCode).to.equal(200);
-          done();
-        });
-      }).timeout(60000);
-    }),*/
+  let sdoc = {};
 
   describe("request docs", function () {
     it("one document should have plausible metadata", function (done) {
