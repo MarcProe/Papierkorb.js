@@ -2,7 +2,7 @@ let expect = require("chai").expect;
 let request = require("request");
 let conf = require("config").get("conf");
 
-let url = conf.test.schema + conf.test.host + ":80/api/v1/";
+let url = conf.test.schema + conf.test.host + "/api/v1/";
 
 describe("API requests", function () {
   describe("request docs", function () {

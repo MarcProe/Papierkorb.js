@@ -2,7 +2,7 @@ let expect = require("chai").expect;
 let request = require("request");
 let conf = require("config").get("conf");
 
-let url = conf.test.schema + conf.test.host + ":80";
+let url = conf.test.schema + conf.test.host;
 
 describe("Basic Requests", function () {
   it("request / should return status 200", function (done) {

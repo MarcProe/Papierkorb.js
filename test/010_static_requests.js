@@ -47,11 +47,11 @@ var statics = [
   "tessdata/nld.traineddata.gz",
 ];
 
-describe("Check static assets on port 80", function () {
+describe("Check static assets", function () {
   statics.forEach((file) => {
-    let url = conf.test.host + ":80" + conf.proxy.public;
+    let url = conf.test.host + conf.proxy.public;
     it(url + file + " should return status 200", function (done) {
-      supertest(conf.test.host + ":80")
+      supertest(conf.test.host)
         .get(conf.proxy.public + file)
         .expect(200, done);
     }).timeout(60000);
