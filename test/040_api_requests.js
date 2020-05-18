@@ -3,9 +3,9 @@ let request = require("request");
 let conf = require("config").get("conf");
 
 let url = conf.test.schema + conf.test.host + ":80/api/v1/";
-let sdoc = null;
 
 describe("API requests", function () {
+  let sdoc = null;
   /*
   describe("request /todo from node", function () {
     let url = conf.test.schema + conf.test.host + ":" + conf.net.port;
@@ -51,7 +51,7 @@ describe("API requests", function () {
 
           expect(response.statusCode).to.equal(200);
           expect(doc._id.to.equal(sdoc._id));
-          expect(doc.previews).to.equal(sdoc_previews);
+          expect(doc.previews).to.equal(sdoc.previews);
 
           done();
         });
