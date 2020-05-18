@@ -24,7 +24,7 @@ describe("API requests", function () {
     }).timeout(60000),
       it("single document should have same metadata as in /docs", function (done) {
         request(url + "doc/" + sdoc._id, function (error, response, body) {
-          let doc = JSON.parse(body)[0];
+          let doc = JSON.parse(body);
           console.log("-.-");
           console.log(sdoc);
           console.log(doc);
