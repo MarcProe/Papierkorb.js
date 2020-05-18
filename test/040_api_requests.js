@@ -27,7 +27,7 @@ describe("API requests", function () {
         let doc = JSON.parse(body)[0];
 
         expect(response.statusCode).to.equal(200);
-        expect(doc._id.to.equal(sdoc._id));
+        expect(doc._id).to.equal(sdoc._id);
         expect(doc.previews).to.equal(sdoc.previews);
 
         done();
