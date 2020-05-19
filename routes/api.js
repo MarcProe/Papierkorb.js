@@ -8,6 +8,8 @@ let fs = require("fs");
 
 let inspect = require("eyes").inspector({ maxLength: 20000 });
 
+const dbl = require("../modules/dbloader.js");
+
 router.get("/:version/:func/:docid?/:genid?", function (req, res, next) {
   switch (req.params.func) {
     case "end":
@@ -394,6 +396,9 @@ function saveuser(req, res, next) {
         res.send(ret);
         res.end(200);
       }
+    })
+    .then(() => {
+      dbl.loadUsers(req);
     });
 }
 
