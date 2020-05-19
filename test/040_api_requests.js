@@ -20,17 +20,44 @@ describe("API requests", function () {
 
         done();
       });
-    }).timeout(60000),
-      it("single document should have same metadata as in /docs", function (done) {
-        request(url + "doc/" + sdoc._id, function (error, response, body) {
-          let doc = JSON.parse(body);
+    }).timeout(60000);
 
+    it("single document should have same metadata as in /docs", function (done) {
+      request(url + "doc/" + sdoc._id, function (error, response, body) {
+        let doc = JSON.parse(body);
+
+        expect(response.statusCode).to.equal(200);
+        expect(doc._id).to.equal(sdoc._id);
+        expect(doc.previews).to.equal(sdoc.previews);
+
+        done();
+      });
+    }).timeout(60000);
+
+    for (let i = 0; i < 5; i++) {
+      it("should have preview " + i, function (done) {
+        request(url + "preview/" + sdoc._id + "/" + i, function (
+          error,
+          response,
+          body
+        ) {
           expect(response.statusCode).to.equal(200);
-          expect(doc._id).to.equal(sdoc._id);
-          expect(doc.previews).to.equal(sdoc.previews);
 
           done();
         });
       }).timeout(60000);
+    }
+
+    it("should be downloadable", function (done) {
+      request(url + "download/" + sdoc._id + "/", function (
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).to.equal(200);
+
+        done();
+      });
+    }).timeout(60000);
   });
 });
