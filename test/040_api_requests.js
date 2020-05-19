@@ -41,19 +41,16 @@ describe("API requests", function () {
       });
     }).timeout(60000);
 
-    for (let i = 0; i < 5; i++) {
-      it("should have preview " + i, function (done) {
-        request(url + "preview/" + sdoc._id + "/" + i, function (
-          error,
-          response,
-          body
-        ) {
+    it(
+      "should have preview 0 (other previews are created async)" + i,
+      function (done) {
+        request(url + "preview/0/" + i, function (error, response, body) {
           expect(response.statusCode).to.equal(200);
 
           done();
         });
-      }).timeout(60000);
-    }
+      }
+    ).timeout(60000);
 
     it("should be downloadable", function (done) {
       request(url + "download/" + sdoc._id + "/", function (
