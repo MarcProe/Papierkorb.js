@@ -82,6 +82,10 @@ router.get("/:version/:func/:docid?/:genid?", function (req, res, next) {
       download(req, res, next);
       break;
     }
+    case "reload": {
+      reload(req, res, next);
+      break;
+    }
   }
 });
 
@@ -412,6 +416,11 @@ function download(req, res, docid) {
   let file = fs.readFileSync(conf.doc.basepath + req.params.docid);
   res.writeHead(200, { "Content-Type": "application/pdf" });
   res.end(file, "binary");
+}
+
+function reload(req, res, next) {
+  req.session.destroy();
+  res.redirect(302, "/");
 }
 
 module.exports = router;

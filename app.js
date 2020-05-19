@@ -89,7 +89,7 @@ app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(
   session({
     secret: "fgdg345DFG4324ftr$§fqa3f43fq$Q§",
@@ -128,4 +128,5 @@ app.use(function (err, req, res, next) {
 function createcol(db, name) {
   return db.createCollection(name);
 }
+
 module.exports = app;
