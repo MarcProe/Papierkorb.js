@@ -73,7 +73,6 @@ describe("API requests", function () {
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(function (res) {
-          console.log(req.body);
           console.log(res.body);
         })
         .expect(200, done);
