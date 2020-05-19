@@ -1,5 +1,6 @@
 let expect = require("chai").expect;
 let request = require("request");
+var supertest = require("supertest");
 let conf = require("config").get("conf");
 
 let url = conf.test.schema + conf.test.host + "/api/v1/";
@@ -58,6 +59,19 @@ describe("API requests", function () {
 
         done();
       });
+    }).timeout(60000);
+
+    it("should be possible to create a user", function (done) {
+      supertest(conf.test.host)
+        .post("/api/v1/user")
+        .send({
+          _id: "NPMTestID",
+          name: "NPMTest",
+          search: ["NPM", "Papierkorb"],
+        })
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200, done);
     }).timeout(60000);
   });
 });
