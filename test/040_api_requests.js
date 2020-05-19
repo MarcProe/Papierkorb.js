@@ -78,5 +78,14 @@ describe("API requests", function () {
         })
         .expect(200, done);
     }).timeout(60000);
+
+    it("should be possible to get that user", function (done) {
+      supertest(conf.test.host)
+        .get("/api/v1/user")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(res.body[0], testuser)
+        .expect(200, done);
+    }).timeout(60000);
   });
 });
