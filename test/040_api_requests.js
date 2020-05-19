@@ -61,6 +61,7 @@ describe("API requests", function () {
         body
       ) {
         expect(response.statusCode).to.equal(200);
+        console.log(response);
 
         done();
       });
@@ -73,7 +74,8 @@ describe("API requests", function () {
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(function (res) {
-          console.log(res.body);
+          if (!res.result) throw new Error("Response Result not defined");
+          if (!res.user) throw new Error("Response User not defined");
         })
         .expect(200, done);
     }).timeout(60000);
