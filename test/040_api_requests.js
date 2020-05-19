@@ -44,7 +44,11 @@ describe("API requests", function () {
     it(
       "should have preview 0 (other previews are created async)" + i,
       function (done) {
-        request(url + "preview/0/" + i, function (error, response, body) {
+        request(url + "preview/" + sdoc._id + "/0", function (
+          error,
+          response,
+          body
+        ) {
           expect(response.statusCode).to.equal(200);
 
           done();
