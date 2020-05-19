@@ -61,7 +61,7 @@ describe("API requests", function () {
         body
       ) {
         expect(response.statusCode).to.equal(200);
-        expect(response.body.startWith("%PDF-1.6").to.equal(true));
+        expect(String(response.body).startsWith("%PDF-1.6")).to.equal(true);
         done();
       });
     }).timeout(60000);
