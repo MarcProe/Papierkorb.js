@@ -1,6 +1,6 @@
 let conf = require("config").get("conf");
 
-exports.loadUsers() = async function loadUsers(req) {
+exports.loadUsers = async function loadUsers(req) {
   //get users from database
   await req.app.locals.db
     .collection(conf.db.c_user)
