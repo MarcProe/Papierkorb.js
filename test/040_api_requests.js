@@ -11,6 +11,9 @@ let testuser = {
   search: ["NPM", "Papierkorb"],
 };
 
+let newname = "Mr. Pink";
+let newsearch = ["Waldo"];
+
 describe("API requests", function () {
   describe("request docs", function () {
     var sdoc = {};
@@ -88,6 +91,47 @@ describe("API requests", function () {
             throw new Error(
               "Result ist not equal to testuser" + JSON.stringify(res.body)
             );
+        })
+        .expect(200, done);
+    }).timeout(60000);
+
+    it("should be possible to change that user", function (done) {
+      testuser.name = newname;
+      testuser.search = newsearch;
+      supertest(conf.test.host)
+        .post("/api/v1/user")
+        .send(testuser)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(function (res) {
+          if (!res.body.result) throw new Error("Response Result not defined");
+          if (!res.body.user) throw new Error("Response User not defined");
+        })
+        .expect(200, done);
+    }).timeout(60000);
+
+    it("should be possible to get the changed user", function (done) {
+      supertest(conf.test.host)
+        .get("/api/v1/user")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(function (res) {
+          if (!_.isEqual(res.body[0], testuser)) {
+            throw new Error(
+              "Result is not equal to testuser" + JSON.stringify(res.body)
+            );
+          }
+          if (newname != res.body[0].name) {
+            throw new Error(
+              "Result Name is not equal to testuser" + JSON.stringify(res.body)
+            );
+          }
+          if (newsearch != res.body[0].search) {
+            throw new Error(
+              "Result Search is not equal to testuser" +
+                JSON.stringify(res.body)
+            );
+          }
         })
         .expect(200, done);
     }).timeout(60000);
