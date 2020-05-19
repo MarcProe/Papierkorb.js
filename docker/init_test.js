@@ -1,8 +1,8 @@
+process.env.NODE_ENV = "test";
+
 let conf = require("config").get("conf");
 let fse = require("fs-extra");
 const { exec } = require("child_process");
-
-process.env.NODE_ENV = "test";
 
 exec("docker-compose down", (err, stdout, stderr) => {
   if (err) {
