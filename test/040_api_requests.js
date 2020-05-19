@@ -2,6 +2,7 @@ let expect = require("chai").expect;
 let request = require("request");
 var supertest = require("supertest");
 let conf = require("config").get("conf");
+let _ = require("lodash");
 
 let url = conf.test.schema + conf.test.host + "/api/v1/";
 let testuser = {
@@ -84,7 +85,12 @@ describe("API requests", function () {
         .get("/api/v1/user")
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
-        .expect(res.body[0], testuser)
+        .expect(function (res) {
+          if (!_.isEqual(res.body[0], testuser))
+            throw new Error(
+              "Result ist not equal to testuser" + JSON.stringify(res.body)
+            );
+        })
         .expect(200, done);
     }).timeout(60000);
   });
