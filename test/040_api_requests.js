@@ -73,8 +73,8 @@ describe("API requests", function () {
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(function (res) {
-          if (!res.result) throw new Error("Response Result not defined");
-          if (!res.user) throw new Error("Response User not defined");
+          if (!res.body.result) throw new Error("Response Result not defined");
+          if (!res.body.user) throw new Error("Response User not defined");
         })
         .expect(200, done);
     }).timeout(60000);
