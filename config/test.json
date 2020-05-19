@@ -1,0 +1,36 @@
+{
+  "conf": {
+    "test": {
+      "schema": "http://",
+      "host": "127.0.0.1",
+      "dirs": ["./data/papierkorb.js", "./data/mongo"]
+    },
+    "lang": {
+      "deu": "Deutsch",
+      "nld": "Niederländisch",
+      "eng": "English"
+    },
+    "proxy": {
+      "preview": "/testdir/images/",
+      "download": "/testdir/docs/",
+      "public": "/public/"
+    },
+    "net": {
+      "port": "3000"
+    },
+    "doc": {
+      "basepath": "./testdir/docs/",
+      "imagepath": "./testdir/images/",
+      "newpath": "./testdir/new/"
+    },
+    "db": {
+      "constring": "mongodb://docker:27017/",
+      "db": "papierkorb-test",
+      "c_user": "user",
+      "c_doc": "doc",
+      "c_tag": "tag",
+      "c_partner": "partner"
+    },
+    "warn": true
+  }
+}

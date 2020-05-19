@@ -10,14 +10,14 @@ services:
     environment:
       - NODE_ENV=docker
     volumes:
-      - ./mnt/papierkorb.js:/opt/papierkorb
+      - ./data/papierkorb.js:/opt/papierkorb
 
   papierkorb-mongo:
     container_name: papierkorb-mongo
     restart: always
     image: sumglobal/rpi-mongodb
     volumes:
-      - ./data:/data/db
+      - ./data/mongo:/data/db
 
   papierkorb-nginx:
     container_name: papierkorb-nginx
