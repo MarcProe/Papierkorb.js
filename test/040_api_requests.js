@@ -41,20 +41,17 @@ describe("API requests", function () {
       });
     }).timeout(60000);
 
-    it(
-      "should have preview 0 (other previews are created async)" + i,
-      function (done) {
-        request(url + "preview/" + sdoc._id + "/0", function (
-          error,
-          response,
-          body
-        ) {
-          expect(response.statusCode).to.equal(200);
+    it("should have preview 0 (other previews are created async)", function (done) {
+      request(url + "preview/" + sdoc._id + "/0", function (
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).to.equal(200);
 
-          done();
-        });
-      }
-    ).timeout(60000);
+        done();
+      });
+    }).timeout(60000);
 
     it("should be downloadable", function (done) {
       request(url + "download/" + sdoc._id + "/", function (
