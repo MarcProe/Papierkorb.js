@@ -114,6 +114,9 @@ router.post("/:version/:func/:docid?/", function (req, res, next) {
     case "doc":
       savedoc(req, res, next);
       break;
+    case "user":
+      saveuser(req, res, next);
+      break;
     default:
       res.writeHead(404, {
         message: "method not found",
@@ -339,6 +342,53 @@ function savedoc(req, res, next) {
       } else {
         res.send({ message: "ok" });
         res.end();
+      }
+    });
+}
+
+function saveuser(req, res, next) {
+  if (!req.body._id || !req.body.name) {
+    res.end(400);
+  }
+
+  let user = {};
+  user._id = req.body._id;
+  user.name = req.body.name;
+
+  if (req.body.search) {
+    if (req.body.search.constructor === Array) {
+      //If only one element is given, the type is string, which is bad
+      user.search = req.body.search;
+    } else {
+      user.search = [req.body.search];
+    }
+  }
+
+  //update document
+  let userdata = {
+    $set: {
+      name: user.name,
+      search: user.search ? user.search : [],
+    },
+  };
+  console.log(userdata);
+  req.app.locals.db
+    .collection(conf.db.c_user)
+    .updateOne({ _id: user._id }, userdata, { upsert: true }, function (
+      err,
+      result
+    ) {
+      console.log(result);
+      console.log(err);
+      if (err) {
+        res.send({ error: err });
+        res.end(500);
+      } else {
+        ret = {};
+        ret.result = result;
+        ret.user = user;
+        res.send(ret);
+        res.end(200);
       }
     });
 }
