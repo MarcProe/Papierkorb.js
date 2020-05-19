@@ -126,7 +126,7 @@ describe("API requests", function () {
               "Result Name is not equal to testuser" + JSON.stringify(res.body)
             );
           }
-          if (newsearch != res.body[0].search) {
+          if (!_.isEqual(newsearch.sort(), res.body[0].search.sort())) {
             throw new Error(
               "Result Search is not equal to testuser" +
                 JSON.stringify(res.body)
