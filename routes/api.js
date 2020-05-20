@@ -342,7 +342,7 @@ function savedoc(req, res, next) {
 
 async function saveuser(req, res, next) {
   if (!req.body._id || !req.body.name) {
-    res.writeHead(200, { "Content-Type": "application/json" });
+    res.setHeader("Content-Type", "application/json");
     res.send('{err: "mandatory data missing"}');
     res.end(400);
   }
@@ -374,17 +374,24 @@ async function saveuser(req, res, next) {
       err,
       result
     ) {
+      console.log("---------------");
       console.log(result);
+      console.log(
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      );
       console.log(err);
+      console.log(
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      );
       if (err) {
-        res.writeHead(200, { "Content-Type": "application/json" });
+        res.setHeader("Content-Type", "application/json");
         res.send(JSON.stringify({ error: err }));
         res.end(500);
       } else {
         ret = {};
         ret.result = result;
         ret.user = user;
-        res.writeHead(200, { "Content-Type": "application/json" });
+        res.setHeader("Content-Type", "application/json");
         res.send(JSON.stringify(ret));
         res.end(200);
       }
@@ -418,6 +425,7 @@ function reload(req, res, next) {
   req.session.destroy();
   res.writeHead(200, { "Content-Type": "application/json" });
   res.send("{message:done}");
+  res.end();
 }
 
 module.exports = router;
