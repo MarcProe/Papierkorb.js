@@ -374,20 +374,12 @@ async function saveuser(req, res, next) {
       err,
       result
     ) {
-      console.log("---------------");
-      console.log(result);
-      console.log(
-        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
-      );
-      console.log(err);
-      console.log(
-        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      );
       if (err) {
         res.setHeader("Content-Type", "application/json");
         res.send(JSON.stringify({ error: err }));
         res.end(500);
       } else {
+        req.session.userlist = dbl.loadUsers(req);
         ret = {};
         ret.result = result;
         ret.user = user;
@@ -396,8 +388,6 @@ async function saveuser(req, res, next) {
         res.end(200);
       }
     });
-
-  dbl.loadUsers(req);
 }
 
 function getpreview(req, res, next, thumb) {
