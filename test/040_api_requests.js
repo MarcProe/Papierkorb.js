@@ -87,6 +87,7 @@ describe("API requests", function () {
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(function (res) {
+          console.log(res.body);
           if (!_.isEqual(res.body[0], testuser))
             throw new Error(
               "Result ist not equal to testuser" + JSON.stringify(res.body)
