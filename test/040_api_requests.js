@@ -73,9 +73,6 @@ describe("API requests", function () {
         .post("/api/v1/user")
         .send(testuser)
         .set("Accept", "application/json")
-        .expect(function (res) {
-          console.log(res);
-        })
         .expect("Content-Type", /json/)
         .expect(function (res) {
           if (!res.body.result) throw new Error("Response Result not defined");
