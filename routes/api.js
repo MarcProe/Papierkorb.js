@@ -10,7 +10,7 @@ let inspect = require("eyes").inspector({ maxLength: 20000 });
 
 const dbl = require("../modules/dbloader.js");
 
-router.get("/:version/:func/:docid?/:genid?", function (req, res, next) {
+router.get("/:version/:func/:docid?/:genid?", async function (req, res, next) {
   switch (req.params.func) {
     case "end":
       res.writeHead(200, {
@@ -91,7 +91,7 @@ router.get("/:version/:func/:docid?/:genid?", function (req, res, next) {
   }
 });
 
-router.post("/:version/:func/:docid?/", function (req, res, next) {
+router.post("/:version/:func/:docid?/", async function (req, res, next) {
   switch (req.params.func) {
     case "ocr":
       try {
@@ -129,18 +129,6 @@ router.post("/:version/:func/:docid?/", function (req, res, next) {
       });
       res.end();
       break;
-  }
-});
-
-router.put("/:version/:func/:docid?/", function (req, res, next) {
-  switch (req.params.func) {
-    case "doc": {
-      console.log("putting");
-      inspect(req.body);
-      console.log(moment.utc(req.body.docdate));
-      res.end();
-      break;
-    }
   }
 });
 
@@ -352,7 +340,7 @@ function savedoc(req, res, next) {
     });
 }
 
-function saveuser(req, res, next) {
+async function saveuser(req, res, next) {
   if (!req.body._id || !req.body.name) {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.send('{err: "mandatory data missing"}');
@@ -380,7 +368,7 @@ function saveuser(req, res, next) {
     },
   };
   console.log(userdata);
-  req.app.locals.db
+  await req.app.locals.db
     .collection(conf.db.c_user)
     .updateOne({ _id: user._id }, userdata, { upsert: true }, function (
       err,
@@ -400,10 +388,9 @@ function saveuser(req, res, next) {
         res.send(JSON.stringify(ret));
         res.end(200);
       }
-    })
-    .then(() => {
-      dbl.loadUsers(req);
     });
+
+  dbl.loadUsers(req);
 }
 
 function getpreview(req, res, next, thumb) {
