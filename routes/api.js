@@ -354,6 +354,8 @@ function savedoc(req, res, next) {
 
 function saveuser(req, res, next) {
   if (!req.body._id || !req.body.name) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.send('{err: "mandatory data missing"}');
     res.end(400);
   }
 
@@ -387,13 +389,15 @@ function saveuser(req, res, next) {
       console.log(result);
       console.log(err);
       if (err) {
-        res.send({ error: err });
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.send(JSON.stringify({ error: err }));
         res.end(500);
       } else {
         ret = {};
         ret.result = result;
         ret.user = user;
-        res.send(ret);
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.send(JSON.stringify(ret));
         res.end(200);
       }
     })
@@ -425,7 +429,8 @@ function download(req, res, docid) {
 
 function reload(req, res, next) {
   req.session.destroy();
-  res.redirect(302, "/");
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.send("{message:done}");
 }
 
 module.exports = router;
