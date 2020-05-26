@@ -34,6 +34,7 @@ before_script:
 
 script:
   - npm test
+  - cd pkjs-api && npm test
 
 after_script:
   - sleep 10

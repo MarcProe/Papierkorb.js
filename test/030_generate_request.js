@@ -12,7 +12,7 @@ describe("Document Creation", function () {
       .post("/new/null/upload")
       .attach("file", "share/test.nld.pdf")
       .expect(200, done);
-  }).timeout(60000),
+  }).timeout(60000);
     it("/new/test.nld.pdf/create/ should return status 302", function (done) {
       supertest(conf.test.host)
         .get("/new/test.nld.pdf/create/")
