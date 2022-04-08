@@ -27,7 +27,7 @@
     "lodash": ">=4.17.19",
     "materialize-css": "^1.0.0",
     "mkdirp": "~0.5.1",
-    "moment": "~2.22.1",
+    "moment": "~2.29.2",
     "mongodb": "^3.1.13",
     "monk": "^6.0.5",
     "morgan": "~1.9.1",
