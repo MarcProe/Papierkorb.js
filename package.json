@@ -15,7 +15,7 @@
     "config": "~2.0.1",
     "cookie-parser": "~1.4.3",
     "debug": "~3.1.0",
-    "express": "~4.16.2",
+    "express": "~4.17.3",
     "express-fileupload": "~1.1.9",
     "express-session": "~1.15.6",
     "eyes": "~0.1.8",
